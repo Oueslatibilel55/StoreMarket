@@ -1,0 +1,81 @@
+<!--
+  Responsive rules (ADR 0005): the top row only holds what always fits — logo, shop links from md, language,
+  cart, account. Role links (orders, affiliate, store, admin) join the top row from xl; below that they live in
+  the second row, which scrolls sideways if needed. Labels shorten (FR / ع / EN, logout icon) below xl.
+-->
+<header class="sticky top-0 z-40 border-b border-line bg-card/80 backdrop-blur-xl backdrop-saturate-150">
+  <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:px-8">
+    <a routerLink="/" class="group flex shrink-0 items-center gap-2.5">
+      <span class="flex size-8 items-center justify-center rounded-lg bg-brand text-sm font-bold text-white shadow-brand transition-transform duration-200 group-hover:-rotate-6">
+        {{ ('app.name' | transloco).charAt(0) }}
+      </span>
+      <span class="hidden text-lg font-bold tracking-tight text-ink min-[400px]:inline">{{ 'app.name' | transloco }}</span>
+    </a>
+
+    <nav class="hidden items-center gap-1 md:flex">
+      <a routerLink="/products" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap">{{ 'shop.products' | transloco }}</a>
+      <a routerLink="/stores" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap">{{ 'shop.stores' | transloco }}</a>
+      @if (auth.user()) {
+        <ng-container *ngTemplateOutlet="roleLinks; context: { $implicit: 'hidden xl:inline-flex' }" />
+      }
+    </nav>
+
+    <div class="ms-auto flex min-w-0 items-center gap-1.5 sm:gap-2.5">
+      <app-language-switcher class="shrink-0" />
+
+      <a routerLink="/cart" routerLinkActive="bg-subtle text-brand" class="relative flex size-9 shrink-0 items-center justify-center rounded-lg text-ink-soft transition-colors hover:bg-subtle hover:text-ink"
+        [attr.aria-label]="'cart.title' | transloco" [title]="'cart.title' | transloco">
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 8H6.2" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="9.5" cy="20" r="1.2" /><circle cx="17" cy="20" r="1.2" />
+        </svg>
+        @if (cart.count(); as n) {
+          <span class="absolute -end-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-bold text-white ring-2 ring-card" dir="ltr">{{ n > 99 ? '99+' : n }}</span>
+        }
+      </a>
+
+      @if (auth.user(); as user) {
+        <span class="hidden h-6 w-px bg-line-strong/70 xl:block" aria-hidden="true"></span>
+        <a routerLink="/account" routerLinkActive="bg-subtle" [title]="user.fullName"
+          class="flex shrink-0 items-center gap-2 rounded-full p-1 text-sm font-medium text-ink transition-colors hover:bg-subtle xl:pe-3">
+          <span class="flex size-8 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand ring-1 ring-brand/15">
+            {{ user.fullName.charAt(0).toUpperCase() }}
+          </span>
+          <span class="hidden max-w-36 truncate xl:inline">{{ user.fullName }}</span>
+        </a>
+        <button type="button" (click)="logout()" class="btn btn-ghost btn-sm shrink-0 px-2 hover:text-danger xl:px-3"
+          [attr.aria-label]="'auth.logout' | transloco" [title]="'auth.logout' | transloco">
+          <svg class="size-4 rtl:rotate-180 xl:hidden" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 14l4-4-4-4M17 10H8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="hidden xl:inline">{{ 'auth.logout' | transloco }}</span>
+        </button>
+      } @else {
+        <a routerLink="/login" class="btn btn-ghost shrink-0 px-2.5 sm:px-4">{{ 'auth.login' | transloco }}</a>
+        <a routerLink="/register" class="btn btn-primary hidden shrink-0 px-3 min-[400px]:inline-flex sm:px-4">{{ 'auth.register' | transloco }}</a>
+      }
+    </div>
+  </div>
+
+  <!-- Second row: shop links below md, role links below xl. Guests have nothing more to show from md. -->
+  <nav class="flex items-center gap-0.5 overflow-x-auto border-t border-line px-2 py-2 sm:px-4" [class]="auth.user() ? 'xl:hidden' : 'md:hidden'">
+    <a routerLink="/products" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap md:hidden">{{ 'shop.products' | transloco }}</a>
+    <a routerLink="/stores" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap md:hidden">{{ 'shop.stores' | transloco }}</a>
+    @if (auth.user()) {
+      <ng-container *ngTemplateOutlet="roleLinks; context: { $implicit: '' }" />
+    }
+  </nav>
+</header>
+
+<ng-template #roleLinks let-extra>
+  <a routerLink="/orders" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap" [class]="extra">{{ 'orders.nav' | transloco }}</a>
+  @if (auth.hasRole('Affiliate')) {
+    <a routerLink="/affiliate" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap" [class]="extra">{{ 'partnerships.nav' | transloco }}</a>
+  }
+  @if (auth.hasRole('StoreOwner')) {
+    <a routerLink="/my-store" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap" [class]="extra">{{ 'myStore.nav' | transloco }}</a>
+  }
+  @if (auth.hasRole('Admin')) {
+    <a routerLink="/admin" routerLinkActive="nav-link-active" class="nav-link whitespace-nowrap" [class]="extra">{{ 'admin.title' | transloco }}</a>
+  }
+</ng-template>

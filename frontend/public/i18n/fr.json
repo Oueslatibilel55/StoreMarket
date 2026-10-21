@@ -1,0 +1,1473 @@
+{
+  "app": {
+    "name": "WebApp",
+    "tagline": "Achetez dans les boutiques locales. Recommandez des produits et gagnez des coins."
+  },
+  "home": {
+    "backendOk": "Backend connecté",
+    "backendKo": "Backend injoignable. L'API tourne-t-elle sur le port 5185 ?",
+    "storeCategories": "Catégories de boutiques",
+    "heroTitle": "Les boutiques locales de Tunisie, au même endroit",
+    "newProducts": "Nouveaux produits",
+    "seeAll": "Tout voir",
+    "heroBadge": "Paiement à la livraison · Récompenses affiliés",
+    "roles": {
+      "buyer": {
+        "title": "Pour les clients",
+        "text": "Découvrez les boutiques locales, commandez en quelques clics et payez à la livraison."
+      },
+      "owner": {
+        "title": "Pour les commerçants",
+        "text": "Ouvrez votre boutique, publiez vos produits et fixez la commission par produit."
+      },
+      "affiliate": {
+        "title": "Pour les affiliés",
+        "text": "Partagez votre code, gagnez des coins à chaque vente livrée, puis encaissez."
+      }
+    }
+  },
+  "auth": {
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "register": "S'inscrire",
+    "registerCta": "Créer mon compte",
+    "loggingIn": "Connexion…",
+    "registering": "Création du compte…",
+    "loginTitle": "Bon retour",
+    "loginSubtitle": "Connectez-vous pour suivre vos commandes et vos coins.",
+    "registerTitle": "Créer votre compte",
+    "registerSubtitle": "Achetez dans les boutiques locales en tant que client, ou rejoignez-nous comme affilié et gagnez des coins.",
+    "noAccount": "Pas encore de compte ?",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "fullName": "Nom complet",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "password": "Mot de passe",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "validation": {
+      "required": "Ce champ est obligatoire.",
+      "email": "Saisissez une adresse e-mail valide.",
+      "phone": "Saisissez un numéro tunisien : 8 chiffres.",
+      "password": "Au moins 8 caractères, avec des lettres et des chiffres."
+    },
+    "accountType": {
+      "label": "Je crée",
+      "Buyer": {
+        "title": "Un compte client",
+        "hint": "Achetez les produits des boutiques locales."
+      },
+      "Affiliate": {
+        "title": "Un compte affilié",
+        "hint": "Travaillez avec plusieurs boutiques, apportez des clients et gagnez des coins."
+      }
+    }
+  },
+  "account": {
+    "title": "Mon compte",
+    "welcome": "Bonjour {{name}} 👋",
+    "roles": "Rôles",
+    "memberSince": "Membre depuis"
+  },
+  "roles": {
+    "Buyer": "Acheteur",
+    "Affiliate": "Affilié",
+    "StoreOwner": "Propriétaire de boutique",
+    "Admin": "Admin"
+  },
+  "errors": {
+    "unknown": "Une erreur est survenue. Veuillez réessayer.",
+    "network": "Impossible de joindre le serveur. Vérifiez votre connexion.",
+    "tooManyRequests": "Trop de tentatives. Patientez une minute puis réessayez.",
+    "auth": {
+      "emailTaken": "Un compte existe déjà avec cet e-mail.",
+      "invalidCredentials": "E-mail ou mot de passe incorrect.",
+      "accountBlocked": "Ce compte est bloqué. Contactez le support.",
+      "invalidRefreshToken": "Votre session a expiré. Veuillez vous reconnecter.",
+      "userNotFound": "Compte introuvable."
+    },
+    "user": {
+      "emailInvalid": "Saisissez une adresse e-mail valide.",
+      "passwordTooWeak": "Mot de passe trop faible : au moins 8 caractères, avec des lettres et des chiffres.",
+      "fullNameRequired": "Saisissez votre nom complet.",
+      "phoneInvalid": "Saisissez un numéro tunisien : 8 chiffres.",
+      "affiliateTermsRequired": "Vous devez accepter les conditions d'affiliation.",
+      "blocked": "Ce compte est bloqué.",
+      "useAffiliateActivation": "Le rôle affilié vient de l'inscription ou d'une demande approuvée.",
+      "cannotBlockAdmin": "Retirez le rôle Admin avant de bloquer cet utilisateur.",
+      "blockReasonRequired": "Indiquez un motif (500 caractères max).",
+      "baseRoleRequired": "Un compte doit garder le rôle Acheteur ou Affilié. Bloquez plutôt l'utilisateur.",
+      "accountTypeInvalid": "Choisissez un compte client ou affilié.",
+      "affiliateCodeReasonRequired": "Indiquez une raison (500 caractères max).",
+      "notAffiliate": "Cet utilisateur n’a pas de code affilié."
+    },
+    "admin": {
+      "cannotChangeOwnAccount": "Vous ne pouvez pas modifier votre propre compte.",
+      "unknownRole": "Rôle inconnu."
+    },
+    "roleRequest": {
+      "roleNotRequestable": "Ce rôle ne peut pas être demandé.",
+      "messageTooLong": "Message trop long (500 caractères max).",
+      "notPending": "Cette demande a déjà été traitée.",
+      "reasonRequired": "Indiquez un motif (500 caractères max).",
+      "notFound": "Demande introuvable.",
+      "alreadyHasRole": "Vous avez déjà ce rôle.",
+      "alreadyPending": "Vous avez déjà une demande en attente pour ce rôle."
+    },
+    "setting": {
+      "unknown": "Paramètre inconnu.",
+      "readOnly": "Ce paramètre ne peut pas être modifié.",
+      "valueRequired": "Saisissez une valeur.",
+      "integerRequired": "Saisissez un nombre entier.",
+      "numberRequired": "Saisissez un nombre (point pour les décimales, 3 décimales max).",
+      "outOfRange": "Valeur hors de la plage autorisée.",
+      "percentMinAboveMax": "Le % minimum ne peut pas dépasser le % maximum."
+    },
+    "storeCategory": {
+      "nameRequired": "Saisissez le nom en français.",
+      "nameTooLong": "Les noms font 60 caractères maximum.",
+      "slugInvalid": "Nom dans l'URL : lettres minuscules, chiffres et tirets (2 à 60).",
+      "iconTooLong": "Icône trop longue : un seul emoji.",
+      "notFound": "Catégorie introuvable.",
+      "slugTaken": "Une autre catégorie utilise déjà ce nom dans l'URL.",
+      "nameTaken": "Une autre catégorie a déjà ce nom français.",
+      "directionInvalid": "Direction inconnue.",
+      "inUse": "Des boutiques utilisent cette catégorie : masquez-la au lieu de la supprimer."
+    },
+    "image": {
+      "required": "Choisissez une image.",
+      "tooLarge": "Image trop lourde ({{max}} Mo max).",
+      "unsupportedType": "Images JPEG, PNG ou WebP uniquement.",
+      "notFound": "Image introuvable.",
+      "purposeNotAllowed": "Vous ne pouvez pas envoyer ce type d'image.",
+      "wrongPurpose": "Cette image a été envoyée pour un autre usage.",
+      "inUse": "Cette image est encore utilisée.",
+      "notYours": "Vous ne pouvez utiliser que vos propres images."
+    },
+    "store": {
+      "nameRequired": "Saisissez le nom de la boutique.",
+      "nameLength": "Nom de la boutique : 2 à 80 caractères.",
+      "slugInvalid": "Nom dans l'URL : lettres minuscules, chiffres et tirets (2 à 60).",
+      "descriptionTooLong": "Description : 2 000 caractères max.",
+      "phoneInvalid": "Saisissez un numéro tunisien : 8 chiffres.",
+      "cityInvalid": "Choisissez un gouvernorat dans la liste.",
+      "addressTooLong": "Adresse : 200 caractères max.",
+      "percentOutOfRange": "Le % affilié est hors des limites de la plateforme.",
+      "deliveryFeeInvalid": "Frais de livraison : 0 à 1 000 TND.",
+      "deliveryCitiesRequired": "Choisissez au moins une zone de livraison.",
+      "deliveryDelayInvalid": "Délai : minimum ≤ maximum, 30 jours max.",
+      "linkInvalid": "Saisissez un lien complet (https://…) vers le bon site.",
+      "notOwnerControlled": "Cette boutique est désactivée ou suspendue : seul l'admin peut changer son statut.",
+      "notFound": "Boutique introuvable.",
+      "alreadyExists": "Vous avez déjà une boutique.",
+      "slugTaken": "Une autre boutique utilise déjà ce nom dans l'URL.",
+      "categoryUnavailable": "Cette catégorie n'est pas disponible.",
+      "deleted": "Cette boutique a été supprimée par l'administrateur.",
+      "ownerNotStoreOwner": "Le propriétaire n'a plus le rôle Propriétaire de boutique : redonnez-le avant de réactiver."
+    },
+    "productCategory": {
+      "nameRequired": "Saisissez le nom en français.",
+      "nameTooLong": "Les noms font 60 caractères maximum.",
+      "slugInvalid": "Nom dans l'URL : lettres minuscules, chiffres et tirets (2 à 60).",
+      "tooManyAttributes": "Trop de champs dans cette catégorie (30 max).",
+      "attributeNotFound": "Champ introuvable.",
+      "attributeKeyInvalid": "Clé : lettres minuscules, chiffres et tirets.",
+      "attributeKeyTaken": "Cette catégorie a déjà un champ avec cette clé.",
+      "attributeTypeInvalid": "Type de champ inconnu.",
+      "unitInvalid": "Une unité (16 caractères max) n'existe que pour les champs nombre.",
+      "optionsRequired": "Donnez entre 2 et 50 choix.",
+      "optionsNotAllowed": "Seuls les champs à choix ont des choix.",
+      "optionKeyInvalid": "Clé du choix : lettres, chiffres et tirets.",
+      "optionKeyTaken": "Deux choix ont le même nom.",
+      "notFound": "Catégorie introuvable.",
+      "parentNotFound": "Catégorie parente introuvable.",
+      "tooDeep": "Les catégories vont sur 3 niveaux au maximum.",
+      "cycle": "Une catégorie ne peut pas aller sous elle-même ou ses propres sous-catégories.",
+      "slugTaken": "Une autre catégorie utilise déjà ce nom dans l'URL.",
+      "hasChildren": "Supprimez ou déplacez d'abord ses sous-catégories.",
+      "keyUsedInBranch": "Une catégorie parente ou une sous-catégorie a déjà un champ avec cette clé.",
+      "directionInvalid": "Direction inconnue.",
+      "hasProducts": "Des produits utilisent cette catégorie : masquez-la au lieu de la supprimer.",
+      "attributeInUse": "Des produits ont une valeur pour ce champ : renommez-le au lieu de le supprimer.",
+      "optionInUse": "Des produits utilisent ce choix : renommez-le au lieu de le retirer."
+    },
+    "product": {
+      "nameRequired": "Saisissez le nom du produit.",
+      "nameLength": "Nom du produit : 2 à 120 caractères.",
+      "slugInvalid": "Nom dans l'URL : lettres minuscules, chiffres et tirets (2 à 60).",
+      "descriptionTooLong": "Description : 5 000 caractères max.",
+      "priceInvalid": "Prix : plus de 0, jusqu'à 1 000 000 TND, 3 décimales max.",
+      "compareAtPriceInvalid": "L'ancien prix doit être supérieur au prix.",
+      "skuTooLong": "Référence : 64 caractères max.",
+      "stockInvalid": "Stock : 0 à 1 000 000.",
+      "percentOutOfRange": "Le % affilié est hors des limites de la plateforme.",
+      "statusInvalid": "Statut inconnu.",
+      "tooManyImages": "8 photos maximum.",
+      "unknownAttribute": "Un champ n'appartient pas à cette catégorie.",
+      "attributeValueInvalid": "Une valeur de champ n'est pas valide.",
+      "requiredAttributeMissing": "Remplissez les champs obligatoires (*) pour publier — ou enregistrez en brouillon.",
+      "variantAxesInvalid": "Les variantes utilisent jusqu'à 2 champs à choix de la catégorie.",
+      "variantsRequired": "Donnez au moins une variante (60 max).",
+      "variantInvalid": "Chaque variante a besoin d'une option de chaque champ choisi.",
+      "variantDuplicate": "Deux variantes sont la même combinaison.",
+      "deleted": "Ce produit a été supprimé.",
+      "notFound": "Produit introuvable.",
+      "slugTaken": "Un autre produit utilise déjà ce nom dans l'URL.",
+      "categoryUnavailable": "Cette catégorie n'est pas disponible."
+    },
+    "moderation": {
+      "reasonRequired": "Indiquez un motif (500 caractères max).",
+      "selectionInvalid": "Sélectionnez de 1 à 100 produits."
+    },
+    "partnership": {
+      "messageTooLong": "Le message est trop long (500 caractères max).",
+      "reasonTooLong": "La raison est trop longue (500 caractères max).",
+      "notRequested": "Cette demande a déjà reçu une réponse.",
+      "notAccepted": "Ce partenariat n’est pas actif.",
+      "notFound": "Partenariat introuvable.",
+      "alreadyOpen": "Vous avez déjà demandé cette boutique, ou travaillez déjà avec elle.",
+      "ownStore": "Vous ne pouvez pas être affilié de votre propre boutique.",
+      "storeUnavailable": "Cette boutique n’est pas disponible.",
+      "affiliateInactive": "Votre code affilié n’est pas actif."
+    },
+    "affiliateCode": {
+      "invalid": "Ce n’est pas un code valide (ex. #DRF-45).",
+      "unknown": "Code inconnu.",
+      "inactive": "Ce code n’est plus actif.",
+      "notPartner": "Cet affilié ne travaille pas avec cette boutique.",
+      "ownStore": "Un affilié ne peut pas utiliser son code sur sa propre boutique.",
+      "ownCode": "Vous ne pouvez pas utiliser votre propre code sur vos achats.",
+      "productUnavailable": "Ce produit n’est pas disponible."
+    },
+    "cart": {
+      "quantityInvalid": "Quantité invalide (1 à 99).",
+      "tooManyLines": "Votre panier est plein (50 produits différents au maximum).",
+      "lineNotFound": "Cette ligne n’est plus dans votre panier.",
+      "codeInvalid": "Ce n’est pas un code valide (ex. #DRF-45).",
+      "productUnavailable": "Ce produit n’est plus disponible.",
+      "storeClosed": "Cette boutique est fermée pour le moment.",
+      "variantRequired": "Choisissez une option.",
+      "variantUnavailable": "Cette option n’est plus disponible.",
+      "notEnoughStock": "Stock insuffisant pour cette quantité."
+    },
+    "checkout": {
+      "cartEmpty": "Votre panier est vide.",
+      "cartNotReady": "Votre panier a changé : certains produits ne peuvent plus être commandés. Vérifiez le panier.",
+      "codeRefused": "Un code affilié de votre panier ne compte plus pour ce produit. Retirez-le ou changez-le dans le panier.",
+      "cityNotDelivered": "Une boutique de votre panier ne livre pas ce gouvernorat.",
+      "notAffiliate": "Seul un affilié actif peut commander pour un client."
+    },
+    "order": {
+      "notFound": "Commande introuvable. Vérifiez la référence et le numéro de téléphone.",
+      "nameRequired": "Indiquez le nom complet (2 à 120 caractères).",
+      "phoneInvalid": "Numéro de téléphone invalide (8 chiffres).",
+      "cityInvalid": "Choisissez un gouvernorat.",
+      "addressRequired": "Indiquez l’adresse (5 à 300 caractères).",
+      "noteTooLong": "La note est trop longue (500 caractères max).",
+      "empty": "La commande est vide.",
+      "lineInvalid": "Une ligne de la commande est invalide.",
+      "storeOrderNotFound": "Commande introuvable.",
+      "transitionNotAllowed": "Ce changement de statut n’est pas possible maintenant.",
+      "reasonRequired": "Indiquez une raison.",
+      "reasonTooLong": "La raison est trop longue (500 caractères max).",
+      "deliveredIsFinal": "Une commande livrée ne change plus de statut.",
+      "changed": "Cette commande vient d’être modifiée par quelqu’un d’autre : la page est à jour, réessayez."
+    },
+    "coins": {
+      "reasonRequired": "Indiquez une raison.",
+      "reasonTooLong": "La raison est trop longue (500 caractères max).",
+      "amountInvalid": "Montant invalide (différent de 0, 3 décimales au plus).",
+      "affiliateNotFound": "Affilié introuvable.",
+      "entryNotFound": "Écriture introuvable pour cet affilié."
+    },
+    "payout": {
+      "notFound": "Demande de retrait introuvable.",
+      "notAffiliate": "Seul un compte affilié actif peut demander un retrait.",
+      "belowMinimum": "Le montant est sous le minimum de retrait.",
+      "notEnoughCoins": "Vous n’avez pas assez de coins disponibles.",
+      "alreadyOpen": "Vous avez déjà une demande en cours.",
+      "changed": "Cette demande vient d’être modifiée par quelqu’un d’autre. Rechargée.",
+      "coinsInvalid": "Nombre de coins invalide (3 décimales au plus).",
+      "methodInvalid": "Mode de paiement invalide.",
+      "noteTooLong": "La note est trop longue (500 caractères max).",
+      "bankDetailsRequired": "Indiquez la banque, le titulaire et le RIB.",
+      "bankDetailsTooLong": "Le nom de la banque ou du titulaire est trop long.",
+      "ribInvalid": "Le RIB doit contenir 20 chiffres.",
+      "transitionNotAllowed": "Cette étape n’est pas possible pour cette demande.",
+      "reasonRequired": "Indiquez une raison.",
+      "reasonTooLong": "Le texte est trop long (500 caractères max).",
+      "dateRequired": "Choisissez une date.",
+      "dateInPast": "La date ne peut pas être passée.",
+      "placeRequired": "Indiquez le lieu de la remise.",
+      "placeTooLong": "Le lieu est trop long (200 caractères max).",
+      "paidReferenceRequired": "Indiquez la référence du virement ou qui a remis l’argent.",
+      "paidReferenceTooLong": "La référence est trop longue (120 caractères max).",
+      "paidInFuture": "La date de paiement ne peut pas être dans le futur."
+    }
+  },
+  "affiliate": {
+    "step1": "Recevez votre code personnel, par exemple #DRF-45.",
+    "step2": "Demandez aux boutiques de travailler avec vous — le propriétaire accepte.",
+    "step3": "Vos clients utilisent votre code sur ces produits. À la livraison, vous gagnez des coins.",
+    "acceptTerms": "J'accepte les conditions d'affiliation : les coins sont gagnés uniquement sur les commandes livrées des boutiques partenaires, jamais sur mes propres achats, et sont versés sur demande dès que j'atteins le minimum.",
+    "yourCode": "Votre code d'affilié",
+    "codeHint": "Donnez ce code à vos clients. Ils le saisissent sur les produits des boutiques avec lesquelles vous travaillez.",
+    "copy": "Copier",
+    "copied": "Copié ✓",
+    "nextStep": "Ensuite : ouvrez la page d’une boutique et demandez à travailler avec elle — le commerçant accepte."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {{page}} sur {{total}}",
+    "pagination": "Pagination",
+    "clearFilters": "Effacer les filtres",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "saving": "Enregistrement…",
+    "yes": "Oui",
+    "no": "Non",
+    "choose": "Choisir…"
+  },
+  "admin": {
+    "title": "Admin",
+    "soon": "bientôt",
+    "nav": {
+      "users": "Utilisateurs",
+      "roleRequests": "Demandes de rôle",
+      "audit": "Journal d'audit",
+      "settings": "Paramètres",
+      "storeCategories": "Catégories de boutiques",
+      "productCategories": "Catégories de produits",
+      "stores": "Boutiques",
+      "products": "Produits",
+      "orders": "Commandes",
+      "reviews": "Avis",
+      "coins": "Coins",
+      "payouts": "Retraits affiliés",
+      "billing": "Facturation",
+      "partnerships": "Partenariats"
+    },
+    "status": {
+      "Active": "Actif",
+      "Blocked": "Bloqué",
+      "Pending": "En attente",
+      "Approved": "Approuvée",
+      "Refused": "Refusée",
+      "Cancelled": "Retirée",
+      "Closed": "Fermée",
+      "Disabled": "Désactivé",
+      "Suspended": "Suspendue",
+      "Draft": "Brouillon",
+      "Published": "Publié",
+      "Archived": "Archivé"
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "summary": "{{total}} utilisateurs · {{affiliates}} affiliés · {{owners}} propriétaires · {{blocked}} bloqués",
+      "searchPlaceholder": "Rechercher par nom, e-mail, téléphone, code affilié ou boutique",
+      "allRoles": "Tous les rôles",
+      "allStatuses": "Tous les statuts",
+      "status": "Statut",
+      "empty": "Aucun utilisateur ne correspond à ces filtres.",
+      "back": "Retour aux utilisateurs",
+      "affiliateCode": "Code affilié",
+      "lastLogin": "Dernière connexion",
+      "blockedReason": "Motif du blocage",
+      "grant": "Attribuer",
+      "revoke": "Retirer",
+      "access": "Accès",
+      "block": "Bloquer cet utilisateur",
+      "unblock": "Débloquer",
+      "blockHint": "L'utilisateur est déconnecté de tous ses appareils et ne peut plus se connecter.",
+      "unblockHint": "L'utilisateur pourra de nouveau se connecter.",
+      "history": "Historique admin",
+      "noHistory": "Aucune action admin sur ce compte pour le moment.",
+      "selfNotice": "C'est votre propre compte : vous ne pouvez pas modifier vos rôles ni vous bloquer.",
+      "stats": {
+        "total": "Utilisateurs",
+        "affiliates": "Affiliés",
+        "owners": "Commerçants",
+        "blocked": "Bloqués"
+      },
+      "store": "Boutique",
+      "storePublic": "Voir la boutique",
+      "noStoreYet": "Pas encore de boutique créée"
+    },
+    "confirm": {
+      "title": "Confirmer",
+      "grant": "Attribuer le rôle « {{role}} » à {{name}} ?",
+      "revoke": "Retirer le rôle « {{role}} » à {{name}} ?",
+      "block": "Bloquer {{name}} ?",
+      "unblock": "Débloquer {{name}} ?",
+      "blockHint": "Expliquez pourquoi — le motif est conservé dans le journal d'audit."
+    },
+    "audit": {
+      "title": "Journal d'audit",
+      "subtitle": "Chaque action admin : qui l’a faite et ce qui a changé.",
+      "empty": "Aucune action admin pour le moment."
+    },
+    "roleRequests": {
+      "title": "Demandes de rôle",
+      "subtitle": "Utilisateurs qui demandent à devenir affilié, propriétaire de boutique ou acheteur. Chaque décision est auditée.",
+      "all": "Toutes",
+      "empty": "Aucune demande ici.",
+      "asks": "demande le rôle",
+      "approve": "Approuver",
+      "refuse": "Refuser",
+      "confirmApprove": "Donner le rôle « {{role}} » à {{name}} ?",
+      "confirmRefuse": "Refuser le rôle « {{role}} » à {{name}} ?",
+      "approveHint": "L'utilisateur reçoit le rôle à sa prochaine connexion ou actualisation. Un affilié reçoit son code.",
+      "refuseHint": "L'utilisateur voit ce motif. Il est aussi conservé dans le journal d'audit."
+    },
+    "settings": {
+      "title": "Paramètres de la plateforme",
+      "subtitle": "Valeurs métier utilisées dans toute la marketplace. Chaque modification est auditée.",
+      "default": "Par défaut :",
+      "range": "autorisé :",
+      "lastChanged": "modifié le",
+      "save": "Enregistrer",
+      "saved": "Enregistré ✓",
+      "readOnly": "Fixe dans cette version.",
+      "historyNote": "Une modification ne s'applique qu'à partir de maintenant : les commandes, coins et factures passés gardent les valeurs de leur création.",
+      "confirm": "Modifier « {{name}} » ?",
+      "reason": "Motif (facultatif, conservé dans le journal d'audit)"
+    },
+    "storeCategories": {
+      "title": "Catégories de boutiques",
+      "subtitle": "Types de boutiques affichés dans la boutique en ligne. Les inactives sont masquées. Chaque modification est auditée.",
+      "add": "Nouvelle catégorie",
+      "addTitle": "Nouvelle catégorie de boutique",
+      "editTitle": "Modifier la catégorie",
+      "empty": "Aucune catégorie pour l'instant. Créez la première.",
+      "active": "Active",
+      "inactive": "Masquée",
+      "edit": "Modifier",
+      "activate": "Afficher",
+      "deactivate": "Masquer",
+      "delete": "Supprimer",
+      "moveUp": "Monter",
+      "moveDown": "Descendre",
+      "nameFr": "Nom en français (obligatoire)",
+      "nameAr": "Nom en arabe",
+      "nameEn": "Nom en anglais",
+      "fallbackHint": "Une traduction manquante affiche le nom français.",
+      "slug": "Nom dans l'URL",
+      "slugAuto": "généré depuis le nom français",
+      "slugHint": "Lettres minuscules, chiffres et tirets, ex. parfums ou pret-a-porter.",
+      "icon": "Icône",
+      "confirmActivate": "Afficher « {{name}} » dans la boutique ?",
+      "confirmDeactivate": "Masquer « {{name}} » de la boutique ?",
+      "confirmDelete": "Supprimer « {{name}} » ?",
+      "activateHint": "Les visiteurs verront de nouveau cette catégorie.",
+      "deactivateHint": "Les visiteurs ne la voient plus. Les boutiques déjà dans cette catégorie la gardent.",
+      "deleteHint": "La catégorie est supprimée définitivement. Le journal d'audit en garde une trace.",
+      "image": "Image (affichée à la place de l'icône)"
+    },
+    "productCategories": {
+      "title": "Catégories de produits",
+      "subtitle": "L'arbre des catégories et les champs de chaque produit. Les sous-catégories héritent des champs de leurs parents.",
+      "add": "Nouvelle catégorie principale",
+      "addTitle": "Nouvelle catégorie de produits",
+      "editTitle": "Modifier la catégorie",
+      "addChild": "Ajouter une sous-catégorie",
+      "empty": "Aucune catégorie pour l'instant. Créez la première.",
+      "pick": "Choisissez une catégorie dans l'arbre pour voir et modifier ses champs.",
+      "attributeCount": "{{count}} champ(s)",
+      "attributes": "Champs du produit",
+      "addAttribute": "Ajouter un champ",
+      "editAttribute": "Modifier le champ",
+      "inheritHint": "Les champs des catégories parentes s'appliquent aussi ici (en gris).",
+      "inheritedFrom": "de {{name}}",
+      "noAttributes": "Aucun champ pour l'instant.",
+      "required": "Obligatoire",
+      "filterable": "Filtre de recherche",
+      "type": "Type",
+      "typeLocked": "Le type ne change plus après la création : les produits y enregistrent leurs valeurs.",
+      "key": "Clé",
+      "unit": "Unité",
+      "options": "Choix",
+      "addOption": "Ajouter un choix",
+      "parent": "Catégorie parente",
+      "topLevel": "— Niveau principal —",
+      "confirmDeleteAttribute": "Supprimer le champ « {{name}} » ?",
+      "deactivateHint": "Les visiteurs ne la voient plus, ni ses sous-catégories.",
+      "deleteHint": "La catégorie et ses champs sont supprimés définitivement. Une catégorie avec des sous-catégories ne peut pas être supprimée.",
+      "deleteAttributeHint": "Les produits de cette catégorie n'afficheront plus ce champ.",
+      "types": {
+        "Text": "Texte",
+        "Number": "Nombre",
+        "Boolean": "Oui / non",
+        "SingleChoice": "Un choix",
+        "MultiChoice": "Plusieurs choix"
+      }
+    },
+    "moveReason": {
+      "up": "monté",
+      "down": "descendu"
+    }
+  },
+  "audit": {
+    "by": "par",
+    "reason": "Motif",
+    "actions": {
+      "user": {
+        "block": "Utilisateur bloqué",
+        "unblock": "Utilisateur débloqué",
+        "role": {
+          "grant": "Rôle attribué",
+          "revoke": "Rôle retiré"
+        },
+        "affiliateCode": {
+          "disable": "Code affilié désactivé",
+          "enable": "Code affilié réactivé"
+        }
+      },
+      "roleRequest": {
+        "approve": "Demande de rôle approuvée",
+        "refuse": "Demande de rôle refusée"
+      },
+      "setting": {
+        "update": "Paramètre modifié"
+      },
+      "storeCategory": {
+        "create": "Catégorie de boutique créée",
+        "update": "Catégorie de boutique modifiée",
+        "activate": "Catégorie de boutique affichée",
+        "deactivate": "Catégorie de boutique masquée",
+        "move": "Catégorie de boutique déplacée",
+        "delete": "Catégorie de boutique supprimée"
+      },
+      "productCategory": {
+        "create": "Catégorie de produits créée",
+        "update": "Catégorie de produits modifiée",
+        "activate": "Catégorie de produits affichée",
+        "deactivate": "Catégorie de produits masquée",
+        "move": "Catégorie de produits déplacée",
+        "delete": "Catégorie de produits supprimée",
+        "attribute": {
+          "create": "Champ produit ajouté",
+          "update": "Champ produit modifié",
+          "move": "Champ produit déplacé",
+          "delete": "Champ produit supprimé"
+        }
+      },
+      "store": {
+        "disable": "Boutique désactivée",
+        "enable": "Boutique réactivée",
+        "delete": "Boutique supprimée"
+      },
+      "product": {
+        "disable": "Produit désactivé",
+        "enable": "Produit réactivé",
+        "delete": "Produit supprimé"
+      },
+      "partnership": {
+        "end": "Partenariat terminé"
+      },
+      "order": {
+        "forceStatus": "Statut de commande forcé"
+      },
+      "coins": {
+        "adjustment": "Coins corrigés"
+      },
+      "payout": {
+        "verify": "Retrait vérifié",
+        "reject": "Retrait refusé",
+        "schedule": "Retrait planifié",
+        "paid": "Retrait payé"
+      }
+    },
+    "fields": {
+      "roles": "Rôles",
+      "status": "Statut",
+      "blockedAt": "Bloqué le",
+      "blockedReason": "Motif du blocage",
+      "affiliateCode": "Code affilié",
+      "email": "E-mail",
+      "fullName": "Nom",
+      "phone": "Téléphone",
+      "role": "Rôle demandé",
+      "value": "Valeur",
+      "slug": "Nom dans l'URL",
+      "name": "Nom",
+      "icon": "Icône",
+      "sortOrder": "Position",
+      "isActive": "Active",
+      "imageUrl": "Image",
+      "key": "Clé",
+      "type": "Type",
+      "unit": "Unité",
+      "required": "Obligatoire",
+      "filterable": "Filtrable",
+      "options": "Choix",
+      "isDeleted": "Supprimé",
+      "isDisabled": "Désactivé",
+      "moderationReason": "Motif de modération",
+      "price": "Prix"
+    }
+  },
+  "roleRequests": {
+    "title": "Ajouter un rôle",
+    "intro": "Vous voulez aussi être affilié, ouvrir une boutique ou acheter en tant que client ? Envoyez une demande : un administrateur l'examine.",
+    "hint": {
+      "Affiliate": "Obtenez un code, travaillez avec des boutiques et gagnez des coins.",
+      "StoreOwner": "Ouvrez votre boutique et vendez vos produits.",
+      "Buyer": "Achetez des produits pour vous-même."
+    },
+    "selfAffiliation": "Votre code affilié ne rapporte jamais de coins sur les produits de votre propre boutique ni sur vos propres achats.",
+    "message": "Message à l'administrateur (facultatif)",
+    "messagePlaceholder": "Ex. ce que vous vendez, comment vous trouvez vos clients…",
+    "send": "Demander le rôle « {{role}} »",
+    "sending": "Envoi…",
+    "nothingToRequest": "Vous avez déjà tous les rôles que vous pouvez demander.",
+    "mine": "Mes demandes",
+    "cancel": "Retirer",
+    "status": {
+      "Pending": "En attente",
+      "Approved": "Approuvée",
+      "Refused": "Refusée",
+      "Cancelled": "Retirée"
+    }
+  },
+  "settings": {
+    "groups": {
+      "coins": "Coins et paiements",
+      "affiliates": "Affiliés",
+      "stores": "Boutiques et facturation",
+      "search": "Recherche",
+      "general": "Général"
+    },
+    "units": {
+      "tnd": "TND",
+      "coins": "coins",
+      "percent": "%",
+      "letters": "lettres",
+      "digits": "chiffres",
+      "dayOfMonth": "du mois",
+      "days": "jours",
+      "reviews": "avis",
+      "mb": "Mo"
+    },
+    "currency": {
+      "label": "Devise",
+      "hint": "Devise unique de la plateforme en v1."
+    },
+    "coin": {
+      "valueInTnd": {
+        "label": "Valeur d'un coin",
+        "hint": "Combien de TND vaut un coin au moment du paiement."
+      }
+    },
+    "payout": {
+      "minimumCoins": {
+        "label": "Paiement minimum",
+        "hint": "Les affiliés peuvent demander un paiement à partir de ce solde."
+      }
+    },
+    "affiliatePercent": {
+      "min": {
+        "label": "% affilié minimum",
+        "hint": "Commission la plus basse qu'un propriétaire peut fixer sur un produit."
+      },
+      "max": {
+        "label": "% affilié maximum",
+        "hint": "Commission la plus haute qu'un propriétaire peut fixer sur un produit."
+      }
+    },
+    "affiliateCode": {
+      "letters": {
+        "label": "Lettres des nouveaux codes affiliés",
+        "hint": "Ex. 3 → #DRF-45. Les codes déjà donnés gardent leur forme et restent valides."
+      },
+      "minDigits": {
+        "label": "Chiffres des nouveaux codes affiliés",
+        "hint": "Longueur de départ du nombre ; elle augmente seule quand les codes manquent. Chaque code est vérifié unique."
+      }
+    },
+    "subscription": {
+      "defaultMonthlyPriceTnd": {
+        "label": "Abonnement boutique par défaut",
+        "hint": "Prix mensuel d'une nouvelle boutique. Chaque boutique peut avoir son propre prix."
+      }
+    },
+    "commissionInvoice": {
+      "dueDayOfMonth": {
+        "label": "Échéance de la facture de commissions",
+        "hint": "Jour du mois suivant où la boutique paie les commissions du mois."
+      }
+    },
+    "billing": {
+      "graceDays": {
+        "label": "Délai de grâce",
+        "hint": "Jours après l'échéance avant la suspension d'une boutique impayée."
+      }
+    },
+    "ranking": {
+      "minReviewsPrior": {
+        "label": "Avis avant de faire confiance à une note",
+        "hint": "Poids de la moyenne dans le classement : peu d'avis comptent moins."
+      }
+    },
+    "upload": {
+      "maxImageSizeMb": {
+        "label": "Taille maximale d'une image",
+        "hint": "Plus grande photo, logo ou bannière qu'un utilisateur peut envoyer."
+      }
+    }
+  },
+  "images": {
+    "choose": "Choisir une image",
+    "replace": "Remplacer",
+    "remove": "Retirer",
+    "uploading": "Envoi… {{percent}} %",
+    "hint": "JPEG, PNG ou WebP, {{max}} Mo max."
+  },
+  "myStore": {
+    "nav": "Ma boutique",
+    "title": "Ma boutique",
+    "subtitle": "Votre boutique, en ligne sur la marketplace. Les modifications s'appliquent tout de suite.",
+    "createTitle": "Créer ma boutique",
+    "createSubtitle": "Votre boutique est en ligne dès sa création. Vous pourrez tout modifier ensuite.",
+    "create": "Créer ma boutique",
+    "choose": "Choisir…",
+    "fixErrors": "Certains champs sont à corriger.",
+    "link": "Lien public",
+    "subscription": "Abonnement",
+    "tndPerMonth": "TND / mois",
+    "since": "Créée le",
+    "close": "Fermer temporairement",
+    "reopen": "Rouvrir",
+    "confirmClose": "Fermer votre boutique pour un temps ?",
+    "confirmReopen": "Rouvrir votre boutique ?",
+    "closeHint": "Les visiteurs la voient toujours, marquée fermée, et ne peuvent pas commander jusqu'à la réouverture.",
+    "reopenHint": "Les clients peuvent de nouveau commander.",
+    "percentHint": "Entre {{min}} % et {{max}} % (limites de la plateforme). S'applique aux futures commandes seulement.",
+    "allCities": "Tout",
+    "noCity": "Aucun",
+    "status": {
+      "Active": "Ouverte",
+      "Closed": "Fermée",
+      "Disabled": "Désactivée par l'admin",
+      "Suspended": "Suspendue (impayé)",
+      "Deleted": "Supprimée par l'admin"
+    },
+    "sections": {
+      "identity": "Votre boutique",
+      "contact": "Contact et liens",
+      "selling": "Vente et livraison"
+    },
+    "fields": {
+      "name": "Nom de la boutique",
+      "category": "Catégorie",
+      "slug": "Nom dans l'URL",
+      "description": "Description",
+      "logo": "Logo",
+      "banner": "Bannière",
+      "city": "Ville (gouvernorat)",
+      "address": "Adresse",
+      "facebookUrl": "Page Facebook",
+      "instagramUrl": "Instagram",
+      "websiteUrl": "Site web",
+      "defaultAffiliatePercent": "% affilié par défaut",
+      "deliveryFee": "Frais de livraison",
+      "deliveryDelay": "Délai de livraison",
+      "minDays": "Jours minimum",
+      "maxDays": "Jours maximum",
+      "deliveryCities": "Zones de livraison"
+    },
+    "tabs": {
+      "store": "Ma boutique",
+      "products": "Mes produits",
+      "affiliates": "Mes affiliés",
+      "orders": "Commandes"
+    },
+    "moderation": {
+      "disabled": "Votre boutique a été désactivée par l'administrateur.",
+      "disabledHint": "Elle et ses produits ne sont plus visibles. Contactez le support pour la faire réactiver.",
+      "deleted": "Votre boutique a été supprimée par l'administrateur.",
+      "deletedHint": "Elle ne peut plus être modifiée."
+    }
+  },
+  "cities": {
+    "tunis": "Tunis",
+    "ariana": "Ariana",
+    "ben-arous": "Ben Arous",
+    "manouba": "La Manouba",
+    "nabeul": "Nabeul",
+    "zaghouan": "Zaghouan",
+    "bizerte": "Bizerte",
+    "beja": "Béja",
+    "jendouba": "Jendouba",
+    "kef": "Le Kef",
+    "siliana": "Siliana",
+    "sousse": "Sousse",
+    "monastir": "Monastir",
+    "mahdia": "Mahdia",
+    "sfax": "Sfax",
+    "kairouan": "Kairouan",
+    "kasserine": "Kasserine",
+    "sidi-bouzid": "Sidi Bouzid",
+    "gabes": "Gabès",
+    "medenine": "Médenine",
+    "tataouine": "Tataouine",
+    "gafsa": "Gafsa",
+    "tozeur": "Tozeur",
+    "kebili": "Kébili"
+  },
+  "products": {
+    "title": "Mes produits",
+    "subtitle": "Tout ce que votre boutique vend. Les produits publiés sont visibles dans la boutique en ligne.",
+    "add": "Ajouter un produit",
+    "addTitle": "Nouveau produit",
+    "editTitle": "Modifier le produit",
+    "back": "Retour à mes produits",
+    "noStore": "Créez d'abord votre boutique, puis ajoutez vos produits.",
+    "empty": "Aucun produit pour l'instant.",
+    "searchPlaceholder": "Rechercher par nom ou référence",
+    "allStatuses": "Tous les statuts",
+    "variantCount": "{{count}} variante(s)",
+    "from": "à partir de",
+    "stockCount": "{{count}} en stock",
+    "status": {
+      "Draft": "Brouillon",
+      "Published": "Publié",
+      "Archived": "Archivé",
+      "Disabled": "Désactivé par l'admin",
+      "Deleted": "Supprimé"
+    },
+    "sections": {
+      "basics": "Produit",
+      "affiliate": "Affiliés",
+      "photos": "Photos",
+      "fields": "Caractéristiques",
+      "variants": "Variantes"
+    },
+    "fields": {
+      "name": "Nom du produit",
+      "category": "Catégorie",
+      "price": "Prix",
+      "compareAtPrice": "Ancien prix (barré)",
+      "sku": "Référence (SKU)",
+      "stock": "Stock",
+      "status": "Statut",
+      "affiliatePercent": "% affilié"
+    },
+    "compareHint": "Facultatif, supérieur au prix.",
+    "coinsPreview": "Avec {{percent}} %, un affilié gagne par article vendu",
+    "percentHint": "Vide = le % par défaut de votre boutique ({{store}} %). Entre {{min}} % et {{max}} %. S'applique aux futures commandes seulement.",
+    "photosHint": "Jusqu'à {{max}} photos. La première est la photo principale ; les flèches changent l'ordre.",
+    "mainPhoto": "Principale",
+    "fieldsHint": "Champs de la catégorie (et de ses catégories parentes). * = obligatoire pour publier.",
+    "variantsHint": "Vendu en plusieurs tailles ou couleurs ? Choisissez jusqu'à 2 champs, cochez les options disponibles, puis donnez le stock de chaque combinaison (et un prix s'il diffère).",
+    "variant": "Variante",
+    "variantPrice": "Prix (si différent)",
+    "pickOptions": "Cochez au moins une option de chaque champ.",
+    "confirmDelete": "Supprimer « {{name}} » ?",
+    "deleteHint": "Il quitte votre boutique et la boutique en ligne. Les commandes passées le gardent.",
+    "disabledByAdmin": "Désactivé par l'admin",
+    "disabledHint": "Ce produit n'est plus dans la boutique en ligne. Vous pouvez le modifier, mais seul un admin peut le réactiver."
+  },
+  "shop": {
+    "products": "Produits",
+    "stores": "Boutiques",
+    "allProducts": "Tous les produits",
+    "allCategories": "Toutes",
+    "allCities": "Toutes les villes",
+    "breadcrumb": "Vous êtes ici",
+    "searchProducts": "Rechercher un produit",
+    "searchStores": "Rechercher une boutique",
+    "sortBy": "Trier par",
+    "sort": {
+      "Newest": "Nouveautés",
+      "PriceAsc": "Prix croissant",
+      "PriceDesc": "Prix décroissant"
+    },
+    "resultCount": "{{count}} produit(s)",
+    "noProducts": "Aucun produit ici pour l'instant.",
+    "noStores": "Aucune boutique ne correspond.",
+    "productCount": "{{count}} produit(s)",
+    "outOfStock": "Rupture de stock",
+    "inStock": "En stock",
+    "chooseVariant": "Choisissez une option",
+    "unavailable": "Indisponible avec ce choix",
+    "storeClosed": "fermée",
+    "storeClosedLong": "Cette boutique est fermée pour le moment : les commandes reprennent à sa réouverture.",
+    "delivery": "Livraison",
+    "deliveryFee": "Frais de livraison",
+    "deliveryDelay": "{{min}} à {{max}} jours",
+    "deliversTo": "Livre à :",
+    "allTunisia": "toute la Tunisie",
+    "paymentOnDelivery": "Paiement en espèces à la livraison.",
+    "addToCart": "Ajouter au panier",
+    "cartSoon": "Les commandes ouvrent bientôt (panier en cours).",
+    "photo": "Photo {{n}}",
+    "affiliateTitle": "Vous êtes affilié",
+    "affiliateEarn": "Ce produit donne {{percent}} % : par article vendu avec votre code vous gagnez",
+    "affiliatePartnership": "Votre code compte sur les produits de cette boutique dès qu’elle accepte de travailler avec vous."
+  },
+  "moderation": {
+    "reasonLabel": "Motif (montré au propriétaire)",
+    "reasonPlaceholder": "Ex. : prix absurde, produit contrefait, boutique fictive…",
+    "ownerRoleRevoked": "Le rôle « Propriétaire de boutique » a été retiré au propriétaire.",
+    "hints": {
+      "disable": "Retiré de la boutique en ligne et de la recherche. Le propriétaire voit le motif ; seul un admin peut réactiver.",
+      "enable": "De nouveau visible dans la boutique en ligne (si le propriétaire l'a publié).",
+      "delete": "Suppression définitive pour le propriétaire : masqué partout, conservé pour l'historique des commandes et des coins."
+    },
+    "do": {
+      "disable": "Désactiver",
+      "enable": "Réactiver",
+      "delete": "Supprimer"
+    },
+    "category": "Catégorie",
+    "allCategories": "Toutes les catégories",
+    "createdFrom": "Créée du",
+    "createdTo": "au",
+    "productCount": "{{ count }} produit(s)",
+    "deliveryDays": "{{ min }} à {{ max }} jours",
+    "link": "Lien",
+    "createdAt": "Créée le",
+    "owner": "Propriétaire",
+    "ownerNoRole": "N'a plus le rôle Propriétaire",
+    "products": {
+      "title": "Produits",
+      "subtitle": "Tous les produits de toutes les boutiques : triez par prix pour repérer les prix absurdes.",
+      "searchPlaceholder": "Nom du produit, référence…",
+      "empty": "Aucun produit.",
+      "disableSelected": "Désactiver la sélection ({{ count }})",
+      "storeFilter": "Boutique : {{ name }}",
+      "allStates": "Tous les états",
+      "states": {
+        "Live": "En ligne",
+        "Draft": "Brouillon",
+        "Archived": "Archivé",
+        "Disabled": "Désactivé",
+        "Deleted": "Supprimé"
+      },
+      "minPrice": "Prix min",
+      "maxPrice": "Prix max",
+      "selectAll": "Tout sélectionner",
+      "count": "{{ count }} produit(s)",
+      "noImage": "Sans photo",
+      "confirm": {
+        "disable": "Désactiver « {{ name }} » ?",
+        "enable": "Réactiver « {{ name }} » ?",
+        "delete": "Supprimer « {{ name }} » ?",
+        "bulk": "Désactiver {{ count }} produit(s) ?"
+      },
+      "min": "Min",
+      "max": "Max"
+    },
+    "productCounts": "{{ total }} produit(s) · {{ live }} en ligne · {{ disabled }} désactivé(s)",
+    "seeProducts": "Voir ses produits",
+    "statsSoon": "Statistiques de la boutique : bientôt (023).",
+    "actions": "Modération",
+    "stores": {
+      "title": "Boutiques",
+      "subtitle": "Les boutiques sont en ligne dès leur création : repérez et désactivez les fausses.",
+      "searchPlaceholder": "Nom de la boutique, propriétaire (nom, e-mail)…",
+      "empty": "Aucune boutique.",
+      "back": "Boutiques",
+      "actionsHint": "Une boutique désactivée et tous ses produits disparaissent de la boutique en ligne.",
+      "confirm": {
+        "disable": "Désactiver la boutique « {{ name }} » ?",
+        "enable": "Réactiver la boutique « {{ name }} » ?",
+        "delete": "Supprimer la boutique « {{ name }} » ?"
+      }
+    },
+    "productsHeading": "Produits"
+  },
+  "partnerships": {
+    "nav": "Mes boutiques",
+    "status": {
+      "Requested": "En attente",
+      "Accepted": "Partenaire",
+      "Refused": "Refusée",
+      "Ended": "Terminée",
+      "Cancelled": "Retirée"
+    },
+    "cancel": "Retirer",
+    "since": "Depuis le {{date}}",
+    "storeHidden": "Boutique indisponible",
+    "codeInactive": "Code désactivé",
+    "cta": {
+      "title": "Affilié",
+      "intro": "Travaillez avec cette boutique pour gagner des coins sur ses produits.",
+      "ask": "Demander à travailler avec cette boutique",
+      "message": "Message au commerçant (facultatif)",
+      "messagePlaceholder": "Qui vous êtes, comment vous vendez (Instagram, TikTok, votre boutique…)",
+      "send": "Envoyer la demande",
+      "waiting": "Demande envoyée — le commerçant décide.",
+      "partner": "Vous travaillez avec cette boutique : votre code compte sur ses produits.",
+      "shareLink": "Lien à partager",
+      "shareHint": "Partagez ce lien, ou donnez votre code {{code}} à vos clients.",
+      "allStores": "Voir toutes mes boutiques",
+      "last": {
+        "Refused": "Votre dernière demande a été refusée",
+        "Ended": "Votre dernier partenariat a été terminé"
+      }
+    },
+    "mine": {
+      "title": "Mes boutiques",
+      "subtitle": "Les boutiques avec lesquelles vous travaillez, et vos demandes.",
+      "findStores": "Trouver des boutiques",
+      "empty": "Vous ne travaillez encore avec aucune boutique",
+      "emptyHint": "Ouvrez la page d’une boutique et demandez à travailler avec elle. Le commerçant accepte ou refuse.",
+      "active": "Boutiques partenaires",
+      "waiting": "En attente de réponse",
+      "history": "Historique"
+    },
+    "store": {
+      "title": "Mes affiliés",
+      "subtitle": "Les affiliés vous amènent des clients. Acceptez ceux avec qui vous voulez travailler : leur code compte alors sur vos produits.",
+      "requests": "Demandes",
+      "partners": "Partenaires",
+      "history": "Historique",
+      "empty": "Aucun affilié n’a encore fait de demande",
+      "emptyHint": "Les affiliés envoient leur demande depuis la page de votre boutique.",
+      "accept": "Accepter",
+      "refuse": "Refuser",
+      "end": "Terminer le partenariat",
+      "reason": "Raison montrée à l’affilié (facultatif)",
+      "profile": "Membre depuis le {{date}} · {{count}} boutique(s) partenaire(s)",
+      "confirm": {
+        "accept": "Travailler avec {{name}} ?",
+        "refuse": "Refuser la demande de {{name}} ?",
+        "end": "Arrêter de travailler avec {{name}} ?"
+      },
+      "confirmHint": {
+        "accept": "Son code comptera sur vos produits, avec la commission que vous fixez par produit.",
+        "refuse": "L’affilié pourra envoyer une nouvelle demande plus tard.",
+        "end": "Son code ne compte plus sur vos produits à partir de maintenant. Les commandes déjà passées gardent leur commission."
+      }
+    },
+    "admin": {
+      "title": "Partenariats",
+      "subtitle": "Tous les liens affilié ↔ boutique. Terminez-en un s’il sert à frauder.",
+      "searchPlaceholder": "Affilié, boutique, propriétaire ou code",
+      "status": "Statut",
+      "allStatuses": "Tous les statuts",
+      "empty": "Aucun partenariat ne correspond.",
+      "endTitle": "Terminer le partenariat de {{affiliate}} avec {{store}} ?",
+      "endHint": "Le code ne compte plus sur les produits de cette boutique. La raison est gardée dans le journal d’audit.",
+      "reason": "Raison (obligatoire)",
+      "owner": "Propriétaire :"
+    },
+    "adminCode": {
+      "title": "Code affilié",
+      "disable": "Désactiver le code",
+      "enable": "Réactiver le code",
+      "disableHint": "En cas de fraude : le code est refusé sur tous les produits jusqu’à sa réactivation. Les partenariats restent en place.",
+      "seePartnerships": "Voir ses partenariats",
+      "confirmDisable": "Désactiver le code {{code}} ?",
+      "confirmEnable": "Réactiver le code {{code}} ?",
+      "confirmHint": "Le code est refusé sur toutes les commandes à partir de maintenant. La raison est gardée dans le journal d’audit."
+    }
+  },
+  "cart": {
+    "title": "Mon panier",
+    "summaryLine": "{{count}} article(s) · {{stores}} boutique(s)",
+    "continue": "Continuer mes achats",
+    "empty": "Votre panier est vide",
+    "emptyHint": "Ajoutez des produits depuis les boutiques : ils restent ici jusqu’à la commande.",
+    "deliveryFee": "Livraison",
+    "remove": "Retirer du panier",
+    "less": "Diminuer la quantité",
+    "more": "Augmenter la quantité",
+    "issues": {
+      "productUnavailable": "Ce produit n’est plus disponible. Retirez-le pour continuer.",
+      "storeClosed": "Cette boutique est fermée pour le moment : elle ne prend pas de commande.",
+      "variantRequired": "Choisissez une option pour ce produit.",
+      "variantUnavailable": "Cette option n’existe plus. Retirez la ligne et choisissez-en une autre.",
+      "outOfStock": "Rupture de stock.",
+      "notEnoughStock": "Il ne reste que {{count}} en stock : diminuez la quantité."
+    },
+    "affiliateCode": "Code affilié",
+    "codePlaceholder": "#DRF-45",
+    "applyCode": "Appliquer",
+    "codeValid": "Recommandé par {{name}}",
+    "changeCode": "Modifier",
+    "removeCode": "Retirer le code",
+    "addCode": "Ajouter un code affilié",
+    "storeSubtotal": "Sous-total de la boutique",
+    "summary": "Récapitulatif",
+    "items": "Articles",
+    "delivery": "Livraison ({{count}} boutique(s))",
+    "total": "Total",
+    "cashOnDelivery": "Paiement en espèces à la livraison.",
+    "fixLines": "Corrigez les lignes signalées pour pouvoir commander.",
+    "checkout": "Passer la commande",
+    "recommendedBy": "Recommandé par {{name}} — son code sera ajouté à votre panier.",
+    "added": "Ajouté au panier",
+    "see": "Voir le panier"
+  },
+  "checkout": {
+    "title": "Finaliser la commande",
+    "subtitle": "Vérifiez votre panier, indiquez où livrer : vous payez en espèces à la réception.",
+    "backToCart": "Retour au panier",
+    "whoFor": "Pour qui est cette commande ?",
+    "forMe": "Pour moi",
+    "forMeHint": "Je commande pour moi-même.",
+    "forClient": "Pour un client",
+    "forClientHint": "Je passe la commande à la place d’un client que j’ai trouvé.",
+    "affiliateModeInfo": "Votre code {{code}} sera ajouté à tous les produits des boutiques avec lesquelles vous travaillez. Les autres produits sont commandés sans code.",
+    "delivery": "Livraison",
+    "clientDetails": "Coordonnées du client",
+    "deliveryHint": "Le livreur appelle ce numéro avant de passer.",
+    "fullName": "Nom complet",
+    "city": "Gouvernorat",
+    "chooseCity": "Choisir…",
+    "address": "Adresse",
+    "addressPlaceholder": "Rue, numéro, quartier, repère…",
+    "note": "Note pour la livraison (facultatif)",
+    "notePlaceholder": "Étage, horaires, sonner deux fois…",
+    "payment": "Paiement",
+    "cod": "Paiement à la livraison",
+    "codHint": "Vous payez en espèces au livreur, à la réception de chaque colis (une boutique = un colis).",
+    "editCart": "Modifier",
+    "notDelivered": "{{store}} ne livre pas à {{city}}. Choisissez un autre gouvernorat ou retirez ses produits du panier.",
+    "toPay": "À payer à la livraison",
+    "confirm": "Confirmer la commande",
+    "placing": "Envoi de la commande…",
+    "confirmHint": "Chaque boutique prépare et livre sa partie de la commande.",
+    "seeCart": "Voir le panier",
+    "validation": {
+      "fullName": "Indiquez le nom complet.",
+      "city": "Choisissez le gouvernorat.",
+      "address": "Indiquez l’adresse (5 caractères au moins)."
+    }
+  },
+  "orders": {
+    "nav": "Commandes",
+    "mine": "Mes commandes",
+    "mineHint": "Le suivi de vos commandes, boutique par boutique.",
+    "none": "Vous n’avez pas encore passé de commande",
+    "order": "Commande",
+    "back": "Mes commandes",
+    "reference": "Référence",
+    "thanks": "Merci, votre commande est passée !",
+    "thanksHint": "Chaque boutique va la préparer et vous appeler avant la livraison. Vous payez en espèces à la réception.",
+    "keepReference": "Gardez cette référence : avec votre numéro de téléphone, elle permet de suivre la commande.",
+    "deliveredBy": "Préparé et livré par la boutique",
+    "toCollect": "À payer au livreur",
+    "deliveryTo": "Livraison à",
+    "date": "Passée le",
+    "placedByAffiliate": "Commandée par un affilié pour vous",
+    "codReminder": "Paiement en espèces à la réception de chaque colis.",
+    "itemCount": "{{count}} article(s)",
+    "forClientNamed": "Pour {{name}}",
+    "status": {
+      "Placed": "Passée",
+      "Confirmed": "Confirmée",
+      "Shipped": "Expédiée",
+      "Delivered": "Livrée",
+      "Cancelled": "Annulée",
+      "NotDelivered": "Non livrée"
+    },
+    "track": {
+      "title": "Suivre une commande",
+      "hint": "Entrez la référence reçue et le numéro de téléphone donné à la commande.",
+      "find": "Rechercher"
+    },
+    "sales": {
+      "title": "Ventes avec mon code",
+      "hint": "Vos coins sont crédités quand la boutique confirme la livraison.",
+      "lines": "Produits",
+      "sales": "Ventes",
+      "expected": "Coins attendus",
+      "none": "Aucune vente avec votre code pour le moment.",
+      "placedByMe": "commandée par vous"
+    },
+    "notDelivered": {
+      "Refused": "Colis refusé",
+      "Unreachable": "Client injoignable",
+      "WrongAddress": "Mauvaise adresse",
+      "Other": "Autre raison"
+    },
+    "actor": {
+      "Store": "par la boutique",
+      "Client": "par le client",
+      "Admin": "par l’administration"
+    },
+    "payment": {
+      "Unpaid": "À encaisser",
+      "Collected": "Encaissé"
+    },
+    "paid": "Payée",
+    "cancel": "Annuler cette commande",
+    "cancelTitle": "Annuler la commande chez {{store}} ?",
+    "cancelHint": "La boutique ne préparera pas ce colis. Les autres boutiques de la commande ne sont pas concernées.",
+    "cancelReason": "Raison (facultatif)",
+    "keep": "Garder la commande",
+    "history": "Historique",
+    "byAffiliate": "Par un affilié",
+    "placedByAffiliateForClient": "Commandée par un affilié pour ce client"
+  },
+  "storeOrders": {
+    "title": "Commandes",
+    "subtitle": "Préparez, expédiez et confirmez la livraison de vos commandes.",
+    "all": "Toutes",
+    "searchPlaceholder": "Référence, nom ou téléphone du client",
+    "none": "Aucune commande ici pour le moment.",
+    "withCode": "Code affilié",
+    "nextHint": {
+      "Placed": "Nouvelle commande : confirmez-la quand vous l’acceptez, ou expédiez-la directement.",
+      "Confirmed": "Préparez le colis puis marquez-le expédié.",
+      "Shipped": "Quand le livreur a remis le colis et encaissé le paiement, confirmez la livraison."
+    },
+    "do": {
+      "Confirmed": "Confirmer",
+      "Shipped": "Marquer expédiée",
+      "Delivered": "Livrée et encaissée",
+      "NotDelivered": "Non livrée",
+      "Cancelled": "Annuler"
+    },
+    "toPrepare": "À préparer",
+    "commission": "Commission {{percent}} % :",
+    "noHistory": "Pas encore de changement.",
+    "confirm": {
+      "Confirmed": "Confirmer la commande {{reference}} ?",
+      "Shipped": "Le colis {{reference}} est parti ?",
+      "Delivered": "Le colis {{reference}} est livré et payé ?",
+      "NotDelivered": "Le colis {{reference}} n’a pas été livré ?",
+      "Cancelled": "Annuler la commande {{reference}} ?"
+    },
+    "confirmHint": {
+      "Confirmed": "Le client verra que vous préparez sa commande.",
+      "Shipped": "Le client verra que son colis est en route.",
+      "Delivered": "Confirmez que {{amount}} TND ont été encaissés. C’est définitif : les coins de l’affilié sont crédités.",
+      "NotDelivered": "Le colis est revenu : rien n’est encaissé, aucun coin n’est crédité et le stock est remis.",
+      "Cancelled": "Le stock est remis. Le client voit la raison."
+    },
+    "whyNotDelivered": "Pourquoi ?",
+    "reasonRequired": "Raison (obligatoire, visible par le client)",
+    "reasonOptional": "Détails (facultatif)"
+  },
+  "adminOrders": {
+    "title": "Commandes",
+    "subtitle": "Toutes les commandes de la plateforme, boutique par boutique.",
+    "searchPlaceholder": "Référence, client, téléphone ou boutique",
+    "status": "Statut",
+    "allStatuses": "Tous les statuts",
+    "none": "Aucune commande ne correspond.",
+    "force": "Changer un statut",
+    "forceHint": "En cas de litige ou de boutique qui ne répond pas. La raison est gardée dans le journal d’audit ; une commande livrée ne change plus.",
+    "forceTitle": "Changer le statut chez {{store}}",
+    "current": "Statut actuel :",
+    "newStatus": "Nouveau statut",
+    "reason": "Raison (obligatoire)",
+    "apply": "Appliquer"
+  },
+  "coins": {
+    "mine": "Mes coins",
+    "mineHint": "Crédités quand la boutique confirme la livraison. Chaque coin est relié à sa commande.",
+    "balance": "Solde",
+    "earned": "Gagnés",
+    "expected": "Attendus",
+    "expectedHint": "Colis encore en route.",
+    "type": {
+      "Earned": "Gagnés",
+      "PayoutLocked": "Retrait demandé",
+      "PayoutReleased": "Retrait annulé",
+      "Adjustment": "Correction"
+    },
+    "admin": {
+      "title": "Coins",
+      "subtitle": "Le registre de tous les coins : chaque écriture remonte à sa commande, son produit, sa boutique et son client. Rien n’est jamais modifié ni supprimé.",
+      "adjust": "Corriger des coins",
+      "affiliates": "Affiliés",
+      "searchPlaceholder": "Affilié, code, commande, produit ou boutique",
+      "type": "Type",
+      "allTypes": "Tous les types",
+      "from": "Du",
+      "to": "Au",
+      "none": "Aucune écriture ne correspond.",
+      "correct": "Corriger",
+      "adjustHint": "Une correction ajoute une écriture signée (positive pour donner, négative pour reprendre). Elle est gardée dans le journal d’audit.",
+      "correcting": "Correction d’une écriture de {{name}} (commande {{reference}})",
+      "affiliate": "Affilié",
+      "affiliatePlaceholder": "Nom, e-mail ou code",
+      "amount": "Coins (signés)",
+      "amountHint": "Ex. -2,5 pour reprendre 2,5 coins.",
+      "reason": "Raison (obligatoire)",
+      "save": "Enregistrer la correction"
+    }
+  },
+  "wallet": {
+    "open": "Mon portefeuille",
+    "title": "Mon portefeuille",
+    "back": "Mon espace affilié",
+    "subtitle": "Tous vos coins, d’où ils viennent et ce qu’ils représentent. Filtrez, comparez vos produits et boutiques, exportez.",
+    "tabs": {
+      "history": "Historique",
+      "breakdown": "Répartition",
+      "orders": "Commandes avec mon code",
+      "payouts": "Retraits"
+    },
+    "searchPlaceholder": "Commande, produit ou boutique",
+    "store": "Boutique",
+    "allStores": "Toutes les boutiques",
+    "oneProduct": "Un produit",
+    "count": "{{count}} écriture(s)",
+    "export": "Exporter (CSV)",
+    "exporting": "Export…",
+    "exportCapped": "Export limité aux {{max}} écritures les plus récentes : réduisez la période pour le reste.",
+    "none": "Pas encore de coins. Ils arrivent quand une commande avec votre code est livrée.",
+    "noneFiltered": "Aucune écriture ne correspond à ces filtres.",
+    "by": {
+      "Product": "Par produit",
+      "Store": "Par boutique"
+    },
+    "breakdownHint": "Coins gagnés sur les commandes livrées de la période (les corrections n’y figurent pas).",
+    "breakdownNone": "Aucun coin gagné sur cette période.",
+    "rowStats": "{{lines}} vente(s) · {{quantity}} article(s)",
+    "viewHistory": "Voir le détail",
+    "clientName": "Client : {{name}}",
+    "csv": {
+      "date": "Date",
+      "type": "Type",
+      "coins": "Coins",
+      "reference": "Commande",
+      "store": "Boutique",
+      "product": "Produit",
+      "quantity": "Quantité",
+      "lineTotal": "Montant (TND)",
+      "percent": "Commission (%)",
+      "client": "Client",
+      "phone": "Téléphone",
+      "reason": "Raison"
+    }
+  },
+  "payouts": {
+    "status": {
+      "Requested": "Demandé",
+      "Verified": "Vérifié",
+      "Scheduled": "Planifié",
+      "Paid": "Payé",
+      "Rejected": "Refusé",
+      "Cancelled": "Annulé"
+    },
+    "method": {
+      "Cash": "Espèces",
+      "BankTransfer": "Virement bancaire"
+    },
+    "actor": {
+      "affiliate": "Vous",
+      "team": "L’équipe"
+    },
+    "lockedHint": "{{coins}} coins réservés pour votre retrait en cours",
+    "paidOut": "Retirés",
+    "mine": {
+      "title": "Retirer mes coins",
+      "hint": "Vous demandez, nous vérifions, puis nous fixons une date pour vous remettre l’argent en espèces ou par virement.",
+      "ask": "Demander un retrait",
+      "missing": "Encore {{coins}} coins pour atteindre le minimum",
+      "oneOpen": "Une demande est déjà en cours",
+      "ready": "Vous pouvez demander un retrait",
+      "cancel": "Annuler la demande",
+      "cancelTitle": "Annuler la demande {{reference}} ?",
+      "cancelHint": "Les coins reviennent sur votre solde tout de suite. Vous pourrez refaire une demande quand vous voulez.",
+      "history": "Mes demandes passées",
+      "none": "Aucune demande pour l’instant.",
+      "paidOn": "Payé le {{date}}"
+    },
+    "next": {
+      "Requested": {
+        "Cash": "Nous vérifions vos commissions. Nous fixerons ensuite le jour et le lieu de la remise.",
+        "BankTransfer": "Nous vérifions vos commissions. Nous fixerons ensuite la date du virement."
+      },
+      "Verified": {
+        "Cash": "Vérifiée. Nous fixons le jour et le lieu de la remise en espèces.",
+        "BankTransfer": "Vérifiée. Nous fixons la date du virement."
+      },
+      "Scheduled": {
+        "Cash": "Rendez-vous fixé pour la remise en espèces :",
+        "BankTransfer": "Virement prévu le :"
+      }
+    },
+    "form": {
+      "title": "Demander un retrait",
+      "hint": "Les coins demandés sont réservés pendant la vérification. Le montant en TND est fixé maintenant.",
+      "coins": "Coins à retirer",
+      "range": "entre {{min}} et {{max}} coins",
+      "method": "Mode de paiement",
+      "bankName": "Banque",
+      "accountHolder": "Titulaire du compte",
+      "rib": "RIB (20 chiffres)",
+      "ribHint": "{{count}} / 20 chiffres",
+      "cashHint": "Nous vous contacterons pour fixer le jour et le lieu de la remise.",
+      "note": "Note (facultatif)",
+      "notePlaceholder": "Disponibilités, précisions…",
+      "send": "Envoyer la demande"
+    },
+    "admin": {
+      "title": "Retraits affiliés",
+      "subtitle": "Les affiliés ne retirent jamais directement : vérifiez chaque demande, fixez une date de remise ou de virement, puis marquez-la payée. Tout est tracé dans l’audit.",
+      "toVerify": "À vérifier",
+      "toSchedule": "À planifier",
+      "planned": "Planifiés",
+      "locked": "Coins réservés",
+      "todayCash": "Remises en espèces du jour",
+      "weekTransfers": "Virements de la semaine",
+      "searchPlaceholder": "Référence, affilié, e-mail ou code",
+      "status": "Statut",
+      "allStatuses": "Tous les statuts",
+      "allMethods": "Tous les modes",
+      "from": "Planifié du",
+      "to": "au",
+      "none": "Aucune demande ne correspond.",
+      "requestedOn": "Demandé le {{date}}",
+      "next": {
+        "Requested": "Vérifiez les commissions couvertes, puis validez ou refusez la demande.",
+        "Verified": "Fixez la date (et le lieu pour les espèces).",
+        "Scheduled": "Une fois l’argent remis ou viré, marquez la demande payée."
+      },
+      "verify": "Valider la vérification",
+      "schedule": "Planifier",
+      "reschedule": "Changer la date",
+      "markPaid": "Marquer payé",
+      "reject": "Refuser",
+      "request": "Demande",
+      "scheduledFor": "Date prévue",
+      "place": "Lieu",
+      "paidAt": "Payé le",
+      "paidReference": "Référence / remis par",
+      "rejectionReason": "Raison du refus",
+      "covered": "Commissions couvertes",
+      "coveredHint": "Coins gagnés les plus anciens d’abord, après ceux déjà pris par les demandes précédentes. Vous décidez au cas par cas.",
+      "fromAdjustments": "{{coins}} coins de cette demande ne viennent pas de ventes : ils viennent des corrections (total des corrections : {{total}}).",
+      "coveredNone": "Aucune vente livrée ne couvre cette demande.",
+      "deliveredOn": "livrée le {{date}}",
+      "invoiced": "Facturée à la boutique",
+      "notInvoiced": "Pas encore facturée",
+      "affiliate": "Affilié",
+      "cannotEarn": "Code désactivé",
+      "seeLedger": "Voir ses coins dans le registre",
+      "steps": "Étapes",
+      "others": "Ses autres demandes",
+      "othersNone": "Aucune autre demande.",
+      "verifyTitle": "Valider la vérification",
+      "verifyHint": "Vous confirmez avoir contrôlé les commissions couvertes. Vous fixerez la date ensuite.",
+      "verifyConfirm": "Valider",
+      "rejectTitle": "Refuser la demande",
+      "rejectHint": "Les coins reviennent sur le solde de l’affilié. La raison lui est montrée.",
+      "rejectConfirm": "Refuser la demande",
+      "scheduleTitle": "Planifier le paiement",
+      "scheduleHint": "L’affilié voit la date tout de suite.",
+      "scheduleConfirm": "Enregistrer la date",
+      "paidTitle": "Marquer comme payé",
+      "paidHint": "À faire une fois l’argent remis ou le virement envoyé. C’est définitif.",
+      "paidConfirm": "Marquer payé",
+      "noteOptional": "Note (facultatif)",
+      "reason": "Raison (obligatoire)",
+      "whenCash": "Jour et heure de la remise",
+      "whenTransfer": "Date du virement",
+      "placePlaceholder": "Ex. Bureau, Les Berges du Lac 2, Tunis",
+      "handedBy": "Remis par (nom)",
+      "bankReference": "Référence du virement"
+    },
+    "rate": "1 coin = {{value}} TND"
+  }
+}

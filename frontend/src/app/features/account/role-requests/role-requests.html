@@ -1,0 +1,101 @@
+<section class="card overflow-hidden">
+  <div class="card-header">
+    <div>
+      <h2 class="section-title">{{ 'roleRequests.title' | transloco }}</h2>
+      <p class="mt-0.5 text-sm text-muted">{{ 'roleRequests.intro' | transloco }}</p>
+    </div>
+  </div>
+
+  <div class="card-body space-y-6">
+    @if (error(); as key) {
+      <p role="alert" class="alert-danger">{{ key | transloco }}</p>
+    }
+
+    @if (available().length) {
+      <div class="grid gap-3 sm:grid-cols-3">
+        @for (r of available(); track r) {
+          <button type="button" (click)="choose(r)" [attr.aria-pressed]="role() === r"
+            class="cursor-pointer rounded-xl border p-4 text-start transition-all duration-200"
+            [class]="role() === r ? 'border-brand bg-brand-soft shadow-card ring-4 ring-brand-ring' : 'border-line-strong/80 bg-card hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-card-hover'">
+            <span class="block font-semibold text-ink">{{ 'roles.' + r | transloco }}</span>
+            <span class="mt-1 block text-sm text-muted">{{ 'roleRequests.hint.' + r | transloco }}</span>
+          </button>
+        }
+      </div>
+
+      @if (role(); as r) {
+        <div class="space-y-5 rounded-xl border border-line bg-subtle/50 p-4 sm:p-5 animate-fade-in">
+          @if (r === 'Affiliate') {
+            <ol class="space-y-2.5 text-sm text-ink-soft">
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xs font-bold text-brand ring-1 ring-brand/15">1</span>
+                <span class="pt-0.5">{{ 'affiliate.step1' | transloco }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xs font-bold text-brand ring-1 ring-brand/15">2</span>
+                <span class="pt-0.5">{{ 'affiliate.step2' | transloco }}</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xs font-bold text-brand ring-1 ring-brand/15">3</span>
+                <span class="pt-0.5">{{ 'affiliate.step3' | transloco }}</span>
+              </li>
+            </ol>
+          }
+          @if (showSelfAffiliationNote()) {
+            <p class="rounded-lg border border-accent/30 bg-accent/12 px-3.5 py-2.5 text-sm text-accent-ink">{{ 'roleRequests.selfAffiliation' | transloco }}</p>
+          }
+
+          <div>
+            <label for="roleMessage" class="field-label">{{ 'roleRequests.message' | transloco }}</label>
+            <textarea id="roleMessage" rows="3" maxlength="500" [value]="message()" (input)="message.set($any($event.target).value)"
+              [placeholder]="'roleRequests.messagePlaceholder' | transloco"
+              class="mt-1.5 field resize-y"></textarea>
+          </div>
+
+          @if (r === 'Affiliate') {
+            <label class="flex cursor-pointer items-start gap-3 text-sm text-ink-soft">
+              <input type="checkbox" class="mt-0.5 checkbox" [checked]="termsAccepted()" (change)="termsAccepted.set(!termsAccepted())" />
+              <span>{{ 'affiliate.acceptTerms' | transloco }}</span>
+            </label>
+          }
+
+          <button type="button" (click)="submit()" [disabled]="!canSubmit()" class="btn btn-primary w-full sm:w-auto">
+            {{ (submitting() ? 'roleRequests.sending' : 'roleRequests.send') | transloco: { role: ('roles.' + r | transloco) } }}
+          </button>
+        </div>
+      }
+    } @else if (requests.hasValue()) {
+      <p class="alert-info">{{ 'roleRequests.nothingToRequest' | transloco }}</p>
+    }
+
+    @if (requests.value()?.length) {
+      <div>
+        <h3 class="eyebrow">{{ 'roleRequests.mine' | transloco }}</h3>
+        <ul class="mt-3 space-y-3">
+          @for (req of requests.value(); track req.id) {
+            <li class="rounded-xl border border-line bg-card p-4 shadow-card transition-shadow duration-200 hover:shadow-card-hover">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+                <span class="font-semibold text-ink">{{ 'roles.' + req.role | transloco }}</span>
+                <span class="pill"
+                  [class]="req.status === 'Approved' ? 'pill-success'
+                    : req.status === 'Refused' ? 'pill-danger'
+                    : req.status === 'Pending' ? 'pill-warning' : 'pill-neutral'">
+                  {{ 'roleRequests.status.' + req.status | transloco }}
+                </span>
+                <span class="text-xs text-muted">{{ req.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span>
+                @if (req.status === 'Pending') {
+                  <button type="button" (click)="cancel(req.id)" class="btn btn-ghost btn-sm ms-auto hover:text-danger">
+                    {{ 'roleRequests.cancel' | transloco }}
+                  </button>
+                }
+              </div>
+              @if (req.decisionReason) {
+                <p class="mt-3 rounded-lg bg-subtle px-3 py-2 text-sm text-muted">{{ 'audit.reason' | transloco }}: <span class="text-ink">{{ req.decisionReason }}</span></p>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+</section>

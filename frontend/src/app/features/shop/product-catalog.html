@@ -1,0 +1,53 @@
+<main class="page">
+  <header>
+    <nav class="flex flex-wrap items-center gap-1.5 text-sm text-muted" [attr.aria-label]="'shop.breadcrumb' | transloco">
+      <a routerLink="/products" [queryParams]="{}" class="transition-colors hover:text-brand">{{ 'shop.allProducts' | transloco }}</a>
+      @for (c of breadcrumb(); track c.id) {
+        <span aria-hidden="true" class="inline-block text-muted/60 rtl:rotate-180">›</span>
+        <a routerLink="/products" [queryParams]="{ category: c.slug }" class="transition-colors hover:text-brand">{{ c.name | localized: language.lang() }}</a>
+      }
+    </nav>
+    <h1 class="page-title mt-3">
+      {{ current() ? (current()!.name | localized: language.lang()) : ('shop.allProducts' | transloco) }}
+    </h1>
+  </header>
+
+  @if (children().length) {
+    <div class="-mx-4 mt-5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
+      @for (c of children(); track c.id) {
+        <a routerLink="/products" [queryParams]="{ category: c.slug }"
+          class="rounded-full border border-line bg-card px-3.5 py-1.5 text-sm font-medium text-ink-soft shadow-card transition-all duration-200 hover:-translate-y-px hover:border-brand hover:text-brand">{{ c.name | localized: language.lang() }}</a>
+      }
+    </div>
+  }
+
+  <div class="card mt-6 grid gap-3 p-3 sm:grid-cols-[1fr_auto] sm:p-4">
+    <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
+      [placeholder]="'shop.searchProducts' | transloco" [attr.aria-label]="'shop.searchProducts' | transloco"
+      class="field" />
+    <select [value]="sort() ?? 'Newest'" (change)="apply({ sort: $any($event.target).value === 'Newest' ? null : $any($event.target).value, page: null })"
+      [attr.aria-label]="'shop.sortBy' | transloco" class="field sm:w-auto">
+      @for (s of sorts; track s) { <option [value]="s">{{ 'shop.sort.' + s | transloco }}</option> }
+    </select>
+  </div>
+
+  @if (unknownCategory()) {
+    <div class="card mt-6"><p class="empty-state">{{ 'errors.productCategory.notFound' | transloco }}</p></div>
+  } @else if (products.error()) {
+    <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
+  } @else if (products.value(); as result) {
+    <p class="mt-6 text-sm text-muted">{{ 'shop.resultCount' | transloco: { count: result.total } }}</p>
+    @if (result.items.length) {
+      <ul class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+        @for (p of result.items; track p.id) { <li><app-product-card [product]="p" /></li> }
+      </ul>
+      <div class="mt-8">
+        <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
+      </div>
+    } @else {
+      <div class="card mt-4"><p class="empty-state">{{ 'shop.noProducts' | transloco }}</p></div>
+    }
+  } @else {
+    <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+  }
+</main>

@@ -1,0 +1,236 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens — use these utilities (bg-brand, text-ink, border-line, shadow-card...) instead of raw colors.
+ * Neutrals follow the slate scale; the brand is an indigo/violet. See ADR 0005 for the design system.
+ */
+@theme {
+  --font-sans: 'Inter', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: 'Noto Sans Arabic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand: oklch(0.52 0.22 277);
+  --color-brand-hover: oklch(0.46 0.22 277);
+  --color-brand-soft: oklch(0.962 0.022 277);
+  --color-brand-ring: oklch(0.52 0.22 277 / 0.18);
+  --color-accent: oklch(0.78 0.16 75);
+  --color-accent-ink: oklch(0.5 0.12 65);
+  --color-surface: oklch(0.984 0.003 248);
+  --color-subtle: oklch(0.968 0.007 248);
+  --color-card: oklch(1 0 0);
+  --color-ink: oklch(0.208 0.042 266);
+  --color-ink-soft: oklch(0.372 0.044 257);
+  --color-muted: oklch(0.554 0.046 257);
+  --color-line: oklch(0.929 0.013 255 / 0.75);
+  --color-line-strong: oklch(0.869 0.022 252);
+  --color-success: oklch(0.56 0.14 155);
+  --color-danger: oklch(0.577 0.215 27);
+
+  /* Soft, multi-layered elevations. */
+  --shadow-card: 0 1px 2px 0 oklch(0.2 0.04 266 / 0.04), 0 1px 3px 0 oklch(0.2 0.04 266 / 0.05);
+  --shadow-card-hover:
+    0 2px 4px -1px oklch(0.2 0.04 266 / 0.05), 0 8px 16px -4px oklch(0.2 0.04 266 / 0.08),
+    0 16px 32px -8px oklch(0.2 0.04 266 / 0.08);
+  --shadow-pop:
+    0 4px 6px -2px oklch(0.2 0.04 266 / 0.05), 0 12px 24px -6px oklch(0.2 0.04 266 / 0.12),
+    0 32px 64px -12px oklch(0.2 0.04 266 / 0.18);
+  --shadow-brand: 0 1px 2px 0 oklch(0.52 0.22 277 / 0.3), 0 4px 12px -2px oklch(0.52 0.22 277 / 0.35);
+
+  --animate-fade-in: fade-in 0.2s ease-out both;
+  --animate-pop-in: pop-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection {
+    background-color: var(--color-brand-soft);
+    color: var(--color-brand-hover);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+/* ---------- Layout ---------- */
+
+@utility page {
+  @apply mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10;
+}
+@utility page-narrow {
+  @apply mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-12;
+}
+@utility page-title {
+  @apply text-2xl font-bold tracking-tight text-ink sm:text-3xl;
+}
+@utility page-subtitle {
+  @apply mt-1.5 text-sm text-muted sm:text-base;
+}
+@utility section-title {
+  @apply text-lg font-semibold tracking-tight text-ink;
+}
+@utility eyebrow {
+  @apply text-xs font-semibold tracking-wider text-muted uppercase;
+}
+
+/* ---------- Surfaces ---------- */
+
+@utility card {
+  @apply rounded-xl border border-line bg-card shadow-card;
+}
+@utility card-interactive {
+  @apply rounded-xl border border-line bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-card-hover active:translate-y-0;
+}
+@utility card-header {
+  @apply flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4 sm:px-6;
+}
+@utility card-body {
+  @apply p-5 sm:p-6;
+}
+@utility row-hover {
+  @apply transition-colors duration-150 hover:bg-subtle/70;
+}
+
+/* ---------- Buttons ---------- */
+
+@utility btn {
+  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-200 select-none active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+}
+@utility btn-sm {
+  @apply gap-1.5 rounded-md px-3 py-1.5 text-xs;
+}
+@utility btn-lg {
+  @apply px-5 py-2.5 text-base;
+}
+@utility btn-primary {
+  @apply bg-brand text-white shadow-brand hover:-translate-y-px hover:bg-brand-hover;
+}
+@utility btn-secondary {
+  @apply border border-line-strong/80 bg-card text-ink shadow-card hover:border-line-strong hover:bg-subtle;
+}
+@utility btn-ghost {
+  @apply text-ink-soft hover:bg-subtle hover:text-ink;
+}
+@utility btn-danger {
+  @apply bg-danger text-white shadow-card hover:-translate-y-px hover:brightness-95;
+}
+@utility btn-danger-soft {
+  @apply bg-danger/8 text-danger hover:bg-danger/15;
+}
+@utility btn-success {
+  @apply bg-success text-white shadow-card hover:-translate-y-px hover:brightness-95;
+}
+@utility link {
+  @apply font-medium text-brand underline-offset-4 transition-colors hover:text-brand-hover hover:underline;
+}
+
+/* ---------- Forms ---------- */
+
+@utility field-label {
+  @apply block text-sm font-medium text-ink-soft;
+}
+@utility field {
+  @apply block w-full rounded-lg border border-line-strong/80 bg-card px-3 py-2 text-sm text-ink shadow-card transition-all duration-150 outline-none placeholder:text-muted/70 hover:border-line-strong focus:border-brand focus:ring-4 focus:ring-brand-ring disabled:cursor-not-allowed disabled:bg-subtle disabled:opacity-70;
+}
+@utility field-hint {
+  @apply mt-1.5 text-xs text-muted;
+}
+@utility field-error {
+  @apply mt-1.5 text-xs font-medium text-danger;
+}
+@utility checkbox {
+  @apply size-4 cursor-pointer rounded border-line-strong accent-brand;
+}
+
+/* ---------- Feedback ---------- */
+
+@utility alert-danger {
+  @apply flex items-start gap-2 rounded-lg border border-danger/20 bg-danger/6 px-3.5 py-2.5 text-sm font-medium text-danger;
+}
+@utility alert-success {
+  @apply flex items-start gap-2 rounded-lg border border-success/20 bg-success/8 px-3.5 py-2.5 text-sm font-medium text-success;
+}
+@utility alert-info {
+  @apply flex items-start gap-2 rounded-lg border border-brand/15 bg-brand-soft px-3.5 py-2.5 text-sm text-ink-soft;
+}
+@utility empty-state {
+  @apply flex flex-col items-center justify-center gap-2 px-6 py-14 text-center text-sm text-muted;
+}
+
+/* ---------- Pills (statuses, roles, commissions) ---------- */
+
+@utility pill {
+  @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ring-1 ring-inset;
+}
+@utility pill-neutral {
+  @apply bg-subtle text-ink-soft ring-line-strong/60;
+}
+@utility pill-brand {
+  @apply bg-brand-soft text-brand ring-brand/15;
+}
+@utility pill-success {
+  @apply bg-success/10 text-success ring-success/20;
+}
+@utility pill-warning {
+  @apply bg-accent/15 text-accent-ink ring-accent/30;
+}
+@utility pill-danger {
+  @apply bg-danger/8 text-danger ring-danger/20;
+}
+@utility pill-dark {
+  @apply bg-ink/85 text-white ring-transparent backdrop-blur;
+}
+@utility code-chip {
+  @apply inline-flex items-center rounded-md bg-subtle px-1.5 py-0.5 font-mono text-xs font-medium text-ink-soft ring-1 ring-line-strong/60 ring-inset;
+}
+
+/* ---------- Navigation ---------- */
+
+@utility nav-link {
+  @apply rounded-lg px-3 py-1.5 text-sm font-medium text-ink-soft transition-colors duration-150 hover:bg-subtle hover:text-ink;
+}
+@utility nav-link-active {
+  @apply bg-brand-soft text-brand hover:bg-brand-soft hover:text-brand;
+}
+
+/* Arabic gets its own font stack; layout direction comes from <html dir="rtl">. */
+html[lang='ar'] body {
+  font-family: var(--font-arabic);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

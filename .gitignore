@@ -1,0 +1,28 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+appsettings.*.local.json
+
+# Node / Angular
+node_modules/
+dist/
+out-tsc/
+.angular/
+coverage/
+
+# IDE / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+Thumbs.db
+.DS_Store
+
+# Env
+.env
+.env.*
+!.env.example
+backend/src/WebApp.Api/uploads/

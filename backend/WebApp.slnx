@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WebApp.Api/WebApp.Api.csproj" />
+    <Project Path="src/WebApp.AppHost/WebApp.AppHost.csproj" />
+    <Project Path="src/WebApp.Application/WebApp.Application.csproj" />
+    <Project Path="src/WebApp.Domain/WebApp.Domain.csproj" />
+    <Project Path="src/WebApp.Infrastructure/WebApp.Infrastructure.csproj" />
+    <Project Path="src/WebApp.ServiceDefaults/WebApp.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WebApp.IntegrationTests/WebApp.IntegrationTests.csproj" />
+    <Project Path="tests/WebApp.UnitTests/WebApp.UnitTests.csproj" />
+  </Folder>
+</Solution>

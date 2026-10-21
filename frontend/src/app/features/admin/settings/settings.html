@@ -1,0 +1,103 @@
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div class="min-w-0">
+    <h1 class="page-title">{{ 'admin.settings.title' | transloco }}</h1>
+    <p class="page-subtitle">{{ 'admin.settings.subtitle' | transloco }}</p>
+  </div>
+</header>
+
+@if (settings.error()) {
+  <p class="mt-6 alert-danger">{{ 'errors.unknown' | transloco }}</p>
+} @else if (settings.hasValue()) {
+  <div class="mt-6 space-y-6">
+    @for (g of groups(); track g.group) {
+      <section class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'settings.groups.' + g.group | transloco }}</h2>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (s of g.items; track s.key) {
+            <li class="grid gap-4 px-5 py-5 sm:px-6 md:grid-cols-[1.4fr_1fr] md:items-start md:gap-8">
+              <div class="min-w-0">
+                <label [for]="'setting-' + s.key" class="text-sm font-semibold text-ink">{{ 'settings.' + s.key + '.label' | transloco }}</label>
+                <p class="mt-1 text-sm text-muted">{{ 'settings.' + s.key + '.hint' | transloco }}</p>
+                <p class="field-hint flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                  {{ 'admin.settings.default' | transloco }} <span class="code-chip" dir="ltr">{{ s.defaultValue }}</span>
+                  @if (s.min !== null && s.max !== null) {
+                    · {{ 'admin.settings.range' | transloco }} <span class="code-chip" dir="ltr">{{ s.min }} – {{ s.max }}</span>
+                  }
+                  @if (s.updatedAt) {
+                    · {{ 'admin.settings.lastChanged' | transloco }} {{ s.updatedAt | date: 'medium' : undefined : language.locale() }}
+                    {{ 'audit.by' | transloco }} <span class="font-medium text-ink-soft" dir="ltr">{{ s.updatedByEmail }}</span>
+                  }
+                </p>
+              </div>
+
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <div class="flex min-w-0 flex-1 rounded-lg shadow-card" dir="ltr">
+                    <input [id]="'setting-' + s.key" [type]="s.type === 'Text' ? 'text' : 'number'" inputmode="decimal"
+                      [step]="s.type === 'WholeNumber' ? 1 : 0.001" [attr.min]="s.min" [attr.max]="s.max"
+                      [value]="draft(s)" (input)="edit(s, $any($event.target).value)" (keydown.enter)="ask(s)"
+                      [readonly]="!s.editable" [attr.aria-invalid]="!!invalid(s)"
+                      class="block w-full min-w-0 border bg-card px-3 py-2 text-sm text-ink tabular-nums outline-none transition-all duration-150 hover:border-line-strong focus:z-10 focus:border-brand focus:ring-4 focus:ring-brand-ring read-only:bg-subtle read-only:text-muted"
+                      [class]="(s.unit ? 'rounded-s-lg ' : 'rounded-lg ') + (invalid(s) ? 'border-danger' : 'border-line-strong/80')" />
+                    @if (s.unit) {
+                      <span class="inline-flex items-center whitespace-nowrap rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">
+                        {{ 'settings.units.' + s.unit | transloco }}
+                      </span>
+                    }
+                  </div>
+                  @if (s.editable && changed(s)) {
+                    <button type="button" (click)="reset(s)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+                    <button type="button" (click)="ask(s)" [disabled]="!!invalid(s)"
+                      class="btn btn-primary">
+                      {{ 'admin.settings.save' | transloco }}
+                    </button>
+                  }
+                </div>
+                @if (invalid(s); as code) {
+                  <p class="field-error">{{ 'errors.' + code | transloco }}</p>
+                } @else if (!s.editable) {
+                  <p class="field-hint">{{ 'admin.settings.readOnly' | transloco }}</p>
+                } @else if (savedKey() === s.key) {
+                  <p class="mt-1.5 text-xs font-medium text-success" role="status">{{ 'admin.settings.saved' | transloco }}</p>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+  <p class="mt-6 alert-info">{{ 'admin.settings.historyNote' | transloco }}</p>
+} @else {
+  <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+}
+
+@if (pending(); as p) {
+  <app-modal [label]="'admin.confirm.title' | transloco" (close)="cancel()">
+    <h2 class="section-title">{{ 'admin.settings.confirm' | transloco: { name: ('settings.' + p.setting.key + '.label' | transloco) } }}</h2>
+    <p class="mt-4 flex flex-wrap items-center gap-2 rounded-lg border border-line bg-subtle/40 px-3 py-2.5 text-sm" dir="ltr">
+      <span class="rounded-md bg-danger/8 px-1.5 py-0.5 font-mono text-danger line-through decoration-danger/50">{{ p.setting.value }}</span>
+      <span aria-hidden="true" class="text-muted">→</span>
+      <span class="rounded-md bg-success/10 px-1.5 py-0.5 font-mono font-semibold text-success">{{ p.value }}</span>
+      @if (p.setting.unit) {
+        <span class="text-muted">{{ 'settings.units.' + p.setting.unit | transloco }}</span>
+      }
+    </p>
+    <p class="mt-3 text-sm text-muted">{{ 'admin.settings.historyNote' | transloco }}</p>
+    <label for="settingReason" class="field-label mt-4">{{ 'admin.settings.reason' | transloco }}</label>
+    <textarea id="settingReason" rows="2" maxlength="500" [value]="reason()" (input)="reason.set($any($event.target).value)"
+      class="field mt-1.5"></textarea>
+    @if (error(); as key) {
+      <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
+    }
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="button" (click)="cancel()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+      <button type="button" (click)="confirm()" [disabled]="busy()"
+        class="btn btn-primary">
+        {{ (busy() ? 'common.saving' : 'common.confirm') | transloco }}
+      </button>
+    </div>
+  </app-modal>
+}

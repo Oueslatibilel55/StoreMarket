@@ -1,0 +1,76 @@
+<section class="relative overflow-hidden border-b border-line bg-card">
+  <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(60rem_30rem_at_80%_-10%,var(--color-brand-soft),transparent_70%)]" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-line)_1px,transparent_1px)] bg-size-[3rem_3rem] mask-[radial-gradient(ellipse_at_top,black,transparent_70%)] opacity-60" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    <span class="pill pill-brand px-3 py-1">
+      <span class="size-1.5 rounded-full bg-brand" aria-hidden="true"></span>
+      {{ 'home.heroBadge' | transloco }}
+    </span>
+    <h1 class="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-ink sm:text-5xl lg:text-6xl">{{ 'home.heroTitle' | transloco }}</h1>
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{{ 'app.tagline' | transloco }}</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a routerLink="/products" class="btn btn-primary btn-lg">
+        {{ 'shop.allProducts' | transloco }}
+        <span class="inline-block rtl:rotate-180" aria-hidden="true">→</span>
+      </a>
+      <a routerLink="/stores" class="btn btn-secondary btn-lg">{{ 'shop.stores' | transloco }}</a>
+    </div>
+
+    <ul class="mt-14 grid gap-4 sm:grid-cols-3">
+      @for (r of roles; track r.key) {
+        <li class="card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
+          <span class="flex size-10 items-center justify-center rounded-lg text-lg" [class]="r.tone" aria-hidden="true">{{ r.icon }}</span>
+          <p class="mt-4 font-semibold text-ink">{{ 'home.roles.' + r.key + '.title' | transloco }}</p>
+          <p class="mt-1 text-sm leading-relaxed text-muted">{{ 'home.roles.' + r.key + '.text' | transloco }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+
+<main class="mx-auto max-w-7xl space-y-16 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+  @if (categories.value()?.length) {
+    <section>
+      <h2 class="section-title text-xl">{{ 'home.storeCategories' | transloco }}</h2>
+      <ul class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        @for (c of categories.value(); track c.id) {
+          <li>
+            <a routerLink="/stores" [queryParams]="{ category: c.slug }" class="group card-interactive flex items-center gap-3 px-4 py-3.5">
+              @if (c.imageUrl) {
+                <img [src]="c.imageUrl" alt="" class="size-10 rounded-lg object-cover" />
+              } @else {
+                <span class="flex size-10 items-center justify-center rounded-lg bg-subtle text-xl" aria-hidden="true">{{ c.icon || '🏷️' }}</span>
+              }
+              <span class="text-sm font-semibold text-ink transition-colors group-hover:text-brand">{{ c.name | localized: language.lang() }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (products.value()?.items?.length) {
+    <section>
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="section-title text-xl">{{ 'home.newProducts' | transloco }}</h2>
+        <a routerLink="/products" class="link text-sm">{{ 'home.seeAll' | transloco }} <span class="inline-block rtl:rotate-180" aria-hidden="true">→</span></a>
+      </div>
+      <ul class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+        @for (p of products.value()!.items; track p.id) { <li><app-product-card [product]="p" /></li> }
+      </ul>
+    </section>
+  }
+
+  @if (stores.value()?.items?.length) {
+    <section>
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="section-title text-xl">{{ 'shop.stores' | transloco }}</h2>
+        <a routerLink="/stores" class="link text-sm">{{ 'home.seeAll' | transloco }} <span class="inline-block rtl:rotate-180" aria-hidden="true">→</span></a>
+      </div>
+      <ul class="mt-5 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+        @for (s of stores.value()!.items; track s.id) { <li><app-store-card [store]="s" /></li> }
+      </ul>
+    </section>
+  }
+</main>

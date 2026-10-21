@@ -1,0 +1,197 @@
+@if (product.error()) {
+  <main class="page-narrow">
+    <div class="card empty-state">
+      <p>{{ 'errors.product.notFound' | transloco }}</p>
+      <a routerLink="/products" class="btn btn-secondary mt-3">{{ 'shop.allProducts' | transloco }}</a>
+    </div>
+  </main>
+} @else if (product.value(); as p) {
+  <main class="page">
+    <nav class="flex flex-wrap items-center gap-1.5 text-sm text-muted" [attr.aria-label]="'shop.breadcrumb' | transloco">
+      <a routerLink="/products" class="transition-colors hover:text-brand">{{ 'shop.allProducts' | transloco }}</a>
+      @for (c of p.categoryPath; track c.id) {
+        <span aria-hidden="true" class="inline-block text-muted/60 rtl:rotate-180">›</span>
+        <a routerLink="/products" [queryParams]="{ category: c.slug }" class="transition-colors hover:text-brand">{{ c.name | localized: language.lang() }}</a>
+      }
+    </nav>
+
+    <div class="mt-6 grid gap-8 md:grid-cols-2 lg:gap-12">
+      <!-- Gallery -->
+      <section class="mx-auto w-full max-w-md md:sticky md:top-24 md:max-w-none md:self-start">
+        <div class="relative aspect-square overflow-hidden rounded-xl border border-line bg-subtle shadow-card">
+          @if (p.imageUrls.length) {
+            <img [src]="p.imageUrls[imageIndex()]" [alt]="p.name" class="absolute inset-0 size-full object-cover animate-fade-in" />
+          } @else {
+            <span class="flex size-full items-center justify-center text-6xl text-muted/60" aria-hidden="true">🖼️</span>
+          }
+        </div>
+        @if (p.imageUrls.length > 1) {
+          <ul class="mt-4 flex flex-wrap gap-3">
+            @for (url of p.imageUrls; track url; let i = $index) {
+              <li>
+                <button type="button" (click)="imageIndex.set(i)" [attr.aria-label]="'shop.photo' | transloco: { n: i + 1 }"
+                  class="block size-16 cursor-pointer overflow-hidden rounded-lg bg-subtle transition-all duration-200 sm:size-20"
+                  [class]="i === imageIndex() ? 'ring-2 ring-brand ring-offset-2 ring-offset-surface' : 'opacity-70 ring-1 ring-line hover:opacity-100 hover:ring-line-strong'">
+                  <img [src]="url" alt="" class="size-full object-cover" />
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <!-- Buy box -->
+      <section class="min-w-0">
+        <a [routerLink]="['/stores', p.store.slug]" class="inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-brand">
+          @if (p.store.logoUrl) { <img [src]="p.store.logoUrl" alt="" class="size-6 rounded-md object-cover ring-1 ring-line" /> }
+          {{ p.store.name }}
+        </a>
+        <h1 class="page-title mt-2 lg:text-4xl">{{ p.name }}</h1>
+
+        <div class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          @if (showFrom()) { <span class="text-sm text-muted">{{ 'products.from' | transloco }}</span> }
+          <span class="text-3xl font-bold tracking-tight text-ink sm:text-4xl" dir="ltr">{{ (showFrom() ? p.minPrice : price()) | number: '1.0-3' : language.locale() }} <span class="text-base font-semibold text-muted">TND</span></span>
+          @if (p.compareAtPrice && p.compareAtPrice > price()) {
+            <span class="text-lg text-muted line-through" dir="ltr">{{ p.compareAtPrice | number: '1.0-3' : language.locale() }} TND</span>
+            <span class="pill pill-danger self-center font-semibold" dir="ltr">−{{ (1 - price() / p.compareAtPrice) * 100 | number: '1.0-0' }} %</span>
+          }
+        </div>
+
+        @if (p.variantAxes.length) {
+          <div class="mt-6 space-y-5 border-t border-line pt-6">
+            @for (axis of p.variantAxes; track axis.key) {
+              <div>
+                <p class="text-sm font-medium text-ink">
+                  {{ axis.name | localized: language.lang() }}
+                  @if (selection()[axis.key]; as chosen) {
+                    @for (o of axis.options; track o.key) { @if (o.key === chosen) { : <span class="font-normal text-muted">{{ o.name | localized: language.lang() }}</span> } }
+                  }
+                </p>
+                <div class="mt-2.5 flex flex-wrap gap-2">
+                  @for (o of axis.options; track o.key) {
+                    @if (exists(axis.key, o.key) || selection()[axis.key] === o.key) {
+                      <button type="button" (click)="choose(axis.key, o.key)" [attr.aria-pressed]="selection()[axis.key] === o.key"
+                        class="min-w-12 cursor-pointer rounded-lg border px-3.5 py-2 text-sm font-medium transition-all duration-200 active:scale-[0.98]"
+                        [class]="selection()[axis.key] === o.key ? 'border-brand bg-brand-soft text-brand ring-1 ring-brand' : 'border-line-strong/80 bg-card text-ink shadow-card hover:border-brand hover:text-brand'">
+                        {{ o.name | localized: language.lang() }}
+                      </button>
+                    } @else {
+                      <span class="min-w-12 rounded-lg border border-dashed border-line-strong px-3.5 py-2 text-center text-sm text-muted/70 line-through" [title]="'shop.unavailable' | transloco">
+                        {{ o.name | localized: language.lang() }}
+                      </span>
+                    }
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="mt-6 border-t border-line pt-6">
+          @let stockTone = inStock() ? (p.variants.length && !variant() ? 'neutral' : 'success') : 'danger';
+          <!-- Availability on its own line, then the action: never side by side. -->
+          <div class="flex items-center gap-2">
+            <span class="pill px-2.5 py-1 text-sm" [class]="'pill-' + stockTone">
+              <span class="size-2 rounded-full" aria-hidden="true"
+                [class]="stockTone === 'success' ? 'bg-success' : stockTone === 'danger' ? 'bg-danger' : 'bg-muted'"></span>
+              {{ (inStock() ? (p.variants.length && !variant() ? 'shop.chooseVariant' : 'shop.inStock') : 'shop.outOfStock') | transloco }}
+            </span>
+          </div>
+
+          @if (recommendedBy(); as name) {
+            <p class="alert-info mt-4">🤝 {{ 'cart.recommendedBy' | transloco: { name } }}</p>
+          }
+
+          <div class="mt-5 flex items-center gap-3">
+            <div class="inline-flex h-12 shrink-0 items-center rounded-lg border border-line-strong/80 bg-card shadow-card" dir="ltr">
+              <button type="button" (click)="quantity.set(quantity() - 1)" [disabled]="quantity() <= 1"
+                class="flex size-11 items-center justify-center rounded-s-lg text-lg text-ink-soft transition-colors hover:bg-subtle disabled:opacity-40"
+                [attr.aria-label]="'cart.less' | transloco">−</button>
+              <span class="min-w-10 text-center font-semibold tabular-nums" aria-live="polite">{{ quantity() }}</span>
+              <button type="button" (click)="quantity.set(quantity() + 1)" [disabled]="quantity() >= 99"
+                class="flex size-11 items-center justify-center rounded-e-lg text-lg text-ink-soft transition-colors hover:bg-subtle disabled:opacity-40"
+                [attr.aria-label]="'cart.more' | transloco">+</button>
+            </div>
+            <button type="button" (click)="addToCart()" [disabled]="!canAdd() || adding()" class="btn btn-primary btn-lg h-12 min-w-0 flex-1 whitespace-normal leading-tight lg:max-w-xs">
+              {{ (adding() ? 'common.saving' : 'shop.addToCart') | transloco }}
+            </button>
+          </div>
+          @if (added()) {
+            <p class="alert-success mt-3 items-center justify-between animate-fade-in" role="status">
+              <span>✓ {{ 'cart.added' | transloco }}</span>
+              <a routerLink="/cart" class="link whitespace-nowrap">{{ 'cart.see' | transloco }}</a>
+            </p>
+          } @else if (addError(); as key) {
+            <p class="alert-danger mt-3" role="alert">{{ key | transloco }}</p>
+          }
+          @if (!p.store.isOpen) {
+            <p class="alert-danger mt-4">{{ 'shop.storeClosedLong' | transloco }}</p>
+          }
+        </div>
+
+        @if (auth.hasRole('Affiliate') && auth.user()?.affiliateCode; as code) {
+          <div class="mt-6 rounded-xl border border-accent/40 bg-accent/10 p-5 text-sm">
+            <p class="font-semibold text-ink">{{ 'shop.affiliateTitle' | transloco }}</p>
+            <p class="mt-1 text-ink-soft">
+              {{ 'shop.affiliateEarn' | transloco: { percent: p.affiliatePercent } }}
+              <span class="font-semibold text-ink" dir="ltr">≈ {{ coins() | number: '1.0-3' : language.locale() }}</span> {{ 'settings.units.coins' | transloco }}
+            </p>
+            <div class="mt-3 flex items-center gap-2">
+              <span dir="ltr" class="rounded-lg bg-card px-3 py-1.5 font-mono font-bold text-brand shadow-card ring-1 ring-line">#{{ code }}</span>
+              <button type="button" (click)="copyCode(code)" class="btn btn-secondary btn-sm">
+                {{ (copied() ? 'affiliate.copied' : 'affiliate.copy') | transloco }}
+              </button>
+            </div>
+            <div class="mt-4 border-t border-accent/30 pt-4">
+              <app-partnership-cta [storeId]="p.store.id" [sharePath]="'/products/' + p.slug" />
+            </div>
+          </div>
+        }
+
+        @if (store.value(); as s) {
+          <a [routerLink]="['/stores', p.store.slug]" class="group card-interactive mt-6 flex items-center gap-4 p-4">
+            <div class="size-12 shrink-0 overflow-hidden rounded-lg bg-subtle ring-1 ring-line">
+              @if (p.store.logoUrl) { <img [src]="p.store.logoUrl" alt="" class="size-full object-cover" /> }
+            </div>
+            <div class="min-w-0 flex-1 text-sm">
+              <p class="truncate font-semibold text-ink transition-colors group-hover:text-brand">{{ p.store.name }}</p>
+              <p class="mt-0.5 text-ink-soft">
+                <span class="eyebrow">{{ 'shop.delivery' | transloco }}</span>
+                · {{ 'shop.deliveryFee' | transloco }} <span class="font-semibold text-ink" dir="ltr">{{ s.deliveryFee | number: '1.0-3' : language.locale() }} TND</span>
+                · {{ 'shop.deliveryDelay' | transloco: { min: s.deliveryMinDays, max: s.deliveryMaxDays } }}
+              </p>
+              <p class="mt-0.5 text-muted">{{ 'shop.paymentOnDelivery' | transloco }}</p>
+            </div>
+            <span aria-hidden="true" class="text-muted transition-transform duration-200 group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5">›</span>
+          </a>
+        }
+      </section>
+    </div>
+
+    @if (p.description || p.attributes.length) {
+      <div class="mt-12 grid gap-8 md:grid-cols-2 lg:gap-12">
+        @if (p.description) {
+          <section>
+            <h2 class="section-title text-xl">{{ 'myStore.fields.description' | transloco }}</h2>
+            <p class="mt-3 leading-relaxed whitespace-pre-line text-ink-soft">{{ p.description }}</p>
+          </section>
+        }
+        @if (p.attributes.length) {
+          <section>
+            <h2 class="section-title text-xl">{{ 'products.sections.fields' | transloco }}</h2>
+            <dl class="card mt-3 divide-y divide-line overflow-hidden">
+              @for (a of p.attributes; track a.key) {
+                <div class="row-hover grid grid-cols-2 gap-4 px-5 py-3 text-sm">
+                  <dt class="text-muted">{{ a.name | localized: language.lang() }}</dt>
+                  <dd class="font-medium text-ink">{{ display(a) }}</dd>
+                </div>
+              }
+            </dl>
+          </section>
+        }
+      </div>
+    }
+  </main>
+} @else {
+  <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+}

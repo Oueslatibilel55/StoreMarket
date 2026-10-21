@@ -1,0 +1,286 @@
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div class="min-w-0">
+    <h1 class="page-title">{{ 'admin.productCategories.title' | transloco }}</h1>
+    <p class="page-subtitle">{{ 'admin.productCategories.subtitle' | transloco }}</p>
+  </div>
+  <button type="button" (click)="openCategory(null)" class="btn btn-primary">
+    <span aria-hidden="true">+</span> {{ 'admin.productCategories.add' | transloco }}
+  </button>
+</header>
+
+@if (error() && !pending()) {
+  <p role="alert" class="mt-6 alert-danger">{{ error()! | transloco }}</p>
+}
+
+@if (categories.error()) {
+  <p class="mt-6 alert-danger">{{ 'errors.unknown' | transloco }}</p>
+} @else if (categories.value(); as all) {
+  <div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+    <!-- Tree -->
+    <section class="card overflow-hidden lg:sticky lg:top-24">
+      @if (all.length === 0) {
+        <p class="empty-state">{{ 'admin.productCategories.empty' | transloco }}</p>
+      } @else {
+        <ul class="space-y-0.5 p-2">
+          @for (c of all; track c.id) {
+            <li [style.padding-inline-start.rem]="(depth(c) - 1) * 1.25" [class.opacity-60]="hidden(c)">
+              <div class="group flex items-center gap-2 rounded-lg py-1.5 pe-2 ps-1.5 transition-colors duration-150"
+                [class]="c.id === id() ? 'bg-brand-soft text-brand' : 'hover:bg-subtle/70'"
+                [class.border-s]="depth(c) > 1" [class.border-line-strong]="depth(c) > 1" [class.rounded-s-none]="depth(c) > 1">
+                <div class="flex flex-col">
+                  <button type="button" (click)="moveCategory(c, 'up')" [disabled]="isFirst(c)" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"
+                    class="flex size-4 items-center justify-center rounded text-[9px] text-muted transition-colors hover:text-brand disabled:pointer-events-none disabled:opacity-30">▲</button>
+                  <button type="button" (click)="moveCategory(c, 'down')" [disabled]="isLast(c)" [attr.aria-label]="'admin.storeCategories.moveDown' | transloco"
+                    class="flex size-4 items-center justify-center rounded text-[9px] text-muted transition-colors hover:text-brand disabled:pointer-events-none disabled:opacity-30">▼</button>
+                </div>
+                <button type="button" (click)="select(c)" class="min-w-0 flex-1 cursor-pointer text-start">
+                  <span class="block truncate text-sm font-semibold" [class.text-ink]="c.id !== id()">
+                    {{ c.name | localized: language.lang() }}
+                  </span>
+                  <span class="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted">
+                    {{ 'admin.productCategories.attributeCount' | transloco: { count: c.attributes.length } }}
+                    @if (!c.isActive) { <span class="pill pill-neutral">{{ 'admin.storeCategories.inactive' | transloco }}</span> }
+                  </span>
+                </button>
+                @if (depth(c) < maxDepth) {
+                  <button type="button" (click)="openCategory(null, c.id)"
+                    class="flex size-7 shrink-0 items-center justify-center rounded-md text-base font-semibold text-muted transition-colors hover:bg-card hover:text-brand hover:shadow-card"
+                    [attr.aria-label]="'admin.productCategories.addChild' | transloco" [title]="'admin.productCategories.addChild' | transloco">+</button>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <!-- Selected category -->
+    <section id="category-detail" class="scroll-mt-20 space-y-6">
+      @if (selected(); as s) {
+        <div class="card">
+          <div class="card-header items-start">
+            <div class="min-w-0 flex-1">
+              <span class="code-chip" dir="ltr">/{{ s.slug }}</span>
+              <h2 class="mt-2 section-title text-xl">{{ s.name | localized: language.lang() }}</h2>
+              <p class="mt-0.5 text-xs text-muted">{{ s.name.fr }} @if (s.name.ar) { · <span dir="rtl">{{ s.name.ar }}</span> } @if (s.name.en) { · {{ s.name.en }} }</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-1">
+              <button type="button" (click)="openCategory(s)" class="btn btn-secondary btn-sm">{{ 'admin.storeCategories.edit' | transloco }}</button>
+              <button type="button" (click)="open({ kind: 'toggle', category: s })" class="btn btn-ghost btn-sm">
+                {{ (s.isActive ? 'admin.storeCategories.deactivate' : 'admin.storeCategories.activate') | transloco }}
+              </button>
+              <button type="button" (click)="open({ kind: 'delete', category: s })" class="btn btn-danger-soft btn-sm">{{ 'admin.storeCategories.delete' | transloco }}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card overflow-hidden">
+          <div class="card-header">
+            <div class="min-w-0">
+              <h3 class="font-semibold text-ink">{{ 'admin.productCategories.attributes' | transloco }}</h3>
+              <p class="mt-0.5 text-xs text-muted">{{ 'admin.productCategories.inheritHint' | transloco }}</p>
+            </div>
+            <button type="button" (click)="openAttribute(null)" class="btn btn-secondary btn-sm">
+              <span aria-hidden="true">+</span> {{ 'admin.productCategories.addAttribute' | transloco }}
+            </button>
+          </div>
+
+          <ul class="divide-y divide-line">
+            @for (i of inherited(); track i.attribute.id) {
+              <li class="flex flex-wrap items-center gap-2 bg-subtle/50 px-5 py-3 text-sm sm:px-6">
+                <span class="font-medium text-ink-soft">{{ i.attribute.name | localized: language.lang() }}</span>
+                <span class="pill pill-neutral">{{ 'admin.productCategories.types.' + i.attribute.type | transloco }}</span>
+                <span class="ms-auto text-xs text-muted">{{ 'admin.productCategories.inheritedFrom' | transloco: { name: (i.from.name | localized: language.lang()) } }}</span>
+              </li>
+            }
+            @for (a of s.attributes; track a.id; let first = $first, last = $last) {
+              <li class="row-hover flex flex-wrap items-center gap-3 px-5 py-3 text-sm sm:px-6">
+                <div class="flex flex-col">
+                  <button type="button" (click)="moveAttribute(a, 'up')" [disabled]="first" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"
+                    class="flex size-4 items-center justify-center rounded text-[9px] text-muted transition-colors hover:text-brand disabled:pointer-events-none disabled:opacity-30">▲</button>
+                  <button type="button" (click)="moveAttribute(a, 'down')" [disabled]="last" [attr.aria-label]="'admin.storeCategories.moveDown' | transloco"
+                    class="flex size-4 items-center justify-center rounded text-[9px] text-muted transition-colors hover:text-brand disabled:pointer-events-none disabled:opacity-30">▼</button>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="font-semibold text-ink">
+                    {{ a.name | localized: language.lang() }}
+                    @if (a.unit) { <span class="font-normal text-muted">({{ a.unit }})</span> }
+                  </p>
+                  <p class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted">
+                    <span class="code-chip" dir="ltr">{{ a.key }}</span>
+                    <span class="pill pill-neutral">{{ 'admin.productCategories.types.' + a.type | transloco }}</span>
+                    @if (a.required) { <span class="pill pill-brand">{{ 'admin.productCategories.required' | transloco }}</span> }
+                    @if (a.filterable) { <span class="pill pill-neutral">{{ 'admin.productCategories.filterable' | transloco }}</span> }
+                    @if (a.options.length) { <span class="truncate">{{ optionNames(a) }}</span> }
+                  </p>
+                </div>
+                <div class="flex items-center gap-1">
+                  <button type="button" (click)="openAttribute(a)" class="btn btn-ghost btn-sm">{{ 'admin.storeCategories.edit' | transloco }}</button>
+                  <button type="button" (click)="open({ kind: 'deleteAttribute', attribute: a })" class="btn btn-danger-soft btn-sm">{{ 'admin.storeCategories.delete' | transloco }}</button>
+                </div>
+              </li>
+            } @empty {
+              @if (!inherited().length) {
+                <li class="empty-state">{{ 'admin.productCategories.noAttributes' | transloco }}</li>
+              }
+            }
+          </ul>
+        </div>
+      } @else {
+        <div class="card">
+          <p class="empty-state">{{ 'admin.productCategories.pick' | transloco }}</p>
+        </div>
+      }
+    </section>
+  </div>
+} @else {
+  <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+}
+
+@if (pending(); as p) {
+  <app-modal [label]="'admin.confirm.title' | transloco" (close)="close()">
+    @switch (p.kind) {
+      @case ('category') {
+        <h2 class="section-title">{{ (p.category ? 'admin.productCategories.editTitle' : 'admin.productCategories.addTitle') | transloco }}</h2>
+        <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()" novalidate class="mt-5 space-y-5">
+          <div>
+            <label for="parentId" class="field-label">{{ 'admin.productCategories.parent' | transloco }}</label>
+            <select id="parentId" formControlName="parentId" class="mt-1.5 field">
+              <option value="">{{ 'admin.productCategories.topLevel' | transloco }}</option>
+              @for (o of parentOptions(p.category); track o.id) {
+                <option [value]="o.id">{{ depth(o) > 1 ? '— ' : '' }}{{ o.name | localized: language.lang() }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label for="cNameFr" class="field-label">{{ 'admin.storeCategories.nameFr' | transloco }}</label>
+            <input id="cNameFr" formControlName="nameFr" lang="fr" class="mt-1.5 field" />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="cNameAr" class="field-label">{{ 'admin.storeCategories.nameAr' | transloco }}</label>
+              <input id="cNameAr" formControlName="nameAr" dir="rtl" lang="ar" class="mt-1.5 field" />
+            </div>
+            <div>
+              <label for="cNameEn" class="field-label">{{ 'admin.storeCategories.nameEn' | transloco }}</label>
+              <input id="cNameEn" formControlName="nameEn" lang="en" class="mt-1.5 field" />
+            </div>
+          </div>
+          <div>
+            <label for="cSlug" class="field-label">{{ 'admin.storeCategories.slug' | transloco }}</label>
+            <input id="cSlug" formControlName="slug" dir="ltr" [placeholder]="'admin.storeCategories.slugAuto' | transloco"
+              class="mt-1.5 field font-mono" />
+          </div>
+          @if (error(); as key) { <p role="alert" class="alert-danger">{{ key | transloco }}</p> }
+          <div class="mt-6 flex justify-end gap-3">
+            <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+            <button type="submit" [disabled]="busy()" class="btn btn-primary">
+              {{ (busy() ? 'common.saving' : 'admin.settings.save') | transloco }}
+            </button>
+          </div>
+        </form>
+      }
+      @case ('attribute') {
+        <h2 class="section-title">{{ (p.attribute ? 'admin.productCategories.editAttribute' : 'admin.productCategories.addAttribute') | transloco }}</h2>
+        <form [formGroup]="attributeForm" (ngSubmit)="saveAttribute()" novalidate class="mt-5 max-h-[70vh] space-y-5 overflow-y-auto pe-1">
+          <div>
+            <p class="field-label">{{ 'admin.productCategories.type' | transloco }}</p>
+            <div class="mt-1.5 flex flex-wrap gap-2">
+              @for (t of types; track t) {
+                <button type="button" (click)="setType(t)" [disabled]="!!p.attribute"
+                  class="cursor-pointer rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset transition-colors duration-150 disabled:cursor-not-allowed"
+                  [class]="attributeType() === t ? 'bg-brand-soft text-brand ring-brand/30' : 'bg-card text-ink-soft ring-line-strong/80 hover:bg-subtle disabled:opacity-40'">
+                  {{ 'admin.productCategories.types.' + t | transloco }}
+                </button>
+              }
+            </div>
+            @if (p.attribute) { <p class="field-hint">{{ 'admin.productCategories.typeLocked' | transloco }}</p> }
+          </div>
+          <div>
+            <label for="aNameFr" class="field-label">{{ 'admin.storeCategories.nameFr' | transloco }}</label>
+            <input id="aNameFr" formControlName="nameFr" lang="fr" class="mt-1.5 field" />
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="aNameAr" class="field-label">{{ 'admin.storeCategories.nameAr' | transloco }}</label>
+              <input id="aNameAr" formControlName="nameAr" dir="rtl" lang="ar" class="mt-1.5 field" />
+            </div>
+            <div>
+              <label for="aNameEn" class="field-label">{{ 'admin.storeCategories.nameEn' | transloco }}</label>
+              <input id="aNameEn" formControlName="nameEn" lang="en" class="mt-1.5 field" />
+            </div>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="aKey" class="field-label">{{ 'admin.productCategories.key' | transloco }}</label>
+              <input id="aKey" formControlName="key" dir="ltr" [readonly]="!!p.attribute" [placeholder]="'admin.storeCategories.slugAuto' | transloco"
+                class="mt-1.5 field font-mono read-only:bg-subtle read-only:text-muted" />
+            </div>
+            @if (attributeType() === 'Number') {
+              <div>
+                <label for="aUnit" class="field-label">{{ 'admin.productCategories.unit' | transloco }}</label>
+                <input id="aUnit" formControlName="unit" dir="ltr" placeholder="ml, g, cm…" class="mt-1.5 field" />
+              </div>
+            }
+          </div>
+          <div class="flex flex-wrap gap-6 text-sm text-ink-soft">
+            <label class="flex cursor-pointer items-center gap-2"><input type="checkbox" formControlName="required" class="checkbox" /> {{ 'admin.productCategories.required' | transloco }}</label>
+            <label class="flex cursor-pointer items-center gap-2"><input type="checkbox" formControlName="filterable" class="checkbox" /> {{ 'admin.productCategories.filterable' | transloco }}</label>
+          </div>
+          @if (isChoice(attributeType())) {
+            <div class="rounded-xl border border-line bg-subtle/50 p-4">
+              <p class="field-label">{{ 'admin.productCategories.options' | transloco }}</p>
+              <ul class="mt-2 space-y-2">
+                @for (o of options(); track $index; let i = $index) {
+                  <li class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] gap-2">
+                    <input [value]="o.fr" (input)="editOption(i, 'fr', $any($event.target).value)" lang="fr" placeholder="FR" [attr.aria-label]="'admin.storeCategories.nameFr' | transloco"
+                      class="field min-w-0 px-2 py-1.5" />
+                    <input [value]="o.ar" (input)="editOption(i, 'ar', $any($event.target).value)" dir="rtl" lang="ar" placeholder="AR" [attr.aria-label]="'admin.storeCategories.nameAr' | transloco"
+                      class="field min-w-0 px-2 py-1.5" />
+                    <input [value]="o.en" (input)="editOption(i, 'en', $any($event.target).value)" lang="en" placeholder="EN" [attr.aria-label]="'admin.storeCategories.nameEn' | transloco"
+                      class="field min-w-0 px-2 py-1.5" />
+                    <button type="button" (click)="removeOption(i)" class="btn btn-danger-soft btn-sm self-center" [attr.aria-label]="'images.remove' | transloco">✕</button>
+                  </li>
+                }
+              </ul>
+              <button type="button" (click)="addOption()" class="btn btn-ghost btn-sm mt-3 text-brand">
+                <span aria-hidden="true">+</span> {{ 'admin.productCategories.addOption' | transloco }}
+              </button>
+            </div>
+          }
+          @if (error(); as key) { <p role="alert" class="alert-danger">{{ key | transloco }}</p> }
+          <div class="mt-6 flex justify-end gap-3">
+            <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+            <button type="submit" [disabled]="busy()" class="btn btn-primary">
+              {{ (busy() ? 'common.saving' : 'admin.settings.save') | transloco }}
+            </button>
+          </div>
+        </form>
+      }
+      @default {
+        <h2 class="section-title">
+          @if (p.kind === 'deleteAttribute') {
+            {{ 'admin.productCategories.confirmDeleteAttribute' | transloco: { name: (p.attribute.name | localized: language.lang()) } }}
+          } @else if (p.kind === 'delete') {
+            {{ 'admin.storeCategories.confirmDelete' | transloco: { name: (p.category.name | localized: language.lang()) } }}
+          } @else if (p.kind === 'toggle') {
+            {{ (p.category.isActive ? 'admin.storeCategories.confirmDeactivate' : 'admin.storeCategories.confirmActivate') | transloco: { name: (p.category.name | localized: language.lang()) } }}
+          }
+        </h2>
+        <p class="mt-2 text-sm text-muted">
+          @if (p.kind === 'toggle' && p.category.isActive) { {{ 'admin.productCategories.deactivateHint' | transloco }} }
+          @else if (p.kind === 'delete') { {{ 'admin.productCategories.deleteHint' | transloco }} }
+          @else if (p.kind === 'deleteAttribute') { {{ 'admin.productCategories.deleteAttributeHint' | transloco }} }
+        </p>
+        @if (error(); as key) { <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p> }
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+          <button type="button" (click)="confirm()" [disabled]="busy()" class="btn"
+            [class]="p.kind === 'toggle' ? 'btn-primary' : 'btn-danger'">
+            {{ (busy() ? 'common.saving' : 'common.confirm') | transloco }}
+          </button>
+        </div>
+      }
+    }
+  </app-modal>
+}

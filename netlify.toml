@@ -1,0 +1,33 @@
+# Netlify — the Angular frontend. The API runs on Render (https://storemarket.onrender.com) and is reached
+# through the proxies below, so the browser stays same-origin: environment.ts keeps apiUrl '/api', the
+# refresh cookie (SameSite=Strict) works, and the API needs no CORS entry. Same setup as RichLife.
+# If the Render service gets another URL, change it in the two proxies.
+
+[build]
+  base    = "frontend"
+  command = "npm ci && npx ng build"
+  publish = "dist/webapp/browser"
+
+[build.environment]
+  # Angular 22 — same Node as frontend/.nvmrc.
+  NODE_VERSION = "24.21.0"
+
+# Proxies, not redirects (status 200): the browser never sees the Render URL.
+[[redirects]]
+  from   = "/api/*"
+  to     = "https://storemarket.onrender.com/api/:splat"
+  status = 200
+  force  = true
+
+# Uploaded images (stored in the database on Render, ADR 0006).
+[[redirects]]
+  from   = "/uploads/*"
+  to     = "https://storemarket.onrender.com/uploads/:splat"
+  status = 200
+  force  = true
+
+# SPA fallback: a refresh on /affiliate/wallet or /admin/payouts must serve index.html, not 404.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

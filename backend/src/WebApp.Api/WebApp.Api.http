@@ -1,0 +1,26 @@
+@host = http://localhost:5185
+
+GET {{host}}/api/ping
+
+###
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{ "email": "amira@example.com", "password": "Secret123", "fullName": "Amira Ben Ali", "phone": "22 123 456" }
+
+###
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "amira@example.com", "password": "Secret123" }
+
+###
+# Uses the webapp_refresh cookie set by login/register
+POST {{host}}/api/auth/refresh
+
+###
+GET {{host}}/api/auth/me
+Authorization: Bearer <paste accessToken>
+
+###
+POST {{host}}/api/auth/logout

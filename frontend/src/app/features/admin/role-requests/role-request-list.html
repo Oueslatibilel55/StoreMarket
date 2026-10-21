@@ -1,0 +1,110 @@
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div class="min-w-0">
+    <h1 class="page-title">{{ 'admin.roleRequests.title' | transloco }}</h1>
+    <p class="page-subtitle">{{ 'admin.roleRequests.subtitle' | transloco }}</p>
+  </div>
+</header>
+
+<div class="mt-6 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+  <div class="inline-flex gap-1 rounded-xl border border-line bg-card p-1 shadow-card" role="tablist">
+    @for (s of statuses; track s) {
+      <button type="button" role="tab" [attr.aria-selected]="selected() === s" (click)="filter(s)"
+        class="nav-link whitespace-nowrap"
+        [class.nav-link-active]="selected() === s">
+        {{ (s === 'all' ? 'admin.roleRequests.all' : 'roleRequests.status.' + s) | transloco }}
+      </button>
+    }
+  </div>
+</div>
+
+<div class="card mt-6 overflow-hidden">
+  @if (requests.error()) {
+    <div class="p-5"><p class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
+  } @else if (requests.value(); as result) {
+    @if (result.items.length === 0) {
+      <p class="empty-state">{{ 'admin.roleRequests.empty' | transloco }}</p>
+    } @else {
+      <ul class="divide-y divide-line">
+        @for (r of result.items; track r.id) {
+          <li class="row-hover grid gap-4 px-5 py-4 md:grid-cols-[2fr_1.5fr_auto] md:items-center">
+            <div class="flex min-w-0 items-start gap-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand" aria-hidden="true">{{ r.userFullName.charAt(0).toUpperCase() }}</span>
+              <div class="min-w-0">
+                <a [routerLink]="['/admin/users', r.userId]" class="text-sm font-semibold text-ink transition-colors hover:text-brand">{{ r.userFullName }}</a>
+                <p class="truncate text-sm text-muted" dir="ltr">{{ r.userEmail }}</p>
+                <div class="mt-1.5 flex flex-wrap gap-1.5">
+                  @for (role of r.userRoles; track role) {
+                    <app-role-badge [role]="role" />
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="min-w-0 text-sm">
+              <p class="flex flex-wrap items-center gap-1.5 text-ink-soft">
+                {{ 'admin.roleRequests.asks' | transloco }}
+                <span class="pill pill-brand">{{ 'roles.' + r.role | transloco }}</span>
+              </p>
+              @if (r.message) {
+                <p class="mt-2 border-s-2 border-line-strong ps-3 text-muted italic">“{{ r.message }}”</p>
+              }
+              @if (r.decisionReason) {
+                <p class="mt-2 text-muted">{{ 'audit.reason' | transloco }}: <span class="text-ink">{{ r.decisionReason }}</span></p>
+              }
+              <p class="field-hint">{{ r.createdAt | date: 'medium' : undefined : language.locale() }}</p>
+            </div>
+            <div class="flex items-center gap-2 md:justify-end">
+              @if (r.status === 'Pending' && !isSelf(r)) {
+                <button type="button" (click)="ask('refuse', r)" class="btn btn-danger-soft">
+                  {{ 'admin.roleRequests.refuse' | transloco }}
+                </button>
+                <button type="button" (click)="ask('approve', r)" class="btn btn-primary">
+                  {{ 'admin.roleRequests.approve' | transloco }}
+                </button>
+              } @else {
+                <span class="pill"
+                  [class]="r.status === 'Approved' ? 'pill-success'
+                    : r.status === 'Refused' ? 'pill-danger'
+                    : r.status === 'Pending' ? 'pill-warning' : 'pill-neutral'">
+                  {{ 'roleRequests.status.' + r.status | transloco }}
+                </span>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+      <div class="border-t border-line px-5 py-3">
+        <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="goTo($event)" />
+      </div>
+    }
+  } @else {
+    <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+  }
+</div>
+
+@if (pending(); as d) {
+  <app-modal [label]="'admin.confirm.title' | transloco" (close)="cancel()">
+    <h2 class="section-title">
+      {{ (d.kind === 'approve' ? 'admin.roleRequests.confirmApprove' : 'admin.roleRequests.confirmRefuse')
+        | transloco: { role: ('roles.' + d.request.role | transloco), name: d.request.userFullName } }}
+    </h2>
+    @if (d.kind === 'approve') {
+      <p class="mt-2 text-sm text-muted">{{ 'admin.roleRequests.approveHint' | transloco }}</p>
+    } @else {
+      <p class="mt-2 text-sm text-muted">{{ 'admin.roleRequests.refuseHint' | transloco }}</p>
+      <label for="refuseReason" class="field-label mt-4">{{ 'audit.reason' | transloco }}</label>
+      <textarea id="refuseReason" rows="3" maxlength="500" [value]="reason()" (input)="reason.set($any($event.target).value)"
+        class="field mt-1.5"></textarea>
+    }
+    @if (error(); as key) {
+      <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
+    }
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="button" (click)="cancel()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+      <button type="button" (click)="confirm()" [disabled]="busy() || (d.kind === 'refuse' && !reason().trim())"
+        class="btn"
+        [class]="d.kind === 'refuse' ? 'btn-danger' : 'btn-primary'">
+        {{ (busy() ? 'common.saving' : 'common.confirm') | transloco }}
+      </button>
+    </div>
+  </app-modal>
+}

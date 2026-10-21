@@ -1,0 +1,231 @@
+<main class="page max-w-4xl">
+  @if (store.error()) {
+    <p role="alert" class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
+  } @else if (store.isLoading() && !store.hasValue()) {
+    <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+  } @else {
+    @let s = store.value();
+    @if (s) { <app-my-store-tabs /> }
+
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div class="min-w-0 flex-1 basis-72">
+        <h1 class="page-title">{{ (s ? 'myStore.title' : 'myStore.createTitle') | transloco }}</h1>
+        <p class="page-subtitle">{{ (s ? 'myStore.subtitle' : 'myStore.createSubtitle') | transloco }}</p>
+      </div>
+      @if (s) {
+        <div class="flex items-center gap-3">
+          <span class="pill px-2.5 py-1"
+            [class]="s.isDeleted ? 'pill-danger' : s.status === 'Active' ? 'pill-success' : s.status === 'Closed' ? 'pill-warning' : 'pill-danger'">
+            <span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>
+            {{ 'myStore.status.' + (s.isDeleted ? 'Deleted' : s.status) | transloco }}
+          </span>
+          @if (s.status === 'Active' || s.status === 'Closed') {
+            <button type="button" (click)="confirmStatus.set(true)" class="btn btn-secondary btn-sm">
+              {{ (s.status === 'Active' ? 'myStore.close' : 'myStore.reopen') | transloco }}
+            </button>
+          }
+        </div>
+      }
+    </header>
+
+    @if (s && (s.isDeleted || s.status === 'Disabled')) {
+      <div role="alert" class="mt-6 rounded-xl border border-danger/20 bg-danger/6 p-5">
+        <p class="font-semibold text-danger">{{ (s.isDeleted ? 'myStore.moderation.deleted' : 'myStore.moderation.disabled') | transloco }}</p>
+        @if (s.moderationReason) {
+          <p class="eyebrow mt-3">{{ 'audit.reason' | transloco }}</p>
+          <p class="mt-1 text-sm text-ink"><app-moderation-reason [reason]="s.moderationReason" /></p>
+        }
+        <p class="mt-3 text-sm text-muted">{{ (s.isDeleted ? 'myStore.moderation.deletedHint' : 'myStore.moderation.disabledHint') | transloco }}</p>
+      </div>
+    }
+
+    @if (s) {
+      <dl class="card mt-6 grid divide-y divide-line text-sm md:grid-cols-3 md:divide-x md:divide-y-0 rtl:md:divide-x-reverse">
+        <div class="px-5 py-4 sm:px-6">
+          <dt class="eyebrow">{{ 'myStore.link' | transloco }}</dt>
+          <dd class="mt-1.5"><span class="code-chip" dir="ltr">/stores/{{ s.slug }}</span></dd>
+        </div>
+        <div class="px-5 py-4 sm:px-6">
+          <dt class="eyebrow">{{ 'myStore.subscription' | transloco }}</dt>
+          <dd class="mt-1.5 font-semibold text-ink"><span dir="ltr">{{ s.subscriptionMonthlyPrice | number: '1.0-3' : language.locale() }}</span> <span class="font-normal text-muted">{{ 'myStore.tndPerMonth' | transloco }}</span></dd>
+        </div>
+        <div class="px-5 py-4 sm:px-6">
+          <dt class="eyebrow">{{ 'myStore.since' | transloco }}</dt>
+          <dd class="mt-1.5 font-medium text-ink">{{ s.createdAt | date: 'longDate' : undefined : language.locale() }}</dd>
+        </div>
+      </dl>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 space-y-6">
+      <!-- Identity -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'myStore.sections.identity' | transloco }}</h2>
+        </div>
+        <div class="card-body grid gap-6 sm:grid-cols-2">
+          <div>
+            <label for="name" class="field-label">{{ 'myStore.fields.name' | transloco }}</label>
+            <input id="name" formControlName="name" class="mt-1.5 field" />
+            @if (invalid('name')) { <p class="field-error">{{ 'errors.store.nameLength' | transloco }}</p> }
+          </div>
+          <div>
+            <label for="categoryId" class="field-label">{{ 'myStore.fields.category' | transloco }}</label>
+            <select id="categoryId" formControlName="categoryId" class="mt-1.5 field">
+              <option value="" disabled>{{ 'myStore.choose' | transloco }}</option>
+              @for (c of categoryOptions(); track c.id) {
+                <option [value]="c.id">{{ c.name | localized: language.lang() }}</option>
+              }
+            </select>
+            @if (invalid('categoryId')) { <p class="field-error">{{ 'auth.validation.required' | transloco }}</p> }
+          </div>
+          <div class="sm:col-span-2">
+            <label for="slug" class="field-label">{{ 'myStore.fields.slug' | transloco }}</label>
+            <div class="mt-1.5 flex" dir="ltr">
+              <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">/stores/</span>
+              <input id="slug" formControlName="slug" [placeholder]="'admin.storeCategories.slugAuto' | transloco"
+                class="field rounded-s-none font-mono" />
+            </div>
+            <p [class]="invalid('slug') ? 'field-error' : 'field-hint'">{{ 'admin.storeCategories.slugHint' | transloco }}</p>
+          </div>
+          <div class="sm:col-span-2">
+            <label for="description" class="field-label">{{ 'myStore.fields.description' | transloco }}</label>
+            <textarea id="description" rows="4" formControlName="description" maxlength="2000"
+              class="mt-1.5 field resize-y"></textarea>
+          </div>
+          <div>
+            <p class="field-label">{{ 'myStore.fields.logo' | transloco }}</p>
+            <div class="mt-1.5"><app-image-upload purpose="StoreLogo" [url]="logo()?.url ?? null" (changed)="logo.set($event)" /></div>
+          </div>
+          <div>
+            <p class="field-label">{{ 'myStore.fields.banner' | transloco }}</p>
+            <div class="mt-1.5"><app-image-upload purpose="StoreBanner" [url]="banner()?.url ?? null" (changed)="banner.set($event)" /></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'myStore.sections.contact' | transloco }}</h2>
+        </div>
+        <div class="card-body grid gap-6 sm:grid-cols-2">
+          <div>
+            <label for="phone" class="field-label">{{ 'auth.phone' | transloco }}</label>
+            <div class="mt-1.5 flex" dir="ltr">
+              <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">+216</span>
+              <input id="phone" type="tel" formControlName="phone" placeholder="22 123 456"
+                class="field rounded-s-none" />
+            </div>
+            @if (invalid('phone')) { <p class="field-error">{{ 'auth.validation.phone' | transloco }}</p> }
+          </div>
+          <div>
+            <label for="city" class="field-label">{{ 'myStore.fields.city' | transloco }}</label>
+            <select id="city" formControlName="city" class="mt-1.5 field">
+              <option value="" disabled>{{ 'myStore.choose' | transloco }}</option>
+              @for (c of cities; track c) {
+                <option [value]="c">{{ 'cities.' + c | transloco }}</option>
+              }
+            </select>
+            @if (invalid('city')) { <p class="field-error">{{ 'auth.validation.required' | transloco }}</p> }
+          </div>
+          <div class="sm:col-span-2">
+            <label for="address" class="field-label">{{ 'myStore.fields.address' | transloco }}</label>
+            <input id="address" formControlName="address" class="mt-1.5 field" />
+          </div>
+          <div class="grid gap-6 sm:col-span-2 md:grid-cols-3">
+            @for (f of ['facebookUrl', 'instagramUrl', 'websiteUrl']; track f) {
+              <div>
+                <label [for]="f" class="field-label">{{ 'myStore.fields.' + f | transloco }}</label>
+                <input [id]="f" [formControlName]="f" dir="ltr" placeholder="https://" class="mt-1.5 field" />
+                @if (invalid($any(f))) { <p class="field-error">{{ 'errors.store.linkInvalid' | transloco }}</p> }
+              </div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Selling & delivery -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'myStore.sections.selling' | transloco }}</h2>
+        </div>
+        <div class="card-body space-y-6">
+          <div class="grid gap-6 sm:grid-cols-3">
+            <div>
+              <label for="percent" class="field-label">{{ 'myStore.fields.defaultAffiliatePercent' | transloco }}</label>
+              <div class="mt-1.5 flex" dir="ltr">
+                <input id="percent" type="number" step="1" [min]="percentMin()" [max]="percentMax()" formControlName="defaultAffiliatePercent"
+                  class="field rounded-e-none" />
+                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">%</span>
+              </div>
+              <p [class]="percentInvalid() ? 'field-error' : 'field-hint'">
+                {{ 'myStore.percentHint' | transloco: { min: percentMin(), max: percentMax() } }}
+              </p>
+            </div>
+            <div>
+              <label for="fee" class="field-label">{{ 'myStore.fields.deliveryFee' | transloco }}</label>
+              <div class="mt-1.5 flex" dir="ltr">
+                <input id="fee" type="number" step="0.5" min="0" max="1000" formControlName="deliveryFee"
+                  class="field rounded-e-none" />
+                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">TND</span>
+              </div>
+            </div>
+            <div>
+              <p class="field-label">{{ 'myStore.fields.deliveryDelay' | transloco }}</p>
+              <div class="mt-1.5 flex items-center gap-2" dir="ltr">
+                <input type="number" min="0" max="30" formControlName="deliveryMinDays" [attr.aria-label]="'myStore.fields.minDays' | transloco"
+                  class="field w-20 text-center" />
+                <span class="text-muted">–</span>
+                <input type="number" min="0" max="30" formControlName="deliveryMaxDays" [attr.aria-label]="'myStore.fields.maxDays' | transloco"
+                  class="field w-20 text-center" />
+                <span class="text-sm text-muted">{{ 'settings.units.days' | transloco }}</span>
+              </div>
+              @if (delayInvalid()) { <p class="field-error">{{ 'errors.store.deliveryDelayInvalid' | transloco }}</p> }
+            </div>
+          </div>
+          <div class="border-t border-line pt-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="field-label">{{ 'myStore.fields.deliveryCities' | transloco }}</p>
+              <div class="flex items-center gap-1">
+                <button type="button" (click)="allCities(true)" class="btn btn-ghost btn-sm text-brand">{{ 'myStore.allCities' | transloco }}</button>
+                <button type="button" (click)="allCities(false)" class="btn btn-ghost btn-sm">{{ 'myStore.noCity' | transloco }}</button>
+              </div>
+            </div>
+            <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              @for (c of cities; track c) {
+                <label class="flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors"
+                  [class]="deliveryCities().includes(c) ? 'border-brand/30 bg-brand-soft text-ink' : 'border-line text-ink-soft hover:bg-subtle'">
+                  <input type="checkbox" class="checkbox" [checked]="deliveryCities().includes(c)" (change)="toggleCity(c, $any($event.target).checked)" />
+                  {{ 'cities.' + c | transloco }}
+                </label>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      @if (error(); as key) {
+        <p role="alert" class="alert-danger">{{ key | transloco }}</p>
+      }
+      <div class="sticky bottom-4 z-10 flex flex-wrap items-center justify-end gap-3 rounded-xl border border-line bg-card/90 px-5 py-3 shadow-pop backdrop-blur">
+        @if (saved()) { <p class="me-auto text-sm font-medium text-success" role="status">{{ 'admin.settings.saved' | transloco }}</p> }
+        <button type="submit" [disabled]="saving()" class="btn btn-primary">
+          {{ (saving() ? 'common.saving' : s ? 'admin.settings.save' : 'myStore.create') | transloco }}
+        </button>
+      </div>
+    </form>
+
+    @if (confirmStatus() && s) {
+      <app-modal [label]="'admin.confirm.title' | transloco" (close)="confirmStatus.set(false)">
+        <h2 class="section-title">{{ (s.status === 'Active' ? 'myStore.confirmClose' : 'myStore.confirmReopen') | transloco }}</h2>
+        <p class="mt-2 text-sm text-muted">{{ (s.status === 'Active' ? 'myStore.closeHint' : 'myStore.reopenHint') | transloco }}</p>
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" (click)="confirmStatus.set(false)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+          <button type="button" (click)="toggleStatus()" [disabled]="saving()" class="btn btn-primary">
+            {{ (saving() ? 'common.saving' : 'common.confirm') | transloco }}
+          </button>
+        </div>
+      </app-modal>
+    }
+  }
+</main>

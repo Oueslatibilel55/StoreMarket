@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fonctionnalités par rôle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f9fc; --card: #ffffff; --ink: #0f172a; --ink-soft: #334155; --muted: #64748b;
+    --line: #e2e8f0; --subtle: #f1f5f9;
+    --brand: #4f46e5; --brand-soft: #eef2ff;
+    --success: #15803d; --success-soft: #f0fdf4;
+    --warning: #a16207; --warning-soft: #fefce8;
+    --client: #0369a1; --client-soft: #f0f9ff;
+    --affiliate: #b45309; --affiliate-soft: #fffbeb;
+    --owner: #15803d; --owner-soft: #f0fdf4;
+    --admin: #4f46e5; --admin-soft: #eef2ff;
+    --visitor: #475569; --visitor-soft: #f8fafc;
+    --shadow: 0 1px 2px rgb(15 23 42 / .04), 0 1px 3px rgb(15 23 42 / .06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1120; --card: #111827; --ink: #f1f5f9; --ink-soft: #cbd5e1; --muted: #94a3b8;
+      --line: #1f2937; --subtle: #1e293b;
+      --brand: #818cf8; --brand-soft: #1e1b4b;
+      --success: #4ade80; --success-soft: #052e16;
+      --warning: #facc15; --warning-soft: #2a2108;
+      --client: #38bdf8; --client-soft: #082f49;
+      --affiliate: #fbbf24; --affiliate-soft: #2a1a05;
+      --owner: #4ade80; --owner-soft: #052e16;
+      --admin: #a5b4fc; --admin-soft: #1e1b4b;
+      --visitor: #cbd5e1; --visitor-soft: #1e293b;
+      --shadow: 0 1px 2px rgb(0 0 0 / .4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1120; --card: #111827; --ink: #f1f5f9; --ink-soft: #cbd5e1; --muted: #94a3b8;
+    --line: #1f2937; --subtle: #1e293b;
+    --brand: #818cf8; --brand-soft: #1e1b4b;
+    --success: #4ade80; --success-soft: #052e16;
+    --warning: #facc15; --warning-soft: #2a2108;
+    --client: #38bdf8; --client-soft: #082f49;
+    --affiliate: #fbbf24; --affiliate-soft: #2a1a05;
+    --owner: #4ade80; --owner-soft: #052e16;
+    --admin: #a5b4fc; --admin-soft: #1e1b4b;
+    --visitor: #cbd5e1; --visitor-soft: #1e293b;
+    --shadow: 0 1px 2px rgb(0 0 0 / .4);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 Inter, system-ui, sans-serif; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 40px 16px 64px; }
+  header.top h1 { margin: 0; font-size: clamp(26px, 4vw, 36px); letter-spacing: -.02em; }
+  header.top p { margin: 8px 0 0; color: var(--muted); max-width: 70ch; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; font-size: 13px; color: var(--muted); align-items: center; }
+
+  nav.roles { position: sticky; top: 0; z-index: 2; margin: 28px -16px 0; padding: 10px 16px; background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); display: flex; gap: 8px; overflow-x: auto; border-bottom: 1px solid var(--line); }
+  nav.roles a { flex: none; text-decoration: none; color: var(--ink-soft); font-weight: 600; font-size: 14px; padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--card); }
+  nav.roles a:hover { color: var(--ink); border-color: var(--muted); }
+
+  section.role { margin-top: 36px; scroll-margin-top: 64px; }
+  .role-head { display: flex; align-items: center; gap: 14px; }
+  .role-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; flex: none; }
+  .role-head h2 { margin: 0; font-size: 22px; letter-spacing: -.01em; }
+  .role-head p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+
+  .grid { display: grid; gap: 16px; margin-top: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 18px 14px; box-shadow: var(--shadow); }
+  .card h3 { margin: 0 0 10px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .card li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; font-size: 14px; color: var(--ink-soft); }
+  .card li::before { content: "✓"; color: var(--success); font-weight: 700; }
+  .card li.soon::before { content: "◷"; color: var(--warning); }
+  .card li.soon { color: var(--muted); }
+  .where { display: block; font-size: 12px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-top: 2px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; }
+  .pill.done { background: var(--success-soft); color: var(--success); }
+  .pill.soon { background: var(--warning-soft); color: var(--warning); }
+
+  .visitor .role-icon { background: var(--visitor-soft); }
+  .client .role-icon { background: var(--client-soft); }
+  .affiliate .role-icon { background: var(--affiliate-soft); }
+  .owner .role-icon { background: var(--owner-soft); }
+  .admin .role-icon { background: var(--admin-soft); }
+  .visitor .card h3 { color: var(--visitor); } .client .card h3 { color: var(--client); }
+  .affiliate .card h3 { color: var(--affiliate); } .owner .card h3 { color: var(--owner); } .admin .card h3 { color: var(--admin); }
+
+  .flow { margin-top: 40px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+  .flow h2 { margin: 0 0 12px; font-size: 18px; }
+  .steps { display: grid; gap: 10px; counter-reset: s; margin: 0; padding: 0; list-style: none; }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 28px 1fr; gap: 10px; color: var(--ink-soft); font-size: 14px; }
+  .steps li::before { content: counter(s); width: 24px; height: 24px; border-radius: 999px; background: var(--brand-soft); color: var(--brand);
+    font-weight: 700; font-size: 12px; display: grid; place-items: center; }
+  footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Marketplace avec affiliation — ce que chaque rôle peut faire</h1>
+    <p>Boutiques locales en Tunisie, paiement à la livraison, et des affiliés qui gagnent des coins sur chaque vente livrée. État au 21 octobre 2026 (features 000 à 016, 019 à 021 et 027 livrées).</p>
+    <div class="legend"><span class="pill done">✓ Disponible</span><span class="pill soon">◷ À venir</span> <span>Un même compte peut cumuler plusieurs rôles (ex. client + commerçant + affilié).</span></div>
+  </header>
+
+  <nav class="roles" aria-label="Rôles">
+    <a href="#visiteur">👀 Visiteur</a>
+    <a href="#client">🛍️ Client</a>
+    <a href="#affilie">🤝 Affilié</a>
+    <a href="#commercant">🏪 Commerçant</a>
+    <a href="#admin">🛡️ Admin</a>
+    <a href="#parcours">🔁 Parcours d'une vente</a>
+  </nav>
+
+  <!-- Visitor -->
+  <section class="role visitor" id="visiteur">
+    <div class="role-head">
+      <div class="role-icon" aria-hidden="true">👀</div>
+      <div><h2>En tant que visiteur, je peux…</h2><p>Sans compte.</p></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Découvrir</h3><ul>
+        <li>Parcourir les boutiques et leurs catégories, filtrer par ville<span class="where">/stores</span></li>
+        <li>Parcourir le catalogue par catégorie et sous-catégorie, chercher, trier par prix<span class="where">/products</span></li>
+        <li>Voir la page d'un produit : photos, prix, variantes (taille, pointure…), caractéristiques, livraison<span class="where">/products/:slug</span></li>
+        <li>Utiliser le site en français, arabe (de droite à gauche) ou anglais, sur téléphone comme sur ordinateur</li>
+      </ul></div>
+      <div class="card"><h3>Commander sans compte</h3><ul>
+        <li>Remplir un panier gardé dans mon navigateur<span class="where">/cart</span></li>
+        <li>Arriver par le lien d'un affilié (« Recommandé par Sana T. ») : son code est ajouté automatiquement</li>
+        <li>Commander et payer en espèces à la livraison<span class="where">/checkout</span></li>
+        <li>Suivre ma commande avec sa référence et mon téléphone<span class="where">/orders/track</span></li>
+      </ul></div>
+      <div class="card"><h3>Créer un compte</h3><ul>
+        <li>M'inscrire comme <strong>client</strong> ou comme <strong>affilié</strong> (avec acceptation des conditions)<span class="where">/register</span></li>
+        <li class="soon">Vérifier mon e-mail et réinitialiser mon mot de passe (026)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- Client -->
+  <section class="role client" id="client">
+    <div class="role-head">
+      <div class="role-icon" aria-hidden="true">🛍️</div>
+      <div><h2>En tant que client, je peux…</h2><p>Compte client (rôle Acheteur).</p></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Panier</h3><ul>
+        <li>Garder mon panier sur mon compte, entre mes appareils ; le panier visiteur est fusionné à la connexion</li>
+        <li>Voir le panier groupé par boutique, avec la livraison de chaque boutique et le total</li>
+        <li>Changer les quantités (limitées au stock), retirer un produit</li>
+        <li>Mettre un code affilié <strong>par produit</strong> : il est vérifié tout de suite (« ✓ Recommandé par… » ou la raison du refus)</li>
+        <li>Être prévenu sur la ligne concernée si un produit n'est plus disponible ou si la boutique est fermée</li>
+      </ul></div>
+      <div class="card"><h3>Commander</h3><ul>
+        <li>Commander avec nom et téléphone préremplis, choisir le gouvernorat, l'adresse, une note</li>
+        <li>Être averti si une boutique ne livre pas mon gouvernorat</li>
+        <li>Recevoir une référence (CMD-2026-000001) : un colis par boutique, payé en espèces au livreur</li>
+      </ul></div>
+      <div class="card"><h3>Suivre mes commandes</h3><ul>
+        <li>Voir mes commandes et le statut de chaque colis (passée, confirmée, expédiée, livrée…)<span class="where">/orders</span></li>
+        <li>Voir l'historique de chaque colis : qui l'a changé, quand, pourquoi</li>
+        <li>Annuler un colis tant qu'il n'est pas expédié</li>
+        <li class="soon">Noter les produits et boutiques reçus (017)</li>
+        <li class="soon">Être notifié à chaque étape (022)</li>
+      </ul></div>
+      <div class="card"><h3>Mon compte</h3><ul>
+        <li>Voir mon profil et mes rôles<span class="where">/account</span></li>
+        <li>Demander un autre rôle (devenir affilié ou commerçant), suivre ou retirer ma demande ; l'admin décide</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- Affiliate -->
+  <section class="role affiliate" id="affilie">
+    <div class="role-head">
+      <div class="role-icon" aria-hidden="true">🤝</div>
+      <div><h2>En tant qu'affilié, je peux…</h2><p>Compte affilié (à l'inscription ou après une demande acceptée).</p></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Mon code</h3><ul>
+        <li>Avoir un code unique et permanent (ex. #DPP-54) et le copier en un clic<span class="where">/affiliate</span></li>
+        <li>Voir sur chaque page produit le % de commission et les coins que je gagnerais</li>
+      </ul></div>
+      <div class="card"><h3>Travailler avec des boutiques</h3><ul>
+        <li>Demander à travailler avec une boutique, avec un message ; un seul partenariat ouvert par boutique</li>
+        <li>Suivre mes demandes : boutiques partenaires, en attente (je peux retirer), historique avec la raison d'un refus</li>
+        <li>Redemander après un refus ou la fin d'un partenariat</li>
+        <li>Ne jamais être affilié de ma propre boutique (refusé automatiquement)</li>
+      </ul></div>
+      <div class="card"><h3>Partager et vendre</h3><ul>
+        <li>Copier un lien de partage par boutique ou par produit (<code>?ref=CODE</code>), retenu 30 jours chez le client</li>
+        <li>Commander <strong>pour un client</strong> : mon code va sur les produits des boutiques partenaires, les autres sans code</li>
+        <li>Voir mes ventes avec mon code : montant, %, coins attendus, statut du colis</li>
+        <li>Mon code ne compte jamais sur mes propres achats</li>
+      </ul></div>
+      <div class="card"><h3>Mes gains</h3><ul>
+        <li>Recevoir mes coins automatiquement à la livraison, chacun relié à sa commande, son produit, sa boutique et son client<span class="where">/affiliate</span></li>
+        <li>Consulter mon portefeuille : historique filtrable (dates, boutique, produit, type), répartition par produit et par boutique, commandes avec mon code, export CSV<span class="where">/affiliate/wallet</span></li>
+        <li>Demander un retrait dès le minimum atteint (espèces ou virement), suivre la vérification et la date prévue, annuler tant que rien n'est planifié<span class="where">/affiliate/wallet · Retraits</span></li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- Store owner -->
+  <section class="role owner" id="commercant">
+    <div class="role-head">
+      <div class="role-icon" aria-hidden="true">🏪</div>
+      <div><h2>En tant que commerçant, je peux…</h2><p>Rôle Propriétaire de boutique, accordé par l'admin après une demande.</p></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Ma boutique</h3><ul>
+        <li>Créer ma boutique (une par compte), en ligne tout de suite : nom, catégorie, logo, bannière, description<span class="where">/my-store</span></li>
+        <li>Régler la livraison : frais, délai, gouvernorats livrés</li>
+        <li>Fixer le % affilié par défaut (dans les limites de la plateforme)</li>
+        <li>Ajouter téléphone, adresse, Facebook, Instagram, site web</li>
+        <li>Fermer temporairement ma boutique et la rouvrir</li>
+        <li>Voir la raison si l'admin a désactivé la boutique</li>
+      </ul></div>
+      <div class="card"><h3>Mes produits</h3><ul>
+        <li>Créer et modifier des produits : jusqu'à 8 photos, prix, prix barré, stock, référence<span class="where">/my-store/products</span></li>
+        <li>Remplir les caractéristiques de la catégorie (contenance, matière…)</li>
+        <li>Gérer des variantes (jusqu'à 2 axes, ex. couleur × pointure), avec stock et prix propres</li>
+        <li>Fixer le % affilié <strong>par produit</strong> et voir combien gagne un affilié</li>
+        <li>Publier, mettre en brouillon, archiver ou supprimer un produit</li>
+      </ul></div>
+      <div class="card"><h3>Mes affiliés</h3><ul>
+        <li>Voir les demandes d'affiliés : nom, code, ancienneté, nombre de boutiques partenaires, message<span class="where">/my-store/affiliates</span></li>
+        <li>Accepter ou refuser (avec une raison facultative)</li>
+        <li>Mettre fin à un partenariat ; les commandes déjà passées ne sont pas touchées</li>
+      </ul></div>
+      <div class="card"><h3>Mes commandes</h3><ul>
+        <li>Voir mes commandes par statut, chercher par référence, nom ou téléphone<span class="where">/my-store/orders</span></li>
+        <li>Voir le client (appel en un clic), l'adresse, les produits et la commission de chaque ligne affiliée</li>
+        <li>Confirmer → expédier → <strong>livrée et encaissée</strong> (définitif)</li>
+        <li>Marquer « non livrée » avec une raison (refusé, injoignable, mauvaise adresse…) ; le stock est remis</li>
+        <li>Annuler avant l'expédition, avec une raison ; le stock est remis</li>
+        <li class="soon">Payer ma facture mensuelle : abonnement + commissions des affiliés (025)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- Admin -->
+  <section class="role admin" id="admin">
+    <div class="role-head">
+      <div class="role-icon" aria-hidden="true">🛡️</div>
+      <div><h2>En tant qu'admin, je peux…</h2><p>Chaque action est inscrite au journal d'audit (qui, quoi, quand, pourquoi, avant / après).</p></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Utilisateurs & rôles</h3><ul>
+        <li>Chercher un utilisateur par nom, e-mail, téléphone, code affilié ou boutique ; voir les compteurs<span class="where">/admin/users</span></li>
+        <li>Voir la fiche d'un utilisateur : rôles, boutique, historique admin</li>
+        <li>Accorder ou retirer des rôles (Acheteur, Commerçant, Admin) ; jamais sur mon propre compte</li>
+        <li>Bloquer / débloquer un compte (déconnexion partout)</li>
+        <li>Désactiver / réactiver un code affilié en cas de fraude</li>
+        <li>Accepter ou refuser les demandes de rôle, avec une raison<span class="where">/admin/role-requests</span></li>
+      </ul></div>
+      <div class="card"><h3>Catalogue & réglages</h3><ul>
+        <li>Gérer les catégories de boutiques (noms FR / AR / EN, icône, ordre, masquer)</li>
+        <li>Gérer l'arbre des catégories de produits (3 niveaux) et leurs champs : texte, nombre, oui / non, choix</li>
+        <li>Régler la plateforme : valeur du coin, limites du %, minimum de retrait, abonnement, format des codes…<span class="where">/admin/settings</span></li>
+      </ul></div>
+      <div class="card"><h3>Modération</h3><ul>
+        <li>Voir toutes les boutiques avec leurs filtres ; désactiver, réactiver ou supprimer une boutique, avec une raison<span class="where">/admin/stores</span></li>
+        <li>Voir tous les produits, trier par prix pour repérer les prix absurdes ; désactiver en masse<span class="where">/admin/products</span></li>
+        <li>Voir tous les partenariats et leur propriétaire de boutique ; en terminer un pour fraude<span class="where">/admin/partnerships</span></li>
+      </ul></div>
+      <div class="card"><h3>Commandes & suivi</h3><ul>
+        <li>Voir toutes les commandes, chercher par référence, client, téléphone ou boutique<span class="where">/admin/orders</span></li>
+        <li>Consulter le registre des coins (totaux, chaque écriture jusqu'à sa commande) et corriger un solde avec une raison, tracée dans l'audit<span class="where">/admin/coins</span></li>
+        <li>Traiter les retraits : vérifier les commissions couvertes, refuser avec une raison, planifier la remise ou le virement, marquer payé — tout est audité<span class="where">/admin/payouts</span></li>
+        <li>Forcer le statut d'un colis en cas de litige (sauf après « Livrée »), avec une raison</li>
+        <li>Consulter le journal d'audit de toutes les actions admin<span class="where">/admin/audit</span></li>
+        <li class="soon">Tableau de bord et statistiques (023), avis (017), facturation des boutiques (025), anti-fraude (024)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="flow" id="parcours">
+    <h2>🔁 Parcours d'une vente avec affilié</h2>
+    <ol class="steps">
+      <li>Le commerçant fixe le % affilié de ses produits (ex. parfum à 200 TND, 10 %).</li>
+      <li>L'affilié demande à travailler avec la boutique ; le commerçant accepte.</li>
+      <li>L'affilié partage son lien ou son code #DPP-54 ; le client l'ajoute au produit dans son panier.</li>
+      <li>Le client commande et paie en espèces à la livraison ; la ligne fige le prix, le %, l'affilié et les coins attendus.</li>
+      <li>La boutique confirme, expédie puis marque le colis « livré et encaissé ».</li>
+      <li>Les coins sont crédités à l'affilié dans un registre traçable (019) et visibles dans son portefeuille (020).</li>
+      <li>L'affilié demande un retrait ; ses coins sont réservés ; l'admin vérifie au cas par cas, fixe la date, puis marque payé (021).</li>
+    </ol>
+  </section>
+
+  <footer>Généré depuis le code et les specs du projet (<code>features/</code>, <code>docs/CONTEXT.md</code>). FR par défaut ; l'application existe aussi en arabe et en anglais.</footer>
+</div>
+</body>
+</html>

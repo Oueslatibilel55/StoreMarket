@@ -1,0 +1,204 @@
+<main class="page-narrow space-y-6 animate-fade-in">
+  <header class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <p class="eyebrow">{{ 'roles.Affiliate' | transloco }}</p>
+      <h1 class="page-title mt-1">{{ 'partnerships.mine.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'partnerships.mine.subtitle' | transloco }}</p>
+    </div>
+    <a routerLink="/stores" class="btn btn-primary">{{ 'partnerships.mine.findStores' | transloco }}</a>
+  </header>
+
+  <app-affiliate-card />
+
+  @if (coins.value(); as c) {
+    <section class="card overflow-hidden">
+      <div class="card-header">
+        <div>
+          <h2 class="section-title">{{ 'coins.mine' | transloco }}</h2>
+          <p class="mt-0.5 text-sm text-muted">{{ 'coins.mineHint' | transloco }}</p>
+        </div>
+        <div class="flex shrink-0 flex-wrap gap-2">
+          <a routerLink="/affiliate/wallet" [queryParams]="{ tab: 'payouts' }" class="btn btn-primary btn-sm">{{ 'payouts.mine.ask' | transloco }}</a>
+          <a routerLink="/affiliate/wallet" class="btn btn-secondary btn-sm">{{ 'wallet.open' | transloco }}</a>
+        </div>
+      </div>
+      <div class="grid gap-4 p-5 sm:grid-cols-3 sm:p-6">
+        <div class="rounded-xl bg-accent/10 p-4 ring-1 ring-accent/25">
+          <p class="eyebrow">{{ 'coins.balance' | transloco }}</p>
+          <p class="mt-1 text-3xl font-bold tracking-tight text-accent-ink" dir="ltr">{{ c.balance | number: '1.0-3' : language.locale() }}</p>
+          <p class="text-xs text-muted" dir="ltr">≈ {{ c.balance * c.coinValueInTnd | number: '1.0-3' : language.locale() }} TND</p>
+        </div>
+        <div class="rounded-xl bg-subtle p-4">
+          <p class="eyebrow">{{ 'coins.earned' | transloco }}</p>
+          <p class="mt-1 text-2xl font-bold text-ink" dir="ltr">{{ c.totalEarned | number: '1.0-3' : language.locale() }}</p>
+        </div>
+        <div class="rounded-xl bg-subtle p-4">
+          <p class="eyebrow">{{ 'coins.expected' | transloco }}</p>
+          <p class="mt-1 text-2xl font-bold text-ink-soft" dir="ltr">≈ {{ c.expected | number: '1.0-3' : language.locale() }}</p>
+          <p class="text-xs text-muted">{{ 'coins.expectedHint' | transloco }}</p>
+        </div>
+      </div>
+      @if (coinHistory.value()?.items?.length) {
+        <ul class="divide-y divide-line border-t border-line">
+          @for (e of coinHistory.value()!.items; track e.id) {
+            <li class="flex flex-col gap-1 px-5 py-3 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div class="min-w-0">
+                <p class="truncate font-medium text-ink">{{ e.productName ?? ('coins.type.' + e.type | transloco) }}</p>
+                <p class="text-xs text-muted">
+                  {{ e.createdAt | date: 'mediumDate' : undefined : language.locale() }}
+                  @if (e.orderReference) { · <span dir="ltr">{{ e.orderReference }}</span> }
+                  @if (e.storeName) { · {{ e.storeName }} }
+                  @if (e.clientName) { · {{ e.clientName }} <span dir="ltr">{{ e.clientPhone }}</span> }
+                  @if (e.reason) { · {{ e.reason }} }
+                </p>
+              </div>
+              <p class="shrink-0 font-semibold" [class]="e.coins < 0 ? 'text-danger' : 'text-success'" dir="ltr">{{ e.coins > 0 ? '+' : '' }}{{ e.coins | number: '1.0-3' : language.locale() }}</p>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+  @if (sales.value(); as s) {
+    <section class="card overflow-hidden">
+      <div class="card-header">
+        <div>
+          <h2 class="section-title">{{ 'orders.sales.title' | transloco }}</h2>
+          <p class="mt-0.5 text-sm text-muted">{{ 'orders.sales.hint' | transloco }}</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 border-b border-line p-4 sm:gap-4 sm:p-5">
+        <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'orders.sales.lines' | transloco }}</p><p class="mt-1 text-xl font-bold" dir="ltr">{{ s.summary.lines }}</p></div>
+        <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'orders.sales.sales' | transloco }}</p><p class="mt-1 text-xl font-bold" dir="ltr">{{ s.summary.sales | number: '1.0-3' : language.locale() }} <span class="text-xs text-muted">TND</span></p></div>
+        <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'coins.earned' | transloco }}</p><p class="mt-1 text-xl font-bold text-success" dir="ltr">{{ s.summary.earnedCoins | number: '1.0-3' : language.locale() }}</p></div>
+      </div>
+      @if (s.lines.items.length === 0) {
+        <p class="empty-state py-8">{{ 'orders.sales.none' | transloco }}</p>
+      } @else {
+        <ul class="divide-y divide-line">
+          @for (l of s.lines.items; track l.lineId) {
+            <li class="flex flex-col gap-1 px-5 py-3.5 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <div class="min-w-0">
+                <p class="truncate font-semibold text-ink">{{ l.productName }} <span class="font-normal text-muted" dir="ltr">× {{ l.quantity }}</span></p>
+                <p class="text-xs text-muted">
+                  <span dir="ltr">{{ l.reference }}</span> · {{ l.storeName }} · {{ l.createdAt | date: 'mediumDate' : undefined : language.locale() }}
+                  @if (l.placedByMe) { · <span class="text-brand">{{ 'orders.sales.placedByMe' | transloco }}</span> }
+                </p>
+              </div>
+              <p class="flex shrink-0 items-center gap-2">
+                <span class="pill" [class]="statusTone(l.status)">{{ 'orders.status.' + l.status | transloco }}</span>
+                <span class="pill pill-brand" dir="ltr">{{ l.affiliatePercent }} %</span>
+                <span class="font-semibold text-accent-ink" dir="ltr">≈ {{ l.expectedCoins | number: '1.0-3' : language.locale() }} {{ 'settings.units.coins' | transloco }}</span>
+              </p>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+
+  @if (error(); as key) {
+    <p role="alert" class="alert-danger">{{ key | transloco }}</p>
+  }
+
+  @if (partnerships.error()) {
+    <p class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
+  } @else if (partnerships.value(); as all) {
+    @if (all.length === 0) {
+      <div class="card empty-state">
+        <span class="text-3xl" aria-hidden="true">🤝</span>
+        <p class="font-semibold text-ink">{{ 'partnerships.mine.empty' | transloco }}</p>
+        <p>{{ 'partnerships.mine.emptyHint' | transloco }}</p>
+        <a routerLink="/stores" class="btn btn-secondary mt-2">{{ 'partnerships.mine.findStores' | transloco }}</a>
+      </div>
+    }
+
+    @if (active().length) {
+      <section class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'partnerships.mine.active' | transloco }}</h2>
+          <span class="pill pill-success" dir="ltr">{{ active().length }}</span>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (p of active(); track p.id) {
+            <li class="space-y-3 px-5 py-4 sm:px-6">
+              <ng-container *ngTemplateOutlet="storeRow; context: { $implicit: p }" />
+              <div class="flex gap-2">
+                <input type="text" readonly [value]="link(p)" dir="ltr" [attr.aria-label]="'partnerships.cta.shareLink' | transloco"
+                  class="field min-w-0 flex-1 font-mono text-xs" (focus)="$any($event.target).select()" />
+                <button type="button" (click)="copy(p)" class="btn btn-sm" [class]="copiedId() === p.id ? 'btn-success' : 'btn-secondary'">
+                  {{ (copiedId() === p.id ? 'affiliate.copied' : 'affiliate.copy') | transloco }}
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (waiting().length) {
+      <section class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'partnerships.mine.waiting' | transloco }}</h2>
+          <span class="pill pill-warning" dir="ltr">{{ waiting().length }}</span>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (p of waiting(); track p.id) {
+            <li class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <ng-container *ngTemplateOutlet="storeRow; context: { $implicit: p }" />
+              <button type="button" (click)="withdraw(p.id)" class="btn btn-ghost btn-sm self-start sm:self-auto">{{ 'partnerships.cancel' | transloco }}</button>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (history().length) {
+      <section class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'partnerships.mine.history' | transloco }}</h2>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (p of history(); track p.id) {
+            <li class="space-y-2 px-5 py-4 sm:px-6">
+              <ng-container *ngTemplateOutlet="storeRow; context: { $implicit: p }" />
+              @if (p.decisionReason || p.endReason) {
+                <p class="rounded-lg bg-subtle px-3 py-2 text-sm text-ink-soft">{{ p.decisionReason || p.endReason }}</p>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
+  }
+</main>
+
+<ng-template #storeRow let-p>
+  <div class="flex min-w-0 flex-1 items-center gap-3">
+    <div class="size-11 shrink-0 overflow-hidden rounded-lg bg-subtle ring-1 ring-line">
+      @if (p.store.logoUrl) {
+        <img [src]="p.store.logoUrl" alt="" class="size-full object-cover" />
+      } @else {
+        <span class="flex size-full items-center justify-center font-bold text-brand">{{ p.store.name.charAt(0).toUpperCase() }}</span>
+      }
+    </div>
+    <div class="min-w-0 flex-1">
+      <p class="flex flex-wrap items-center gap-2">
+        @if (p.store.isVisible) {
+          <a [routerLink]="['/stores', p.store.slug]" class="truncate font-semibold text-ink hover:text-brand">{{ p.store.name }}</a>
+        } @else {
+          <span class="truncate font-semibold text-muted">{{ p.store.name }}</span>
+          <span class="pill pill-neutral">{{ 'partnerships.storeHidden' | transloco }}</span>
+        }
+        <span class="pill" [class]="tone(p.status)">{{ 'partnerships.status.' + p.status | transloco }}</span>
+        <span class="pill pill-brand" dir="ltr">{{ p.store.defaultAffiliatePercent }} %</span>
+      </p>
+      <p class="mt-0.5 text-xs text-muted">
+        {{ 'partnerships.since' | transloco: { date: ((p.decidedAt ?? p.createdAt) | date: 'mediumDate' : undefined : language.locale()) } }}
+      </p>
+    </div>
+  </div>
+</ng-template>

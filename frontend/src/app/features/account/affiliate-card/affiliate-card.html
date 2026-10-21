@@ -1,0 +1,20 @@
+@if (auth.user()?.affiliateCode; as code) {
+  <section class="card overflow-hidden">
+    <div class="card-body">
+      <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+        <div class="min-w-0 flex-1">
+          <h2 class="section-title">{{ 'affiliate.yourCode' | transloco }}</h2>
+          <p class="mt-1 text-sm text-muted">{{ 'affiliate.codeHint' | transloco }}</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <span dir="ltr"
+            class="rounded-xl bg-brand-soft px-4 py-2 font-mono text-2xl font-bold tracking-wider text-brand ring-1 ring-brand/15 ring-inset select-all">#{{ code }}</span>
+          <button type="button" (click)="copy(code)" class="btn" [class]="copied() ? 'btn-success' : 'btn-secondary'">
+            {{ (copied() ? 'affiliate.copied' : 'affiliate.copy') | transloco }}
+          </button>
+        </div>
+      </div>
+      <p class="mt-5 alert-info">{{ 'affiliate.nextStep' | transloco }}</p>
+    </div>
+  </section>
+}

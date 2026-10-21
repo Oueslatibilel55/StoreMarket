@@ -1,0 +1,327 @@
+<main class="page max-w-4xl">
+  <app-my-store-tabs />
+
+  <a routerLink="/my-store/products" class="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand">
+    <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'products.back' | transloco }}
+  </a>
+
+  @if (product.error()) {
+    <p role="alert" class="mt-6 alert-danger">{{ 'errors.product.notFound' | transloco }}</p>
+  } @else if (id() && !product.hasValue()) {
+    <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+  } @else {
+    <header class="mt-4 flex flex-wrap items-end justify-between gap-4">
+      <h1 class="page-title min-w-0 flex-1">{{ (id() ? 'products.editTitle' : 'products.addTitle') | transloco }}</h1>
+      @if (id()) {
+        <button type="button" (click)="confirmDelete.set(true)" class="btn btn-danger-soft btn-sm">{{ 'admin.storeCategories.delete' | transloco }}</button>
+      }
+    </header>
+
+    @if (product.value()?.isDisabled) {
+      <div role="alert" class="mt-6 rounded-xl border border-danger/20 bg-danger/6 p-5">
+        <p class="font-semibold text-danger">{{ 'products.disabledByAdmin' | transloco }}</p>
+        <p class="mt-1.5 text-sm text-ink">{{ product.value()?.moderationReason }}</p>
+        <p class="mt-1.5 text-sm text-muted">{{ 'products.disabledHint' | transloco }}</p>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 space-y-6">
+      <!-- Basics -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'products.sections.basics' | transloco }}</h2>
+        </div>
+        <div class="card-body grid gap-6 sm:grid-cols-2">
+          <div>
+            <label for="name" class="field-label">{{ 'products.fields.name' | transloco }}</label>
+            <input id="name" formControlName="name" class="mt-1.5 field" />
+            @if (invalid('name')) { <p class="field-error">{{ 'errors.product.nameLength' | transloco }}</p> }
+          </div>
+          <div>
+            <label for="categoryId" class="field-label">{{ 'products.fields.category' | transloco }}</label>
+            <select id="categoryId" formControlName="categoryId" class="mt-1.5 field">
+              <option value="" disabled>{{ 'myStore.choose' | transloco }}</option>
+              @for (c of categories.value() ?? []; track c.id) {
+                <option [value]="c.id">{{ c.depth > 1 ? '— '.repeat(c.depth - 1) : '' }}{{ c.name | localized: language.lang() }}</option>
+              }
+            </select>
+            @if (invalid('categoryId')) { <p class="field-error">{{ 'auth.validation.required' | transloco }}</p> }
+          </div>
+          <div class="sm:col-span-2">
+            <label for="description" class="field-label">{{ 'myStore.fields.description' | transloco }}</label>
+            <textarea id="description" rows="4" formControlName="description" maxlength="5000"
+              class="mt-1.5 field resize-y"></textarea>
+          </div>
+          <div class="grid gap-6 sm:col-span-2 sm:grid-cols-3">
+            <div>
+              <label for="price" class="field-label">{{ 'products.fields.price' | transloco }}</label>
+              <div class="mt-1.5 flex" dir="ltr">
+                <input id="price" type="number" step="0.001" min="0" formControlName="price" class="field rounded-e-none" />
+                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">TND</span>
+              </div>
+              @if (invalid('price')) { <p class="field-error">{{ 'errors.product.priceInvalid' | transloco }}</p> }
+            </div>
+            <div>
+              <label for="compare" class="field-label">{{ 'products.fields.compareAtPrice' | transloco }}</label>
+              <div class="mt-1.5 flex" dir="ltr">
+                <input id="compare" type="number" step="0.001" min="0" formControlName="compareAtPrice" class="field rounded-e-none" />
+                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">TND</span>
+              </div>
+              <p class="field-hint">{{ 'products.compareHint' | transloco }}</p>
+            </div>
+            <div>
+              <label for="sku" class="field-label">{{ 'products.fields.sku' | transloco }}</label>
+              <input id="sku" formControlName="sku" dir="ltr" class="mt-1.5 field font-mono" />
+            </div>
+          </div>
+          <div class="grid gap-6 border-t border-line pt-6 sm:col-span-2 sm:grid-cols-3">
+            @if (!axes().length) {
+              <div>
+                <label for="stock" class="field-label">{{ 'products.fields.stock' | transloco }}</label>
+                <input id="stock" type="number" step="1" min="0" formControlName="stock" dir="ltr" class="mt-1.5 field" />
+              </div>
+            }
+            <div>
+              <label for="status" class="field-label">{{ 'products.fields.status' | transloco }}</label>
+              <select id="status" formControlName="status" class="mt-1.5 field">
+                @for (s of statuses; track s) { <option [value]="s">{{ 'products.status.' + s | transloco }}</option> }
+              </select>
+            </div>
+            <div>
+              <label for="slug" class="field-label">{{ 'admin.storeCategories.slug' | transloco }}</label>
+              <input id="slug" formControlName="slug" dir="ltr" [placeholder]="'admin.storeCategories.slugAuto' | transloco"
+                class="mt-1.5 field font-mono" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Affiliate -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'products.sections.affiliate' | transloco }}</h2>
+          <span class="pill pill-brand" dir="ltr">{{ effectivePercent() }}%</span>
+        </div>
+        <div class="card-body">
+          <div class="flex flex-wrap items-end gap-6">
+            <div>
+              <label for="percent" class="field-label">{{ 'products.fields.affiliatePercent' | transloco }}</label>
+              <div class="mt-1.5 flex w-40" dir="ltr">
+                <input id="percent" type="number" step="1" [min]="percentMin()" [max]="percentMax()" formControlName="affiliatePercent"
+                  [placeholder]="storePercent()" class="field rounded-e-none" />
+                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">%</span>
+              </div>
+            </div>
+            <p class="flex flex-wrap items-center gap-x-1.5 rounded-lg border border-accent/30 bg-accent/10 px-4 py-2.5 text-sm text-ink-soft">
+              {{ 'products.coinsPreview' | transloco: { percent: effectivePercent() } }}
+              <span class="font-semibold text-accent-ink" dir="ltr">≈ {{ coins() | number: '1.0-3' : language.locale() }}</span> {{ 'settings.units.coins' | transloco }}
+            </p>
+          </div>
+          <p class="field-hint mt-3">{{ 'products.percentHint' | transloco: { store: storePercent(), min: percentMin(), max: percentMax() } }}</p>
+        </div>
+      </section>
+
+      <!-- Photos -->
+      <section class="card">
+        <div class="card-header">
+          <div class="min-w-0">
+            <h2 class="section-title">{{ 'products.sections.photos' | transloco }}</h2>
+            <p class="mt-0.5 text-xs text-muted">{{ 'products.photosHint' | transloco: { max: maxImages } }}</p>
+          </div>
+          <span class="pill pill-neutral" dir="ltr">{{ images().length }} / {{ maxImages }}</span>
+        </div>
+        <div class="card-body space-y-5">
+          @if (images().length) {
+            <ul class="flex flex-wrap gap-4">
+              @for (img of images(); track img.id; let i = $index, first = $first, last = $last) {
+                <li class="relative">
+                  <img [src]="img.url" alt="" class="size-24 rounded-xl border-2 object-cover shadow-card" [class]="first ? 'border-brand' : 'border-line'" />
+                  @if (first) { <span class="pill pill-dark absolute start-1.5 top-1.5 px-1.5 text-[10px]">{{ 'products.mainPhoto' | transloco }}</span> }
+                  <div class="mt-1.5 flex items-center justify-between rounded-lg border border-line bg-card text-xs">
+                    <button type="button" (click)="moveImage(i, -1)" [disabled]="first" class="btn btn-ghost btn-sm px-2 disabled:opacity-30" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"><span class="inline-block rtl:rotate-180">◀</span></button>
+                    <button type="button" (click)="removeImage(i)" class="btn btn-ghost btn-sm px-2 text-danger hover:text-danger" [attr.aria-label]="'images.remove' | transloco">✕</button>
+                    <button type="button" (click)="moveImage(i, 1)" [disabled]="last" class="btn btn-ghost btn-sm px-2 disabled:opacity-30" [attr.aria-label]="'admin.storeCategories.moveDown' | transloco"><span class="inline-block rtl:rotate-180">▶</span></button>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+          @if (images().length < maxImages) {
+            <app-image-upload purpose="ProductPhoto" [url]="null" (changed)="addImage($event)" />
+          }
+        </div>
+      </section>
+
+      <!-- Category fields -->
+      @if (fields().length) {
+        <section class="card">
+          <div class="card-header">
+            <div class="min-w-0">
+              <h2 class="section-title">{{ 'products.sections.fields' | transloco }}</h2>
+              <p class="mt-0.5 text-xs text-muted">{{ 'products.fieldsHint' | transloco }}</p>
+            </div>
+          </div>
+          <div class="card-body grid gap-6 sm:grid-cols-2">
+            @for (f of productFields(); track f.attribute.id) {
+              @let a = f.attribute;
+              @let val = value(a.key);
+              <div>
+                <p class="field-label">
+                  {{ a.name | localized: language.lang() }}
+                  @if (a.required) { <span class="text-danger" [title]="'admin.productCategories.required' | transloco">*</span> }
+                </p>
+                @switch (a.type) {
+                  @case ('Text') {
+                    <input [value]="val.text" (input)="setValue(a.key, { text: $any($event.target).value })" [attr.aria-label]="a.name | localized: language.lang()"
+                      class="mt-1.5 field" />
+                  }
+                  @case ('Number') {
+                    <div class="mt-1.5 flex" dir="ltr">
+                      <input type="number" step="0.001" min="0" [value]="val.number ?? ''" [attr.aria-label]="a.name | localized: language.lang()"
+                        (input)="setValue(a.key, { number: num($event) })"
+                        [class]="a.unit ? 'rounded-e-none' : ''" class="field" />
+                      @if (a.unit) { <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">{{ a.unit }}</span> }
+                    </div>
+                  }
+                  @case ('Boolean') {
+                    <div class="mt-1.5 inline-flex rounded-lg border border-line-strong/80 bg-subtle p-0.5 text-sm">
+                      <label class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 font-medium transition-colors"
+                        [class]="val.boolean === true ? 'bg-card text-brand shadow-card' : 'text-ink-soft hover:text-ink'">
+                        <input type="radio" [name]="'b-' + a.key" class="sr-only" [checked]="val.boolean === true" (change)="setValue(a.key, { boolean: true })" /> {{ 'common.yes' | transloco }}
+                      </label>
+                      <label class="flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 font-medium transition-colors"
+                        [class]="val.boolean === false ? 'bg-card text-brand shadow-card' : 'text-ink-soft hover:text-ink'">
+                        <input type="radio" [name]="'b-' + a.key" class="sr-only" [checked]="val.boolean === false" (change)="setValue(a.key, { boolean: false })" /> {{ 'common.no' | transloco }}
+                      </label>
+                    </div>
+                  }
+                  @default {
+                    <div class="mt-1.5 flex flex-wrap gap-2">
+                      @for (o of a.options; track o.key) {
+                        <label class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-brand-ring"
+                          [class]="val.options.includes(o.key) ? 'border-brand bg-brand-soft text-brand' : 'border-line-strong/80 bg-card text-ink-soft hover:border-line-strong hover:bg-subtle'">
+                          <input [type]="a.type === 'SingleChoice' ? 'radio' : 'checkbox'" [name]="'o-' + a.key" class="sr-only"
+                            [checked]="val.options.includes(o.key)" (change)="toggleOption(f, o.key, $any($event.target).checked)" />
+                          {{ o.name | localized: language.lang() }}
+                        </label>
+                      }
+                    </div>
+                  }
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Variants -->
+      @if (choiceFields().length) {
+        <section class="card">
+          <div class="card-header">
+            <div class="min-w-0">
+              <h2 class="section-title">{{ 'products.sections.variants' | transloco }}</h2>
+              <p class="mt-0.5 text-xs text-muted">{{ 'products.variantsHint' | transloco }}</p>
+            </div>
+          </div>
+          <div class="card-body space-y-6">
+            <div class="flex flex-wrap gap-2 text-sm">
+              @for (f of choiceFields(); track f.attribute.id) {
+                <label class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 font-medium transition-colors"
+                  [class]="axes().includes(f.attribute.key) ? 'border-brand/30 bg-brand-soft text-ink' : 'border-line text-ink-soft hover:bg-subtle'"
+                  [class.opacity-50]="axisFull(f.attribute.key)">
+                  <input type="checkbox" class="checkbox" [checked]="axes().includes(f.attribute.key)" [disabled]="axisFull(f.attribute.key)"
+                    (change)="toggleAxis(f.attribute.key, $any($event.target).checked)" />
+                  {{ f.attribute.name | localized: language.lang() }}
+                </label>
+              }
+            </div>
+
+            @for (axis of axes(); track axis) {
+              @let f = fieldOf(axis);
+              @if (f) {
+                <div>
+                  <p class="field-label">{{ f.attribute.name | localized: language.lang() }}</p>
+                  <div class="mt-1.5 flex flex-wrap gap-2">
+                    @for (o of f.attribute.options; track o.key) {
+                      <label class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-brand-ring"
+                        [class]="(axisOptions()[axis] ?? []).includes(o.key) ? 'border-brand bg-brand-soft text-brand' : 'border-line-strong/80 bg-card text-ink-soft hover:border-line-strong hover:bg-subtle'">
+                        <input type="checkbox" class="sr-only" [checked]="(axisOptions()[axis] ?? []).includes(o.key)"
+                          (change)="toggleAxisOption(axis, o.key, $any($event.target).checked)" />
+                        {{ o.name | localized: language.lang() }}
+                      </label>
+                    }
+                  </div>
+                </div>
+              }
+            }
+
+            @if (axes().length) {
+              @if (combos().length) {
+                <div class="overflow-hidden rounded-xl border border-line">
+                  <table class="w-full text-sm">
+                    <thead class="hidden bg-subtle text-xs font-semibold tracking-wide text-muted uppercase sm:table-header-group">
+                      <tr>
+                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.variant' | transloco }}</th>
+                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.fields.stock' | transloco }}</th>
+                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.variantPrice' | transloco }}</th>
+                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.fields.sku' | transloco }}</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-line">
+                      @for (combo of combos(); track $index) {
+                        @let r = row(combo);
+                        <tr class="row-hover grid grid-cols-3 gap-x-3 gap-y-2 px-4 py-3 sm:table-row sm:p-0">
+                          <td class="col-span-3 font-semibold text-ink sm:px-4 sm:py-2.5">{{ comboLabel(combo) }}</td>
+                          <td class="sm:px-4 sm:py-2.5">
+                            <span class="eyebrow mb-1 block sm:hidden">{{ 'products.fields.stock' | transloco }}</span>
+                            <input type="number" min="0" step="1" dir="ltr" [value]="r.stock" (input)="setRow(combo, { stock: num($event) ?? 0 })"
+                              [attr.aria-label]="'products.fields.stock' | transloco" class="field px-2 py-1.5 sm:w-24" />
+                          </td>
+                          <td class="sm:px-4 sm:py-2.5">
+                            <span class="eyebrow mb-1 block sm:hidden">{{ 'products.variantPrice' | transloco }}</span>
+                            <input type="number" min="0" step="0.001" dir="ltr" [value]="r.price ?? ''" [placeholder]="form.controls.price.value"
+                              (input)="setRow(combo, { price: num($event) })"
+                              [attr.aria-label]="'products.variantPrice' | transloco" class="field px-2 py-1.5 sm:w-32" />
+                          </td>
+                          <td class="sm:px-4 sm:py-2.5">
+                            <span class="eyebrow mb-1 block sm:hidden">{{ 'products.fields.sku' | transloco }}</span>
+                            <input dir="ltr" [value]="r.sku" (input)="setRow(combo, { sku: $any($event.target).value })"
+                              [attr.aria-label]="'products.fields.sku' | transloco" class="field px-2 py-1.5 font-mono sm:w-32" />
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              } @else {
+                <p class="rounded-lg border border-dashed border-line-strong px-4 py-6 text-center text-sm text-muted">{{ 'products.pickOptions' | transloco }}</p>
+              }
+            }
+          </div>
+        </section>
+      }
+
+      @if (error(); as key) {
+        <p role="alert" class="alert-danger">{{ key | transloco }}</p>
+      }
+      <div class="sticky bottom-4 z-10 flex flex-wrap items-center justify-end gap-3 rounded-xl border border-line bg-card/90 px-5 py-3 shadow-pop backdrop-blur">
+        @if (saved()) { <p class="me-auto text-sm font-medium text-success" role="status">{{ 'admin.settings.saved' | transloco }}</p> }
+        <a routerLink="/my-store/products" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</a>
+        <button type="submit" [disabled]="saving()" class="btn btn-primary">
+          {{ (saving() ? 'common.saving' : 'admin.settings.save') | transloco }}
+        </button>
+      </div>
+    </form>
+
+    @if (confirmDelete()) {
+      <app-modal [label]="'admin.confirm.title' | transloco" (close)="confirmDelete.set(false)">
+        <h2 class="section-title">{{ 'products.confirmDelete' | transloco: { name: form.controls.name.value } }}</h2>
+        <p class="mt-2 text-sm text-muted">{{ 'products.deleteHint' | transloco }}</p>
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" (click)="confirmDelete.set(false)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+          <button type="button" (click)="remove()" [disabled]="saving()" class="btn btn-danger">{{ 'common.confirm' | transloco }}</button>
+        </div>
+      </app-modal>
+    }
+  }
+</main>

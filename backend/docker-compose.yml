@@ -1,0 +1,54 @@
+services:
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: webapp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       webapp
+      POSTGRES_USER:     webapp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-webapp_dev}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U webapp -d webapp"]
+      interval: 10s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:9
+    container_name: webapp-pgadmin
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL:    admin@webapp.dev
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5051:80"
+
+  api:
+    build:
+      context: .
+      dockerfile: src/WebApp.Api/Dockerfile
+    container_name: webapp-api
+    restart: unless-stopped
+    profiles: ["full"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS:        http://+:8080
+      Database__MigrateOnStartup: "true"
+      ConnectionStrings__DefaultConnection: >-
+        Host=postgres;Port=5432;Database=webapp;
+        Username=webapp;Password=${POSTGRES_PASSWORD:-webapp_dev}
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

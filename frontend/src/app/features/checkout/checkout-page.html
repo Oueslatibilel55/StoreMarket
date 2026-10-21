@@ -1,0 +1,145 @@
+@let c = cart.cart();
+<main class="page animate-fade-in">
+  <a routerLink="/cart" class="btn btn-ghost btn-sm -ms-3"><span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'checkout.backToCart' | transloco }}</a>
+  <h1 class="page-title mt-2">{{ 'checkout.title' | transloco }}</h1>
+  <p class="page-subtitle">{{ 'checkout.subtitle' | transloco }}</p>
+
+  @if (!c.stores.length && !cart.loading()) {
+    <div class="card empty-state mt-8">
+      <p class="font-semibold text-ink">{{ 'cart.empty' | transloco }}</p>
+      <a routerLink="/products" class="btn btn-primary mt-3">{{ 'shop.allProducts' | transloco }}</a>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
+      <div class="space-y-6">
+        @if (canOrderForClient()) {
+          <section class="card card-body">
+            <h2 class="section-title">{{ 'checkout.whoFor' | transloco }}</h2>
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              @for (option of [false, true]; track option) {
+                <button type="button" (click)="setForClient(option)" [attr.aria-pressed]="forClient() === option"
+                  class="cursor-pointer rounded-xl border p-4 text-start transition-all duration-200"
+                  [class]="forClient() === option ? 'border-brand bg-brand-soft shadow-card ring-4 ring-brand-ring' : 'border-line-strong/80 bg-card hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-card-hover'">
+                  <span class="block font-semibold text-ink">{{ (option ? 'checkout.forClient' : 'checkout.forMe') | transloco }}</span>
+                  <span class="mt-1 block text-sm text-muted">{{ (option ? 'checkout.forClientHint' : 'checkout.forMeHint') | transloco }}</span>
+                </button>
+              }
+            </div>
+            @if (forClient()) {
+              <p class="alert-info mt-4">🤝 {{ 'checkout.affiliateModeInfo' | transloco: { code: '#' + auth.user()?.affiliateCode } }}</p>
+            }
+          </section>
+        }
+
+        <section class="card overflow-hidden">
+          <div class="card-header">
+            <div>
+              <h2 class="section-title">{{ (forClient() ? 'checkout.clientDetails' : 'checkout.delivery') | transloco }}</h2>
+              <p class="mt-0.5 text-sm text-muted">{{ 'checkout.deliveryHint' | transloco }}</p>
+            </div>
+          </div>
+          <div class="card-body grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="fullName" class="field-label">{{ 'checkout.fullName' | transloco }}</label>
+              <input id="fullName" formControlName="fullName" autocomplete="name" class="mt-1.5 field" />
+              @if (invalid('fullName')) { <p class="field-error">{{ 'checkout.validation.fullName' | transloco }}</p> }
+            </div>
+            <div>
+              <label for="phone" class="field-label">{{ 'auth.phone' | transloco }}</label>
+              <div class="mt-1.5 flex" dir="ltr">
+                <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">+216</span>
+                <input id="phone" type="tel" formControlName="phone" autocomplete="tel-national" placeholder="22 123 456" class="field rounded-s-none" />
+              </div>
+              @if (invalid('phone')) { <p class="field-error">{{ 'auth.validation.phone' | transloco }}</p> }
+            </div>
+            <div>
+              <label for="city" class="field-label">{{ 'checkout.city' | transloco }}</label>
+              <select id="city" formControlName="city" class="mt-1.5 field">
+                <option value="" disabled>{{ 'checkout.chooseCity' | transloco }}</option>
+                @for (code of cities; track code) { <option [value]="code">{{ 'cities.' + code | transloco }}</option> }
+              </select>
+              @if (invalid('city')) { <p class="field-error">{{ 'checkout.validation.city' | transloco }}</p> }
+            </div>
+            <div class="sm:col-span-2">
+              <label for="address" class="field-label">{{ 'checkout.address' | transloco }}</label>
+              <textarea id="address" rows="2" formControlName="address" autocomplete="street-address"
+                [placeholder]="'checkout.addressPlaceholder' | transloco" class="mt-1.5 field resize-y"></textarea>
+              @if (invalid('address')) { <p class="field-error">{{ 'checkout.validation.address' | transloco }}</p> }
+            </div>
+            <div class="sm:col-span-2">
+              <label for="note" class="field-label">{{ 'checkout.note' | transloco }}</label>
+              <textarea id="note" rows="2" formControlName="note" maxlength="500" [placeholder]="'checkout.notePlaceholder' | transloco"
+                class="mt-1.5 field resize-y"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="card card-body">
+          <h2 class="section-title">{{ 'checkout.payment' | transloco }}</h2>
+          <div class="mt-4 flex items-start gap-3 rounded-xl border border-brand bg-brand-soft p-4 ring-4 ring-brand-ring">
+            <span class="text-2xl" aria-hidden="true">💵</span>
+            <div>
+              <p class="font-semibold text-ink">{{ 'checkout.cod' | transloco }}</p>
+              <p class="mt-0.5 text-sm text-ink-soft">{{ 'checkout.codHint' | transloco }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="card overflow-hidden lg:sticky lg:top-24">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'cart.summary' | transloco }}</h2>
+          <a routerLink="/cart" class="link text-sm">{{ 'checkout.editCart' | transloco }}</a>
+        </div>
+        <div class="max-h-[50vh] divide-y divide-line overflow-y-auto">
+          @for (group of c.stores; track group.storeId) {
+            <div class="px-5 py-4">
+              <p class="flex items-center justify-between gap-3 text-sm">
+                <span class="font-semibold text-ink">{{ group.name }}</span>
+                <span class="text-muted" dir="ltr">+ {{ group.deliveryFee | number: '1.0-3' : language.locale() }} TND</span>
+              </p>
+              <ul class="mt-2 space-y-1.5 text-sm">
+                @for (line of group.lines; track line.productId + (line.variantId ?? '')) {
+                  <li class="flex justify-between gap-3">
+                    <span class="min-w-0 truncate text-ink-soft"><span dir="ltr">{{ line.quantity }} ×</span> {{ line.productName }}
+                      @if (forClient() ? false : line.affiliateCode) { <span class="code-chip ms-1" dir="ltr">#{{ line.affiliateCode }}</span> }
+                    </span>
+                    <span class="shrink-0 font-medium text-ink" dir="ltr">{{ line.lineTotal | number: '1.0-3' : language.locale() }}</span>
+                  </li>
+                }
+              </ul>
+              @if (notDelivered().includes(group.name)) {
+                <p class="alert-danger mt-3">{{ 'checkout.notDelivered' | transloco: { store: group.name, city: ('cities.' + form.controls.city.value | transloco) } }}</p>
+              }
+            </div>
+          }
+        </div>
+        <dl class="space-y-2 border-t border-line px-5 py-4 text-sm">
+          <div class="flex justify-between"><dt class="text-muted">{{ 'cart.items' | transloco }}</dt><dd class="font-medium" dir="ltr">{{ c.itemsTotal | number: '1.0-3' : language.locale() }} TND</dd></div>
+          <div class="flex justify-between"><dt class="text-muted">{{ 'cart.delivery' | transloco: { count: c.stores.length } }}</dt><dd class="font-medium" dir="ltr">{{ c.deliveryTotal | number: '1.0-3' : language.locale() }} TND</dd></div>
+          <div class="flex items-baseline justify-between border-t border-line pt-3">
+            <dt class="font-semibold text-ink">{{ 'checkout.toPay' | transloco }}</dt>
+            <dd class="text-2xl font-bold tracking-tight" dir="ltr">{{ c.total | number: '1.0-3' : language.locale() }} <span class="text-sm font-semibold text-muted">TND</span></dd>
+          </div>
+        </dl>
+        <div class="space-y-3 border-t border-line px-5 py-4">
+          @if (error(); as key) {
+            <div role="alert" class="alert-danger flex-col">
+              <span>{{ key | transloco }}</span>
+              @if (cartError()) { <a routerLink="/cart" class="link text-sm">{{ 'checkout.seeCart' | transloco }}</a> }
+            </div>
+          } @else if (!ready() && c.stores.length) {
+            <div class="alert-danger flex-col">
+              <span>{{ 'cart.fixLines' | transloco }}</span>
+              <a routerLink="/cart" class="link text-sm">{{ 'checkout.seeCart' | transloco }}</a>
+            </div>
+          }
+          <button type="submit" [disabled]="submitting() || !ready() || notDelivered().length > 0" class="btn btn-primary btn-lg w-full">
+            {{ (submitting() ? 'checkout.placing' : 'checkout.confirm') | transloco }}
+          </button>
+          <p class="text-center text-xs text-muted">{{ 'checkout.confirmHint' | transloco }}</p>
+        </div>
+      </aside>
+    </form>
+  }
+</main>

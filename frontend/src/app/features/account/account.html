@@ -1,0 +1,60 @@
+<main class="page-narrow">
+  @if (auth.user(); as user) {
+    <div class="space-y-6 animate-fade-in">
+      <header class="flex flex-col gap-5 sm:flex-row sm:items-center">
+        <span aria-hidden="true"
+          class="flex size-16 shrink-0 items-center justify-center rounded-full bg-brand-soft text-2xl font-bold text-brand ring-4 ring-card shadow-card">
+          {{ user.fullName.charAt(0).toUpperCase() }}
+        </span>
+        <div class="min-w-0 flex-1">
+          <p class="eyebrow">{{ 'account.title' | transloco }}</p>
+          <h1 class="mt-1 page-title truncate">{{ user.fullName }}</h1>
+          <p class="mt-1 truncate text-sm text-muted"><span dir="ltr">{{ user.email }}</span></p>
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            @for (role of user.roles; track role) {
+              <app-role-badge [role]="role" />
+            }
+          </div>
+        </div>
+      </header>
+
+      <section class="card overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'account.welcome' | transloco: { name: user.fullName } }}</h2>
+        </div>
+        <dl class="divide-y divide-line">
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-muted">{{ 'auth.fullName' | transloco }}</dt>
+            <dd class="font-medium text-ink sm:col-span-2">{{ user.fullName }}</dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-muted">{{ 'auth.email' | transloco }}</dt>
+            <dd class="min-w-0 break-all font-medium text-ink sm:col-span-2"><span dir="ltr">{{ user.email }}</span></dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-muted">{{ 'auth.phone' | transloco }}</dt>
+            <dd class="font-medium text-ink tabular-nums sm:col-span-2"><span dir="ltr">{{ user.phone }}</span></dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm font-medium text-muted">{{ 'account.memberSince' | transloco }}</dt>
+            <dd class="font-medium text-ink sm:col-span-2">{{ user.createdAt | date: 'longDate' : undefined : language.locale() }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <a routerLink="/orders" class="card-interactive flex items-center justify-between gap-4 p-5 sm:p-6">
+        <span class="flex items-center gap-4">
+          <span class="flex size-11 items-center justify-center rounded-lg bg-brand-soft text-xl" aria-hidden="true">📦</span>
+          <span>
+            <span class="block font-semibold text-ink">{{ 'orders.mine' | transloco }}</span>
+            <span class="block text-sm text-muted">{{ 'orders.mineHint' | transloco }}</span>
+          </span>
+        </span>
+        <span aria-hidden="true" class="inline-block text-muted rtl:rotate-180">›</span>
+      </a>
+
+      <app-affiliate-card />
+      <app-role-requests />
+    </div>
+  }
+</main>

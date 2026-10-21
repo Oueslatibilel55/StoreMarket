@@ -1,0 +1,140 @@
+<main class="page max-w-4xl animate-fade-in">
+  <app-my-store-tabs />
+
+  <header>
+    <h1 class="page-title">{{ 'partnerships.store.title' | transloco }}</h1>
+    <p class="page-subtitle">{{ 'partnerships.store.subtitle' | transloco }}</p>
+  </header>
+
+  @if (partnerships.error(); as err) {
+    <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
+  } @else if (partnerships.value(); as all) {
+    <div class="mt-6 grid grid-cols-3 gap-2 sm:gap-4">
+      <div class="card p-3 sm:p-5">
+        <p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'partnerships.store.requests' | transloco }}</p>
+        <p class="mt-2 text-2xl font-bold tracking-tight" [class]="requests().length ? 'text-accent-ink' : 'text-ink'" dir="ltr">{{ requests().length }}</p>
+      </div>
+      <div class="card p-3 sm:p-5">
+        <p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'partnerships.store.partners' | transloco }}</p>
+        <p class="mt-2 text-2xl font-bold tracking-tight text-ink" dir="ltr">{{ partners().length }}</p>
+      </div>
+      <div class="card p-3 sm:p-5">
+        <p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'partnerships.store.history' | transloco }}</p>
+        <p class="mt-2 text-2xl font-bold tracking-tight text-ink" dir="ltr">{{ history().length }}</p>
+      </div>
+    </div>
+
+    @if (all.length === 0) {
+      <div class="card empty-state mt-6">
+        <span class="text-3xl" aria-hidden="true">🤝</span>
+        <p class="font-semibold text-ink">{{ 'partnerships.store.empty' | transloco }}</p>
+        <p>{{ 'partnerships.store.emptyHint' | transloco }}</p>
+      </div>
+    }
+
+    @if (requests().length) {
+      <section class="card mt-6 overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'partnerships.store.requests' | transloco }}</h2>
+          <span class="pill pill-warning" dir="ltr">{{ requests().length }}</span>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (p of requests(); track p.id) {
+            <li class="space-y-3 px-5 py-4 sm:px-6">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <ng-container *ngTemplateOutlet="affiliateRow; context: { $implicit: p }" />
+                <div class="flex gap-2">
+                  <button type="button" (click)="ask('refuse', p)" class="btn btn-danger-soft btn-sm">{{ 'partnerships.store.refuse' | transloco }}</button>
+                  <button type="button" (click)="ask('accept', p)" class="btn btn-primary btn-sm">{{ 'partnerships.store.accept' | transloco }}</button>
+                </div>
+              </div>
+              @if (p.message) {
+                <p class="rounded-lg border-s-2 border-brand/40 bg-subtle px-3 py-2 text-sm text-ink-soft">{{ p.message }}</p>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (partners().length) {
+      <section class="card mt-6 overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'partnerships.store.partners' | transloco }}</h2>
+          <span class="pill pill-success" dir="ltr">{{ partners().length }}</span>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (p of partners(); track p.id) {
+            <li class="row-hover flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <ng-container *ngTemplateOutlet="affiliateRow; context: { $implicit: p }" />
+              <button type="button" (click)="ask('end', p)" class="btn btn-ghost btn-sm self-start hover:text-danger sm:self-auto">{{ 'partnerships.store.end' | transloco }}</button>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    @if (history().length) {
+      <section class="card mt-6 overflow-hidden">
+        <div class="card-header">
+          <h2 class="section-title">{{ 'partnerships.store.history' | transloco }}</h2>
+        </div>
+        <ul class="divide-y divide-line">
+          @for (p of history(); track p.id) {
+            <li class="space-y-2 px-5 py-4 sm:px-6">
+              <ng-container *ngTemplateOutlet="affiliateRow; context: { $implicit: p }" />
+              @if (p.decisionReason || p.endReason) {
+                <p class="rounded-lg bg-subtle px-3 py-2 text-sm text-ink-soft">{{ p.decisionReason || p.endReason }}</p>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <p class="card empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+  }
+</main>
+
+<ng-template #affiliateRow let-p>
+  <div class="flex min-w-0 flex-1 items-center gap-3">
+    <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-soft font-semibold text-brand ring-1 ring-brand/15">
+      {{ p.affiliate.fullName.charAt(0).toUpperCase() }}
+    </span>
+    <div class="min-w-0">
+      <p class="flex flex-wrap items-center gap-2">
+        <span class="truncate font-semibold text-ink">{{ p.affiliate.fullName }}</span>
+        @if (p.affiliate.code) { <span class="code-chip" dir="ltr">#{{ p.affiliate.code }}</span> }
+        <span class="pill" [class]="tone(p.status)">{{ 'partnerships.status.' + p.status | transloco }}</span>
+        @if (!p.affiliate.codeActive) { <span class="pill pill-danger">{{ 'partnerships.codeInactive' | transloco }}</span> }
+      </p>
+      <p class="mt-0.5 text-xs text-muted">
+        {{ 'partnerships.store.profile' | transloco: {
+          date: (p.affiliate.memberSince | date: 'mediumDate' : undefined : language.locale()),
+          count: p.affiliate.activePartnerships } }}
+        · {{ (p.decidedAt ?? p.createdAt) | date: 'mediumDate' : undefined : language.locale() }}
+      </p>
+    </div>
+  </div>
+</ng-template>
+
+@if (pending(); as d) {
+  <app-modal [label]="'partnerships.store.' + d.kind | transloco" (close)="close()">
+    <h2 class="section-title">{{ 'partnerships.store.confirm.' + d.kind | transloco: { name: d.partnership.affiliate.fullName } }}</h2>
+    <p class="mt-2 text-sm text-muted">{{ 'partnerships.store.confirmHint.' + d.kind | transloco }}</p>
+    @if (d.kind !== 'accept') {
+      <label for="partnershipReason" class="field-label mt-4">{{ 'partnerships.store.reason' | transloco }}</label>
+      <textarea id="partnershipReason" rows="3" maxlength="500" [value]="reason()" (input)="reason.set($any($event.target).value)"
+        class="mt-1.5 field resize-y"></textarea>
+    }
+    @if (error(); as key) {
+      <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p>
+    }
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+      <button type="button" (click)="confirm()" [disabled]="busy()" class="btn" [class]="d.kind === 'accept' ? 'btn-primary' : 'btn-danger'">
+        {{ 'partnerships.store.' + d.kind | transloco }}
+      </button>
+    </div>
+  </app-modal>
+}

@@ -1,0 +1,81 @@
+DEMO DATA — LOCAL DEV DATABASE ONLY
+===================================
+Created by: node scripts/seed-dev-users.mjs (from backend/, API running)
+App:        http://localhost:4200
+Password:   Demo2026x for every account
+Never use these accounts or this password outside your machine.
+
+MAIN ACCOUNTS — one per role
+----------------------------
+Name              Email                          Roles               Code      How it got there
+----------------  -----------------------------  ------------------  --------  ---------------------------------------------
+Admin Démo        admin@webapp.local             Buyer, Admin        -         Client sign-up + first admin. Admin panel: /admin
+Leila Gharbi      leila.gharbi@webapp.local      Buyer               -         Client account at sign-up
+Sana Trabelsi     sana.trabelsi@webapp.local     Affiliate           #DPP-54   Affiliate account at sign-up (no Buyer role)
+Karim Ben Salah   karim.bensalah@webapp.local    Buyer, StoreOwner   -         Client sign-up + StoreOwner request approved
+
+MORE TEST USERS
+---------------
+Name               Email                            Roles                        Code      Situation
+-----------------  -------------------------------  ---------------------------  --------  ------------------------------------------------
+Ines Chaabane      ines.chaabane@webapp.local       Buyer                        -         Plain client
+Yasmine Ferchichi  yasmine.ferchichi@webapp.local   Buyer                        -         Asked to be affiliate, then WITHDREW the request
+Mehdi Bouazizi     mehdi.bouazizi@webapp.local      Buyer, Affiliate             #MZS-73   Affiliate request approved (by you, in the admin panel)
+Omar Khelifi       omar.khelifi@webapp.local        Buyer                        -         StoreOwner request PENDING
+Rania Saidi        rania.saidi@webapp.local         Buyer                        -         StoreOwner request REFUSED ("Aucune information sur la boutique")
+Fatma Dridi        fatma.dridi@webapp.local         Buyer, Affiliate             #LYV-23   Client, affiliate request approved
+Youssef Mansour    youssef.mansour@webapp.local     Affiliate                    #BBR-47   Affiliate account
+Walid Ayari        walid.ayari@webapp.local         Affiliate                    #GCY-48   Affiliate account
+Nesrine Toumi      nesrine.toumi@webapp.local       Affiliate, Buyer             #YNM-42   Affiliate, Buyer request approved
+Hela Jebali        hela.jebali@webapp.local         Affiliate                    #JYW-22   Affiliate, StoreOwner request PENDING
+Amine Jaziri       amine.jaziri@webapp.local        Affiliate, StoreOwner        #CWM-95   Affiliate, StoreOwner request approved
+Nour Haddad        nour.haddad@webapp.local         Buyer, StoreOwner            -         Store owner
+Slim Ben Amor      slim.benamor@webapp.local        Buyer, StoreOwner            -         Store owner
+Amel Zouari        amel.zouari@webapp.local         Buyer, StoreOwner, Affiliate #TKQ-21   Store owner, Affiliate request approved (by you)
+Faux Vendeur       fake.seller@webapp.local         Buyer                        -         BLOCKED: "Produits contrefaits signalés"
+Spam Affilié       spam.affiliate@webapp.local      Affiliate                    #RUX-26   BLOCKED: "Faux avis et spam de code affilié"
+
+Mourad Ghanmi, Riadh Mejri, Sonia Ben Youssef, Ahmed Kooli, Lamia Hadj Ali (…@webapp.local): store owners
+
+Role requests: 2 pending (Omar, Hela), 14 approved, 1 refused, 1 withdrawn  → /admin/role-requests
+
+CATALOGUE — source: scripts/demo-data/catalog.mjs (edit it, then re-run the seed with --reset-catalog)
+-----------------------------------------------------------------
+Images: scripts/demo-data/images (README.md there lists every file name, ✅ = already there)
+        → photos from Wikimedia Commons (free licences, see CREDITS.md) + 6 of your own; only
+          argile-tfal-naturelle has none yet (colour tile)
+        → re-run after adding photos:  node scripts/seed-dev-users.mjs --reset-catalog
+        → after editing the catalogue: node scripts/demo-data/list-images.mjs (checks it + updates the list)
+
+STORES (10)  → sign in as the owner, then "My store" (/my-store) · shop: /stores/<url name>
+Store               URL name              Owner                            Category
+Parfumerie Karim    parfumerie-karim      karim.bensalah@webapp.local      Parfums (Armani Privé Oud Royal, Dior Ambre Nuit, house creations)
+Nour Mode           nour-mode             nour.haddad@webapp.local         Mode (dresses, kaftan, jebba, men's T-shirt — variants)
+Slim Électronique   slim-electronique     slim.benamor@webapp.local        Électronique (Galaxy A55, Redmi Note 13 — storage variants)
+Amine Cosmétiques   amine-cosmetiques     amine.jaziri@webapp.local        Beauté (figue de Barbarie, tfal, savon noir…)
+Douceurs d'Amel     douceurs-d-amel       amel.zouari@webapp.local         Pâtisserie (baklawa, makroudh, kaak warka…)
+Dar Zitouna         dar-zitouna           mourad.ghanmi@webapp.local       Épicerie fine (huile d'olive, dattes, harissa)
+Fakhar Nabeul       fakhar-nabeul         riadh.mejri@webapp.local         Maison & déco (poterie, kilim, margoum)
+Fadha Bijoux        fadha-bijoux          sonia.benyoussef@webapp.local    Bijoux (khomsa, bague berbère — ring sizes)
+Kooli Chaussures    kooli-chaussures      ahmed.kooli@webapp.local         Chaussures (baskets, sandales, balghas — sizes)
+Couffin & Co        couffin-et-co         lamia.hadjali@webapp.local       Artisanat (couffins, cuivre)
+61 products, 67 variants, 42 product categories (12 top + sub-categories), 10 store categories.
+Empty % on a product = the store's default affiliate %.
+Sub-categories inherit the fields of their parent (a dress has Taille, Couleur, Matière, Longueur).
+
+Extra roles are never self-service: sign in, go to "My account" > "Add a role" to send a request,
+then approve or refuse it as the admin in /admin/role-requests.
+
+Note: affiliate codes are generated randomly. If you reset the database and run the
+seed script again, the codes will be different (the script prints the new ones).
+
+Reset the catalogue only (users / roles / settings / audit stay):
+  node scripts/seed-dev-users.mjs --reset-catalog
+
+Full reset (also every user, session, role request and audit entry of the LOCAL database):
+  docker exec -e PGPASSWORD=webapp_dev webapp-postgres-aspire psql -U webapp -d webapp -c "truncate product_variants, products, product_attributes, product_categories, stores, store_categories, images, platform_settings, role_requests, refresh_tokens, audit_entries, users;"
+  node scripts/seed-dev-users.mjs --reset-catalog
+
+Partnerships (012): Sana works with Parfumerie Karim and Nour Mode, waits on Slim Électronique and Dar Zitouna;
+Youssef works with Parfumerie Karim, his partnership with Couffin & Co was ended; Walid was refused by Nour Mode
+→ /affiliate (affiliates), /my-store/affiliates (store owners), /admin/partnerships

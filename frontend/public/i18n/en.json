@@ -1,0 +1,1473 @@
+{
+  "app": {
+    "name": "WebApp",
+    "tagline": "Shop from local stores. Recommend products and earn coins."
+  },
+  "home": {
+    "backendOk": "Backend connected",
+    "backendKo": "Backend unreachable. Is the API running on port 5185?",
+    "storeCategories": "Store categories",
+    "heroTitle": "The local stores of Tunisia, in one place",
+    "newProducts": "New products",
+    "seeAll": "See all",
+    "heroBadge": "Cash on delivery · Affiliate rewards",
+    "roles": {
+      "buyer": {
+        "title": "For clients",
+        "text": "Discover local stores, order in a few clicks and pay on delivery."
+      },
+      "owner": {
+        "title": "For store owners",
+        "text": "Open your store, list your products and set the commission per product."
+      },
+      "affiliate": {
+        "title": "For affiliates",
+        "text": "Share your code, earn coins on every delivered sale, get paid out."
+      }
+    }
+  },
+  "auth": {
+    "login": "Sign in",
+    "logout": "Sign out",
+    "register": "Sign up",
+    "registerCta": "Create my account",
+    "loggingIn": "Signing in…",
+    "registering": "Creating your account…",
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to follow your orders and your coins.",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "Shop from local stores as a client, or join as an affiliate and earn coins.",
+    "noAccount": "No account yet?",
+    "haveAccount": "Already have an account?",
+    "fullName": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password",
+    "show": "Show",
+    "hide": "Hide",
+    "validation": {
+      "required": "This field is required.",
+      "email": "Enter a valid email address.",
+      "phone": "Enter a Tunisian number: 8 digits.",
+      "password": "At least 8 characters, with letters and numbers."
+    },
+    "accountType": {
+      "label": "I am creating",
+      "Buyer": {
+        "title": "A client account",
+        "hint": "Buy products from local stores."
+      },
+      "Affiliate": {
+        "title": "An affiliate account",
+        "hint": "Work with many stores, bring clients and earn coins."
+      }
+    }
+  },
+  "account": {
+    "title": "My account",
+    "welcome": "Hello {{name}} 👋",
+    "roles": "Roles",
+    "memberSince": "Member since"
+  },
+  "roles": {
+    "Buyer": "Buyer",
+    "Affiliate": "Affiliate",
+    "StoreOwner": "Store owner",
+    "Admin": "Admin"
+  },
+  "errors": {
+    "unknown": "Something went wrong. Please try again.",
+    "network": "Can't reach the server. Check your connection.",
+    "tooManyRequests": "Too many attempts. Wait a minute and try again.",
+    "auth": {
+      "emailTaken": "An account already exists with this email.",
+      "invalidCredentials": "Wrong email or password.",
+      "accountBlocked": "This account is blocked. Contact support.",
+      "invalidRefreshToken": "Your session has expired. Please sign in again.",
+      "userNotFound": "Account not found."
+    },
+    "user": {
+      "emailInvalid": "Enter a valid email address.",
+      "passwordTooWeak": "Password too weak: at least 8 characters, with letters and numbers.",
+      "fullNameRequired": "Enter your full name.",
+      "phoneInvalid": "Enter a Tunisian number: 8 digits.",
+      "affiliateTermsRequired": "You must accept the affiliate terms.",
+      "blocked": "This account is blocked.",
+      "useAffiliateActivation": "The affiliate role comes from sign-up or an approved request.",
+      "cannotBlockAdmin": "Remove the Admin role before blocking this user.",
+      "blockReasonRequired": "Give a reason (max 500 characters).",
+      "baseRoleRequired": "An account must keep the Buyer or Affiliate role. Block the user instead.",
+      "accountTypeInvalid": "Choose a client or an affiliate account.",
+      "affiliateCodeReasonRequired": "Give a reason (500 characters max).",
+      "notAffiliate": "This user has no affiliate code."
+    },
+    "admin": {
+      "cannotChangeOwnAccount": "You can't change your own account.",
+      "unknownRole": "Unknown role."
+    },
+    "roleRequest": {
+      "roleNotRequestable": "This role can't be requested.",
+      "messageTooLong": "Message too long (max 500 characters).",
+      "notPending": "This request has already been handled.",
+      "reasonRequired": "Give a reason (max 500 characters).",
+      "notFound": "Request not found.",
+      "alreadyHasRole": "You already have this role.",
+      "alreadyPending": "You already have a pending request for this role."
+    },
+    "setting": {
+      "unknown": "Unknown setting.",
+      "readOnly": "This setting can't be changed.",
+      "valueRequired": "Enter a value.",
+      "integerRequired": "Enter a whole number.",
+      "numberRequired": "Enter a number (dot for decimals, max 3 decimals).",
+      "outOfRange": "Value outside the allowed range.",
+      "percentMinAboveMax": "The minimum % can't be above the maximum %."
+    },
+    "storeCategory": {
+      "nameRequired": "Enter the French name.",
+      "nameTooLong": "Names are 60 characters max.",
+      "slugInvalid": "URL name: lower-case letters, digits and dashes (2 to 60).",
+      "iconTooLong": "Icon too long: one emoji.",
+      "notFound": "Category not found.",
+      "slugTaken": "Another category already uses this URL name.",
+      "nameTaken": "Another category already has this French name.",
+      "directionInvalid": "Unknown direction.",
+      "inUse": "Stores use this category: hide it instead of deleting it."
+    },
+    "image": {
+      "required": "Choose an image.",
+      "tooLarge": "Image too large ({{max}} MB max).",
+      "unsupportedType": "Only JPEG, PNG or WebP images.",
+      "notFound": "Image not found.",
+      "purposeNotAllowed": "You can't upload this kind of image.",
+      "wrongPurpose": "This image was uploaded for something else.",
+      "inUse": "This image is still used.",
+      "notYours": "You can only use images you uploaded."
+    },
+    "store": {
+      "nameRequired": "Enter the store name.",
+      "nameLength": "Store name: 2 to 80 characters.",
+      "slugInvalid": "URL name: lower-case letters, digits and dashes (2 to 60).",
+      "descriptionTooLong": "Description: 2,000 characters max.",
+      "phoneInvalid": "Enter a Tunisian number: 8 digits.",
+      "cityInvalid": "Choose a governorate from the list.",
+      "addressTooLong": "Address: 200 characters max.",
+      "percentOutOfRange": "The affiliate % is outside the platform limits.",
+      "deliveryFeeInvalid": "Delivery fee: 0 to 1,000 TND.",
+      "deliveryCitiesRequired": "Choose at least one delivery zone.",
+      "deliveryDelayInvalid": "Delivery delay: minimum ≤ maximum, 30 days max.",
+      "linkInvalid": "Enter a full link (https://…) to the right site.",
+      "notOwnerControlled": "This store is disabled or suspended: only the admin can change its status.",
+      "notFound": "Store not found.",
+      "alreadyExists": "You already have a store.",
+      "slugTaken": "Another store already uses this URL name.",
+      "categoryUnavailable": "This category is not available.",
+      "deleted": "This store was deleted by the administrator.",
+      "ownerNotStoreOwner": "The owner no longer has the Store owner role: give it back before enabling."
+    },
+    "productCategory": {
+      "nameRequired": "Enter the French name.",
+      "nameTooLong": "Names are 60 characters max.",
+      "slugInvalid": "URL name: lower-case letters, digits and dashes (2 to 60).",
+      "tooManyAttributes": "Too many fields in this category (30 max).",
+      "attributeNotFound": "Field not found.",
+      "attributeKeyInvalid": "Key: lower-case letters, digits and dashes.",
+      "attributeKeyTaken": "This category already has a field with this key.",
+      "attributeTypeInvalid": "Unknown field type.",
+      "unitInvalid": "A unit (16 characters max) is only for number fields.",
+      "optionsRequired": "Give between 2 and 50 choices.",
+      "optionsNotAllowed": "Only choice fields have choices.",
+      "optionKeyInvalid": "Choice key: letters, digits and dashes.",
+      "optionKeyTaken": "Two choices have the same name.",
+      "notFound": "Category not found.",
+      "parentNotFound": "Parent category not found.",
+      "tooDeep": "Categories go 3 levels deep at most.",
+      "cycle": "A category can't be moved under itself or its own sub-categories.",
+      "slugTaken": "Another category already uses this URL name.",
+      "hasChildren": "Delete or move its sub-categories first.",
+      "keyUsedInBranch": "A parent or sub-category already has a field with this key.",
+      "directionInvalid": "Unknown direction.",
+      "hasProducts": "Products use this category: hide it instead of deleting it.",
+      "attributeInUse": "Products have a value for this field: rename it instead of deleting it.",
+      "optionInUse": "Products use this choice: rename it instead of removing it."
+    },
+    "product": {
+      "nameRequired": "Enter the product name.",
+      "nameLength": "Product name: 2 to 120 characters.",
+      "slugInvalid": "URL name: lower-case letters, digits and dashes (2 to 60).",
+      "descriptionTooLong": "Description: 5,000 characters max.",
+      "priceInvalid": "Price: more than 0, up to 1,000,000 TND, 3 decimals max.",
+      "compareAtPriceInvalid": "The old price must be higher than the price.",
+      "skuTooLong": "SKU: 64 characters max.",
+      "stockInvalid": "Stock: 0 to 1,000,000.",
+      "percentOutOfRange": "The affiliate % is outside the platform limits.",
+      "statusInvalid": "Unknown status.",
+      "tooManyImages": "8 photos max.",
+      "unknownAttribute": "A field does not belong to this category.",
+      "attributeValueInvalid": "A field value is not valid.",
+      "requiredAttributeMissing": "Fill the required fields (*) to publish — or save as a draft.",
+      "variantAxesInvalid": "Variants use up to 2 choice fields of the category.",
+      "variantsRequired": "Give at least one variant (60 max).",
+      "variantInvalid": "Each variant needs one option of each chosen field.",
+      "variantDuplicate": "Two variants are the same combination.",
+      "deleted": "This product was deleted.",
+      "notFound": "Product not found.",
+      "slugTaken": "Another product already uses this URL name.",
+      "categoryUnavailable": "This category is not available."
+    },
+    "moderation": {
+      "reasonRequired": "Give a reason (500 characters max).",
+      "selectionInvalid": "Select 1 to 100 products."
+    },
+    "partnership": {
+      "messageTooLong": "The message is too long (500 characters max).",
+      "reasonTooLong": "The reason is too long (500 characters max).",
+      "notRequested": "This request has already been answered.",
+      "notAccepted": "This partnership is not active.",
+      "notFound": "Partnership not found.",
+      "alreadyOpen": "You already asked this store, or already work with it.",
+      "ownStore": "You can’t be an affiliate of your own store.",
+      "storeUnavailable": "This store is not available.",
+      "affiliateInactive": "Your affiliate code is not active."
+    },
+    "affiliateCode": {
+      "invalid": "This is not a valid code (e.g. #DRF-45).",
+      "unknown": "Unknown code.",
+      "inactive": "This code is no longer active.",
+      "notPartner": "This affiliate does not work with this store.",
+      "ownStore": "An affiliate can’t use their code on their own store.",
+      "ownCode": "You can’t use your own code on your purchases.",
+      "productUnavailable": "This product is not available."
+    },
+    "cart": {
+      "quantityInvalid": "Invalid quantity (1 to 99).",
+      "tooManyLines": "Your cart is full (50 different products at most).",
+      "lineNotFound": "This line is no longer in your cart.",
+      "codeInvalid": "This is not a valid code (e.g. #DRF-45).",
+      "productUnavailable": "This product is no longer available.",
+      "storeClosed": "This store is closed for now.",
+      "variantRequired": "Choose an option.",
+      "variantUnavailable": "This option is no longer available.",
+      "notEnoughStock": "Not enough stock for this quantity."
+    },
+    "checkout": {
+      "cartEmpty": "Your cart is empty.",
+      "cartNotReady": "Your cart changed: some products can no longer be ordered. Check your cart.",
+      "codeRefused": "An affiliate code in your cart no longer counts on its product. Remove or change it in the cart.",
+      "cityNotDelivered": "A store in your cart does not deliver to this governorate.",
+      "notAffiliate": "Only an active affiliate can order for a client."
+    },
+    "order": {
+      "notFound": "Order not found. Check the reference and the phone number.",
+      "nameRequired": "Enter the full name (2 to 120 characters).",
+      "phoneInvalid": "Invalid phone number (8 digits).",
+      "cityInvalid": "Choose a governorate.",
+      "addressRequired": "Enter the address (5 to 300 characters).",
+      "noteTooLong": "The note is too long (500 characters max).",
+      "empty": "The order is empty.",
+      "lineInvalid": "A line of the order is invalid.",
+      "storeOrderNotFound": "Order not found.",
+      "transitionNotAllowed": "This status change is not possible now.",
+      "reasonRequired": "Give a reason.",
+      "reasonTooLong": "The reason is too long (500 characters max).",
+      "deliveredIsFinal": "A delivered order never changes status.",
+      "changed": "Someone else just changed this order: the page is up to date, try again."
+    },
+    "coins": {
+      "reasonRequired": "Give a reason.",
+      "reasonTooLong": "The reason is too long (500 characters max).",
+      "amountInvalid": "Invalid amount (not 0, at most 3 decimals).",
+      "affiliateNotFound": "Affiliate not found.",
+      "entryNotFound": "Entry not found for this affiliate."
+    },
+    "payout": {
+      "notFound": "Payout request not found.",
+      "notAffiliate": "Only an active affiliate account can request a payout.",
+      "belowMinimum": "The amount is below the payout minimum.",
+      "notEnoughCoins": "You do not have enough available coins.",
+      "alreadyOpen": "You already have a request in progress.",
+      "changed": "Someone else just changed this request. Reloaded.",
+      "coinsInvalid": "Invalid number of coins (3 decimals at most).",
+      "methodInvalid": "Invalid payment method.",
+      "noteTooLong": "The note is too long (500 characters max).",
+      "bankDetailsRequired": "Enter the bank, the account holder and the RIB.",
+      "bankDetailsTooLong": "The bank or account holder name is too long.",
+      "ribInvalid": "The RIB must have 20 digits.",
+      "transitionNotAllowed": "This step is not possible for this request.",
+      "reasonRequired": "Give a reason.",
+      "reasonTooLong": "The text is too long (500 characters max).",
+      "dateRequired": "Pick a date.",
+      "dateInPast": "The date cannot be in the past.",
+      "placeRequired": "Enter the place of the handover.",
+      "placeTooLong": "The place is too long (200 characters max).",
+      "paidReferenceRequired": "Enter the transfer reference or who handed the money.",
+      "paidReferenceTooLong": "The reference is too long (120 characters max).",
+      "paidInFuture": "The payment date cannot be in the future."
+    }
+  },
+  "affiliate": {
+    "step1": "Get your personal code, like #DRF-45.",
+    "step2": "Ask stores to work with you — the store owner accepts.",
+    "step3": "Your clients use your code on those products. When the order is delivered, you earn coins.",
+    "acceptTerms": "I accept the affiliate terms: coins are earned only on delivered orders of partner stores, never on my own purchases, and are paid on request once I reach the minimum.",
+    "yourCode": "Your affiliate code",
+    "codeHint": "Give this code to your clients. They enter it on the products of stores you work with.",
+    "copy": "Copy",
+    "copied": "Copied ✓",
+    "nextStep": "Next: open a store page and ask to work with it — the store owner accepts."
+  },
+  "common": {
+    "loading": "Loading…",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{page}} of {{total}}",
+    "pagination": "Pagination",
+    "clearFilters": "Clear filters",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "saving": "Saving…",
+    "yes": "Yes",
+    "no": "No",
+    "choose": "Choose…"
+  },
+  "admin": {
+    "title": "Admin",
+    "soon": "soon",
+    "nav": {
+      "users": "Users",
+      "roleRequests": "Role requests",
+      "audit": "Audit log",
+      "settings": "Settings",
+      "storeCategories": "Store categories",
+      "productCategories": "Product categories",
+      "stores": "Stores",
+      "products": "Products",
+      "orders": "Orders",
+      "reviews": "Reviews",
+      "coins": "Coins",
+      "payouts": "Affiliate payouts",
+      "billing": "Billing",
+      "partnerships": "Partnerships"
+    },
+    "status": {
+      "Active": "Active",
+      "Blocked": "Blocked",
+      "Pending": "Pending",
+      "Approved": "Approved",
+      "Refused": "Refused",
+      "Cancelled": "Withdrawn",
+      "Closed": "Closed",
+      "Disabled": "Disabled",
+      "Suspended": "Suspended",
+      "Draft": "Draft",
+      "Published": "Published",
+      "Archived": "Archived"
+    },
+    "users": {
+      "title": "Users",
+      "summary": "{{total}} users · {{affiliates}} affiliates · {{owners}} store owners · {{blocked}} blocked",
+      "searchPlaceholder": "Search by name, e-mail, phone, affiliate code or store",
+      "allRoles": "All roles",
+      "allStatuses": "All statuses",
+      "status": "Status",
+      "empty": "No user matches these filters.",
+      "back": "Back to users",
+      "affiliateCode": "Affiliate code",
+      "lastLogin": "Last sign-in",
+      "blockedReason": "Block reason",
+      "grant": "Grant",
+      "revoke": "Remove",
+      "access": "Access",
+      "block": "Block this user",
+      "unblock": "Unblock",
+      "blockHint": "The user is signed out from every device and can no longer sign in.",
+      "unblockHint": "The user will be able to sign in again.",
+      "history": "Admin history",
+      "noHistory": "No admin action on this account yet.",
+      "selfNotice": "This is your own account: you cannot change your roles or block yourself.",
+      "stats": {
+        "total": "Users",
+        "affiliates": "Affiliates",
+        "owners": "Store owners",
+        "blocked": "Blocked"
+      },
+      "store": "Store",
+      "storePublic": "View store",
+      "noStoreYet": "No store created yet"
+    },
+    "confirm": {
+      "title": "Confirm",
+      "grant": "Give the role \"{{role}}\" to {{name}}?",
+      "revoke": "Remove the role \"{{role}}\" from {{name}}?",
+      "block": "Block {{name}}?",
+      "unblock": "Unblock {{name}}?",
+      "blockHint": "Explain why — the reason is kept in the audit log."
+    },
+    "audit": {
+      "title": "Audit log",
+      "subtitle": "Every admin action, who did it and what changed.",
+      "empty": "No admin action yet."
+    },
+    "roleRequests": {
+      "title": "Role requests",
+      "subtitle": "Users asking to become affiliate, store owner or buyer. Every decision is audited.",
+      "all": "All",
+      "empty": "No request here.",
+      "asks": "asks for",
+      "approve": "Approve",
+      "refuse": "Refuse",
+      "confirmApprove": "Give the role \"{{role}}\" to {{name}}?",
+      "confirmRefuse": "Refuse the role \"{{role}}\" for {{name}}?",
+      "approveHint": "The user gets the role at their next sign-in or refresh. An affiliate gets their code.",
+      "refuseHint": "The user sees this reason. It is also kept in the audit log."
+    },
+    "settings": {
+      "title": "Platform settings",
+      "subtitle": "Business values used across the marketplace. Every change is audited.",
+      "default": "Default:",
+      "range": "allowed:",
+      "lastChanged": "changed on",
+      "save": "Save",
+      "saved": "Saved ✓",
+      "readOnly": "Fixed in this version.",
+      "historyNote": "A change only applies from now on: past orders, coins and invoices keep the values they were created with.",
+      "confirm": "Change \"{{name}}\"?",
+      "reason": "Reason (optional, kept in the audit log)"
+    },
+    "storeCategories": {
+      "title": "Store categories",
+      "subtitle": "Types of stores shown in the shop. Inactive ones are hidden. Every change is audited.",
+      "add": "New category",
+      "addTitle": "New store category",
+      "editTitle": "Edit store category",
+      "empty": "No category yet. Create the first one.",
+      "active": "Active",
+      "inactive": "Hidden",
+      "edit": "Edit",
+      "activate": "Show",
+      "deactivate": "Hide",
+      "delete": "Delete",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "nameFr": "Name in French (required)",
+      "nameAr": "Name in Arabic",
+      "nameEn": "Name in English",
+      "fallbackHint": "A missing translation shows the French name.",
+      "slug": "URL name",
+      "slugAuto": "made from the French name",
+      "slugHint": "Lower-case letters, digits and dashes, e.g. parfums or pret-a-porter.",
+      "icon": "Icon",
+      "confirmActivate": "Show \"{{name}}\" in the shop?",
+      "confirmDeactivate": "Hide \"{{name}}\" from the shop?",
+      "confirmDelete": "Delete \"{{name}}\"?",
+      "activateHint": "Visitors will see this category again.",
+      "deactivateHint": "Visitors no longer see it. Stores already in this category keep it.",
+      "deleteHint": "The category is removed for good. The audit log keeps a trace.",
+      "image": "Image (shown instead of the icon)"
+    },
+    "productCategories": {
+      "title": "Product categories",
+      "subtitle": "The category tree and the fields each product has. Sub-categories inherit the fields of their parents.",
+      "add": "New top category",
+      "addTitle": "New product category",
+      "editTitle": "Edit product category",
+      "addChild": "Add a sub-category",
+      "empty": "No category yet. Create the first one.",
+      "pick": "Pick a category in the tree to see and edit its fields.",
+      "attributeCount": "{{count}} field(s)",
+      "attributes": "Product fields",
+      "addAttribute": "Add a field",
+      "editAttribute": "Edit field",
+      "inheritHint": "Fields of parent categories apply here too (grey).",
+      "inheritedFrom": "from {{name}}",
+      "noAttributes": "No field yet.",
+      "required": "Required",
+      "filterable": "Filter in search",
+      "type": "Type",
+      "typeLocked": "The type can't change once created: products store values in it.",
+      "key": "Key",
+      "unit": "Unit",
+      "options": "Choices",
+      "addOption": "Add a choice",
+      "parent": "Parent category",
+      "topLevel": "— Top level —",
+      "confirmDeleteAttribute": "Delete the field \"{{name}}\"?",
+      "deactivateHint": "Visitors no longer see it, nor its sub-categories.",
+      "deleteHint": "The category and its fields are removed for good. A category with sub-categories can't be deleted.",
+      "deleteAttributeHint": "Products of this category will no longer show this field.",
+      "types": {
+        "Text": "Text",
+        "Number": "Number",
+        "Boolean": "Yes / no",
+        "SingleChoice": "One choice",
+        "MultiChoice": "Several choices"
+      }
+    },
+    "moveReason": {
+      "up": "moved up",
+      "down": "moved down"
+    }
+  },
+  "audit": {
+    "by": "by",
+    "reason": "Reason",
+    "actions": {
+      "user": {
+        "block": "User blocked",
+        "unblock": "User unblocked",
+        "role": {
+          "grant": "Role granted",
+          "revoke": "Role removed"
+        },
+        "affiliateCode": {
+          "disable": "Affiliate code deactivated",
+          "enable": "Affiliate code re-enabled"
+        }
+      },
+      "roleRequest": {
+        "approve": "Role request approved",
+        "refuse": "Role request refused"
+      },
+      "setting": {
+        "update": "Setting changed"
+      },
+      "storeCategory": {
+        "create": "Store category created",
+        "update": "Store category edited",
+        "activate": "Store category shown",
+        "deactivate": "Store category hidden",
+        "move": "Store category moved",
+        "delete": "Store category deleted"
+      },
+      "productCategory": {
+        "create": "Product category created",
+        "update": "Product category edited",
+        "activate": "Product category shown",
+        "deactivate": "Product category hidden",
+        "move": "Product category moved",
+        "delete": "Product category deleted",
+        "attribute": {
+          "create": "Product field added",
+          "update": "Product field edited",
+          "move": "Product field moved",
+          "delete": "Product field deleted"
+        }
+      },
+      "store": {
+        "disable": "Store disabled",
+        "enable": "Store enabled",
+        "delete": "Store deleted"
+      },
+      "product": {
+        "disable": "Product disabled",
+        "enable": "Product enabled",
+        "delete": "Product deleted"
+      },
+      "partnership": {
+        "end": "Partnership ended"
+      },
+      "order": {
+        "forceStatus": "Order status forced"
+      },
+      "coins": {
+        "adjustment": "Coins corrected"
+      },
+      "payout": {
+        "verify": "Payout checked",
+        "reject": "Payout refused",
+        "schedule": "Payout scheduled",
+        "paid": "Payout paid"
+      }
+    },
+    "fields": {
+      "roles": "Roles",
+      "status": "Status",
+      "blockedAt": "Blocked on",
+      "blockedReason": "Block reason",
+      "affiliateCode": "Affiliate code",
+      "email": "Email",
+      "fullName": "Name",
+      "phone": "Phone",
+      "role": "Requested role",
+      "value": "Value",
+      "slug": "URL name",
+      "name": "Name",
+      "icon": "Icon",
+      "sortOrder": "Position",
+      "isActive": "Active",
+      "imageUrl": "Image",
+      "key": "Key",
+      "type": "Type",
+      "unit": "Unit",
+      "required": "Required",
+      "filterable": "Filterable",
+      "options": "Choices",
+      "isDeleted": "Deleted",
+      "isDisabled": "Disabled",
+      "moderationReason": "Moderation reason",
+      "price": "Price"
+    }
+  },
+  "roleRequests": {
+    "title": "Add a role",
+    "intro": "Want to also be an affiliate, open a store or shop as a client? Send a request: an admin reviews it.",
+    "hint": {
+      "Affiliate": "Get a code, work with stores and earn coins.",
+      "StoreOwner": "Open your store and sell your products.",
+      "Buyer": "Buy products for yourself."
+    },
+    "selfAffiliation": "Your affiliate code never earns coins on your own store's products or on your own purchases.",
+    "message": "Message to the admin (optional)",
+    "messagePlaceholder": "E.g. what you sell, how you find clients…",
+    "send": "Request the \"{{role}}\" role",
+    "sending": "Sending…",
+    "nothingToRequest": "You already have every role you can request.",
+    "mine": "My requests",
+    "cancel": "Withdraw",
+    "status": {
+      "Pending": "Pending",
+      "Approved": "Approved",
+      "Refused": "Refused",
+      "Cancelled": "Withdrawn"
+    }
+  },
+  "settings": {
+    "groups": {
+      "coins": "Coins & payouts",
+      "affiliates": "Affiliates",
+      "stores": "Stores & billing",
+      "search": "Search",
+      "general": "General"
+    },
+    "units": {
+      "tnd": "TND",
+      "coins": "coins",
+      "percent": "%",
+      "letters": "letters",
+      "digits": "digits",
+      "dayOfMonth": "of the month",
+      "days": "days",
+      "reviews": "reviews",
+      "mb": "MB"
+    },
+    "currency": {
+      "label": "Currency",
+      "hint": "Single currency of the platform in v1."
+    },
+    "coin": {
+      "valueInTnd": {
+        "label": "Value of 1 coin",
+        "hint": "How many TND one coin is worth when it is paid out."
+      }
+    },
+    "payout": {
+      "minimumCoins": {
+        "label": "Minimum payout",
+        "hint": "Affiliates can ask for a payout from this balance."
+      }
+    },
+    "affiliatePercent": {
+      "min": {
+        "label": "Minimum affiliate %",
+        "hint": "Lowest commission a store owner can set on a product."
+      },
+      "max": {
+        "label": "Maximum affiliate %",
+        "hint": "Highest commission a store owner can set on a product."
+      }
+    },
+    "affiliateCode": {
+      "letters": {
+        "label": "Letters in new affiliate codes",
+        "hint": "E.g. 3 → #DRF-45. Codes already given keep their shape and stay valid."
+      },
+      "minDigits": {
+        "label": "Digits in new affiliate codes",
+        "hint": "Starting length of the number; it grows by itself when codes run out. Every code is checked unique."
+      }
+    },
+    "subscription": {
+      "defaultMonthlyPriceTnd": {
+        "label": "Default store subscription",
+        "hint": "Monthly price for a new store. Each store can get its own price."
+      }
+    },
+    "commissionInvoice": {
+      "dueDayOfMonth": {
+        "label": "Commission invoice due day",
+        "hint": "Day of the next month by which the store pays the month's commissions."
+      }
+    },
+    "billing": {
+      "graceDays": {
+        "label": "Grace period",
+        "hint": "Days after the due date before an unpaid store is suspended."
+      }
+    },
+    "ranking": {
+      "minReviewsPrior": {
+        "label": "Reviews before trusting a rating",
+        "hint": "Weight of the average in the ranking: few reviews count less."
+      }
+    },
+    "upload": {
+      "maxImageSizeMb": {
+        "label": "Maximum image size",
+        "hint": "Largest photo, logo or banner a user can upload."
+      }
+    }
+  },
+  "images": {
+    "choose": "Choose an image",
+    "replace": "Replace",
+    "remove": "Remove",
+    "uploading": "Uploading… {{percent}} %",
+    "hint": "JPEG, PNG or WebP, {{max}} MB max."
+  },
+  "myStore": {
+    "nav": "My store",
+    "title": "My store",
+    "subtitle": "Your shop, live in the marketplace. Changes apply at once.",
+    "createTitle": "Create my store",
+    "createSubtitle": "Your store goes live as soon as it is created. You can change everything later.",
+    "create": "Create my store",
+    "choose": "Choose…",
+    "fixErrors": "Some fields need fixing.",
+    "link": "Public link",
+    "subscription": "Subscription",
+    "tndPerMonth": "TND / month",
+    "since": "Created on",
+    "close": "Close temporarily",
+    "reopen": "Reopen",
+    "confirmClose": "Close your store for a while?",
+    "confirmReopen": "Reopen your store?",
+    "closeHint": "Visitors still see it, marked as closed, and can't order until you reopen.",
+    "reopenHint": "Clients can order again.",
+    "percentHint": "Between {{min}} % and {{max}} % (platform limits). Applies to future orders only.",
+    "allCities": "All",
+    "noCity": "None",
+    "status": {
+      "Active": "Open",
+      "Closed": "Closed",
+      "Disabled": "Disabled by the admin",
+      "Suspended": "Suspended (unpaid)",
+      "Deleted": "Deleted by the admin"
+    },
+    "sections": {
+      "identity": "Your store",
+      "contact": "Contact & links",
+      "selling": "Selling & delivery"
+    },
+    "fields": {
+      "name": "Store name",
+      "category": "Category",
+      "slug": "URL name",
+      "description": "Description",
+      "logo": "Logo",
+      "banner": "Banner",
+      "city": "City (governorate)",
+      "address": "Address",
+      "facebookUrl": "Facebook page",
+      "instagramUrl": "Instagram",
+      "websiteUrl": "Website",
+      "defaultAffiliatePercent": "Default affiliate %",
+      "deliveryFee": "Delivery fee",
+      "deliveryDelay": "Delivery delay",
+      "minDays": "Minimum days",
+      "maxDays": "Maximum days",
+      "deliveryCities": "Delivery zones"
+    },
+    "tabs": {
+      "store": "My store",
+      "products": "My products",
+      "affiliates": "My affiliates",
+      "orders": "Orders"
+    },
+    "moderation": {
+      "disabled": "Your store was disabled by the administrator.",
+      "disabledHint": "It and its products are no longer visible. Contact support to have it enabled again.",
+      "deleted": "Your store was deleted by the administrator.",
+      "deletedHint": "It can no longer be edited."
+    }
+  },
+  "cities": {
+    "tunis": "Tunis",
+    "ariana": "Ariana",
+    "ben-arous": "Ben Arous",
+    "manouba": "Manouba",
+    "nabeul": "Nabeul",
+    "zaghouan": "Zaghouan",
+    "bizerte": "Bizerte",
+    "beja": "Béja",
+    "jendouba": "Jendouba",
+    "kef": "Kef",
+    "siliana": "Siliana",
+    "sousse": "Sousse",
+    "monastir": "Monastir",
+    "mahdia": "Mahdia",
+    "sfax": "Sfax",
+    "kairouan": "Kairouan",
+    "kasserine": "Kasserine",
+    "sidi-bouzid": "Sidi Bouzid",
+    "gabes": "Gabès",
+    "medenine": "Medenine",
+    "tataouine": "Tataouine",
+    "gafsa": "Gafsa",
+    "tozeur": "Tozeur",
+    "kebili": "Kebili"
+  },
+  "products": {
+    "title": "My products",
+    "subtitle": "Everything your store sells. Published products are visible in the shop.",
+    "add": "Add a product",
+    "addTitle": "New product",
+    "editTitle": "Edit product",
+    "back": "Back to my products",
+    "noStore": "Create your store first, then add your products.",
+    "empty": "No product yet.",
+    "searchPlaceholder": "Search by name or SKU",
+    "allStatuses": "All statuses",
+    "variantCount": "{{count}} variant(s)",
+    "from": "from",
+    "stockCount": "{{count}} in stock",
+    "status": {
+      "Draft": "Draft",
+      "Published": "Published",
+      "Archived": "Archived",
+      "Disabled": "Disabled by the admin",
+      "Deleted": "Deleted"
+    },
+    "sections": {
+      "basics": "Product",
+      "affiliate": "Affiliates",
+      "photos": "Photos",
+      "fields": "Details",
+      "variants": "Variants"
+    },
+    "fields": {
+      "name": "Product name",
+      "category": "Category",
+      "price": "Price",
+      "compareAtPrice": "Old price (crossed out)",
+      "sku": "SKU (reference)",
+      "stock": "Stock",
+      "status": "Status",
+      "affiliatePercent": "Affiliate %"
+    },
+    "compareHint": "Optional, higher than the price.",
+    "coinsPreview": "With {{percent}} %, an affiliate earns per item sold",
+    "percentHint": "Empty = your store default ({{store}} %). Between {{min}} % and {{max}} %. Applies to future orders only.",
+    "photosHint": "Up to {{max}} photos. The first one is the main photo; use the arrows to reorder.",
+    "mainPhoto": "Main",
+    "fieldsHint": "Fields of the category (and of its parent categories). * = required to publish.",
+    "variantsHint": "Sold in several sizes or colours? Pick up to 2 fields, tick the options you have, then give each combination its stock (and a price if different).",
+    "variant": "Variant",
+    "variantPrice": "Price (if different)",
+    "pickOptions": "Tick at least one option of each field.",
+    "confirmDelete": "Delete \"{{name}}\"?",
+    "deleteHint": "It leaves your store and the shop. Past orders keep it.",
+    "disabledByAdmin": "Disabled by the admin",
+    "disabledHint": "This product is no longer in the shop. You can edit it, but only an admin can enable it again."
+  },
+  "shop": {
+    "products": "Products",
+    "stores": "Stores",
+    "allProducts": "All products",
+    "allCategories": "All",
+    "allCities": "All cities",
+    "breadcrumb": "You are here",
+    "searchProducts": "Search a product",
+    "searchStores": "Search a store",
+    "sortBy": "Sort by",
+    "sort": {
+      "Newest": "Newest",
+      "PriceAsc": "Price: low to high",
+      "PriceDesc": "Price: high to low"
+    },
+    "resultCount": "{{count}} product(s)",
+    "noProducts": "No product here yet.",
+    "noStores": "No store matches.",
+    "productCount": "{{count}} product(s)",
+    "outOfStock": "Out of stock",
+    "inStock": "In stock",
+    "chooseVariant": "Choose an option",
+    "unavailable": "Not available with this choice",
+    "storeClosed": "closed",
+    "storeClosedLong": "This store is closed for now: orders resume when it reopens.",
+    "delivery": "Delivery",
+    "deliveryFee": "Delivery fee",
+    "deliveryDelay": "{{min}} to {{max}} days",
+    "deliversTo": "Delivers to:",
+    "allTunisia": "all of Tunisia",
+    "paymentOnDelivery": "Payment in cash on delivery.",
+    "addToCart": "Add to cart",
+    "cartSoon": "Ordering opens soon (cart in progress).",
+    "photo": "Photo {{n}}",
+    "affiliateTitle": "You are an affiliate",
+    "affiliateEarn": "This product gives {{percent}} %: per item sold with your code you earn",
+    "affiliatePartnership": "Your code counts on this store’s products once the store accepts to work with you."
+  },
+  "moderation": {
+    "reasonLabel": "Reason (shown to the owner)",
+    "reasonPlaceholder": "E.g. absurd price, counterfeit product, fake store…",
+    "ownerRoleRevoked": "The owner lost the \"Store owner\" role.",
+    "hints": {
+      "disable": "Removed from the shop and from search. The owner sees the reason; only an admin can enable it again.",
+      "enable": "Visible in the shop again (if the owner published it).",
+      "delete": "Final for the owner: hidden everywhere, kept for order and coin history."
+    },
+    "do": {
+      "disable": "Disable",
+      "enable": "Enable",
+      "delete": "Delete"
+    },
+    "category": "Category",
+    "allCategories": "All categories",
+    "createdFrom": "Created from",
+    "createdTo": "to",
+    "productCount": "{{ count }} product(s)",
+    "deliveryDays": "{{ min }} to {{ max }} days",
+    "link": "Link",
+    "createdAt": "Created on",
+    "owner": "Owner",
+    "ownerNoRole": "No longer has the Store owner role",
+    "products": {
+      "title": "Products",
+      "subtitle": "Every product of every store: sort by price to spot absurd prices.",
+      "searchPlaceholder": "Product name, SKU…",
+      "empty": "No products.",
+      "disableSelected": "Disable selection ({{ count }})",
+      "storeFilter": "Store: {{ name }}",
+      "allStates": "All states",
+      "states": {
+        "Live": "Live",
+        "Draft": "Draft",
+        "Archived": "Archived",
+        "Disabled": "Disabled",
+        "Deleted": "Deleted"
+      },
+      "minPrice": "Min price",
+      "maxPrice": "Max price",
+      "selectAll": "Select all",
+      "count": "{{ count }} product(s)",
+      "noImage": "No photo",
+      "confirm": {
+        "disable": "Disable \"{{ name }}\"?",
+        "enable": "Enable \"{{ name }}\"?",
+        "delete": "Delete \"{{ name }}\"?",
+        "bulk": "Disable {{ count }} product(s)?"
+      },
+      "min": "Min",
+      "max": "Max"
+    },
+    "productCounts": "{{ total }} product(s) · {{ live }} live · {{ disabled }} disabled",
+    "seeProducts": "See its products",
+    "statsSoon": "Store statistics: coming soon (023).",
+    "actions": "Moderation",
+    "stores": {
+      "title": "Stores",
+      "subtitle": "Stores go live as soon as they are created: spot and disable fake ones.",
+      "searchPlaceholder": "Store name, owner (name, email)…",
+      "empty": "No stores.",
+      "back": "Stores",
+      "actionsHint": "A disabled store and all its products disappear from the shop.",
+      "confirm": {
+        "disable": "Disable the store \"{{ name }}\"?",
+        "enable": "Enable the store \"{{ name }}\"?",
+        "delete": "Delete the store \"{{ name }}\"?"
+      }
+    },
+    "productsHeading": "Products"
+  },
+  "partnerships": {
+    "nav": "My stores",
+    "status": {
+      "Requested": "Waiting",
+      "Accepted": "Partner",
+      "Refused": "Refused",
+      "Ended": "Ended",
+      "Cancelled": "Withdrawn"
+    },
+    "cancel": "Withdraw",
+    "since": "Since {{date}}",
+    "storeHidden": "Store unavailable",
+    "codeInactive": "Code deactivated",
+    "cta": {
+      "title": "Affiliate",
+      "intro": "Work with this store to earn coins on its products.",
+      "ask": "Ask to work with this store",
+      "message": "Message to the store owner (optional)",
+      "messagePlaceholder": "Who you are, how you sell (Instagram, TikTok, your shop…)",
+      "send": "Send the request",
+      "waiting": "Request sent — the store owner decides.",
+      "partner": "You work with this store: your code counts on its products.",
+      "shareLink": "Share link",
+      "shareHint": "Share this link, or give your code {{code}} to your clients.",
+      "allStores": "See all my stores",
+      "last": {
+        "Refused": "Your last request was refused",
+        "Ended": "Your last partnership was ended"
+      }
+    },
+    "mine": {
+      "title": "My stores",
+      "subtitle": "The stores you work with, and your requests.",
+      "findStores": "Find stores",
+      "empty": "You don’t work with any store yet",
+      "emptyHint": "Open a store page and ask to work with them. The store owner accepts or refuses.",
+      "active": "Partner stores",
+      "waiting": "Waiting for an answer",
+      "history": "History"
+    },
+    "store": {
+      "title": "My affiliates",
+      "subtitle": "Affiliates bring you clients. Accept the ones you want to work with: their code then counts on your products.",
+      "requests": "Requests",
+      "partners": "Partners",
+      "history": "History",
+      "empty": "No affiliate has asked yet",
+      "emptyHint": "Affiliates send their requests from your store page.",
+      "accept": "Accept",
+      "refuse": "Refuse",
+      "end": "End the partnership",
+      "reason": "Reason shown to the affiliate (optional)",
+      "profile": "Member since {{date}} · {{count}} partner store(s)",
+      "confirm": {
+        "accept": "Work with {{name}}?",
+        "refuse": "Refuse the request of {{name}}?",
+        "end": "Stop working with {{name}}?"
+      },
+      "confirmHint": {
+        "accept": "Their code will count on your products, with the commission you set per product.",
+        "refuse": "The affiliate can send a new request later.",
+        "end": "Their code stops counting on your products from now on. Orders already placed keep their commission."
+      }
+    },
+    "admin": {
+      "title": "Partnerships",
+      "subtitle": "Every affiliate ↔ store link. End one when it is used for fraud.",
+      "searchPlaceholder": "Affiliate, store, owner or code",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "empty": "No partnership matches.",
+      "endTitle": "End the partnership of {{affiliate}} with {{store}}?",
+      "endHint": "The code stops counting on this store’s products. The reason is kept in the audit log.",
+      "reason": "Reason (required)",
+      "owner": "Owner:"
+    },
+    "adminCode": {
+      "title": "Affiliate code",
+      "disable": "Deactivate the code",
+      "enable": "Re-enable the code",
+      "disableHint": "For fraud: the code is refused on every product until you re-enable it. Partnerships stay as they are.",
+      "seePartnerships": "See their partnerships",
+      "confirmDisable": "Deactivate the code {{code}}?",
+      "confirmEnable": "Re-enable the code {{code}}?",
+      "confirmHint": "The code is refused on every order from now on. The reason is kept in the audit log."
+    }
+  },
+  "cart": {
+    "title": "My cart",
+    "summaryLine": "{{count}} item(s) · {{stores}} store(s)",
+    "continue": "Continue shopping",
+    "empty": "Your cart is empty",
+    "emptyHint": "Add products from the stores: they stay here until you order.",
+    "deliveryFee": "Delivery",
+    "remove": "Remove from cart",
+    "less": "Decrease quantity",
+    "more": "Increase quantity",
+    "issues": {
+      "productUnavailable": "This product is no longer available. Remove it to continue.",
+      "storeClosed": "This store is closed for now: it takes no orders.",
+      "variantRequired": "Choose an option for this product.",
+      "variantUnavailable": "This option no longer exists. Remove the line and pick another one.",
+      "outOfStock": "Out of stock.",
+      "notEnoughStock": "Only {{count}} left in stock: lower the quantity."
+    },
+    "affiliateCode": "Affiliate code",
+    "codePlaceholder": "#DRF-45",
+    "applyCode": "Apply",
+    "codeValid": "Recommended by {{name}}",
+    "changeCode": "Change",
+    "removeCode": "Remove code",
+    "addCode": "Add an affiliate code",
+    "storeSubtotal": "Store subtotal",
+    "summary": "Summary",
+    "items": "Items",
+    "delivery": "Delivery ({{count}} store(s))",
+    "total": "Total",
+    "cashOnDelivery": "Cash on delivery.",
+    "fixLines": "Fix the flagged lines to place your order.",
+    "checkout": "Place order",
+    "recommendedBy": "Recommended by {{name}} — their code will be added to your cart.",
+    "added": "Added to cart",
+    "see": "See cart"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "subtitle": "Check your cart and tell us where to deliver: you pay cash on delivery.",
+    "backToCart": "Back to cart",
+    "whoFor": "Who is this order for?",
+    "forMe": "For me",
+    "forMeHint": "I am ordering for myself.",
+    "forClient": "For a client",
+    "forClientHint": "I am placing the order for a client I found.",
+    "affiliateModeInfo": "Your code {{code}} will be added to every product of the stores you work with. Other products are ordered without a code.",
+    "delivery": "Delivery",
+    "clientDetails": "Client details",
+    "deliveryHint": "The courier calls this number before coming.",
+    "fullName": "Full name",
+    "city": "Governorate",
+    "chooseCity": "Choose…",
+    "address": "Address",
+    "addressPlaceholder": "Street, number, area, landmark…",
+    "note": "Delivery note (optional)",
+    "notePlaceholder": "Floor, hours, ring twice…",
+    "payment": "Payment",
+    "cod": "Cash on delivery",
+    "codHint": "You pay the courier in cash when each parcel arrives (one store = one parcel).",
+    "editCart": "Edit",
+    "notDelivered": "{{store}} does not deliver to {{city}}. Pick another governorate or remove its products from the cart.",
+    "toPay": "To pay on delivery",
+    "confirm": "Place order",
+    "placing": "Placing your order…",
+    "confirmHint": "Each store prepares and delivers its part of the order.",
+    "seeCart": "See cart",
+    "validation": {
+      "fullName": "Enter the full name.",
+      "city": "Choose the governorate.",
+      "address": "Enter the address (at least 5 characters)."
+    }
+  },
+  "orders": {
+    "nav": "Orders",
+    "mine": "My orders",
+    "mineHint": "Follow your orders, store by store.",
+    "none": "You haven’t ordered anything yet",
+    "order": "Order",
+    "back": "My orders",
+    "reference": "Reference",
+    "thanks": "Thank you, your order is placed!",
+    "thanksHint": "Each store will prepare it and call you before delivery. You pay cash when it arrives.",
+    "keepReference": "Keep this reference: with your phone number, it lets you follow the order.",
+    "deliveredBy": "Prepared and delivered by the store",
+    "toCollect": "To pay the courier",
+    "deliveryTo": "Deliver to",
+    "date": "Placed on",
+    "placedByAffiliate": "Ordered for you by an affiliate",
+    "codReminder": "Cash payment when each parcel arrives.",
+    "itemCount": "{{count}} item(s)",
+    "forClientNamed": "For {{name}}",
+    "status": {
+      "Placed": "Placed",
+      "Confirmed": "Confirmed",
+      "Shipped": "Shipped",
+      "Delivered": "Delivered",
+      "Cancelled": "Cancelled",
+      "NotDelivered": "Not delivered"
+    },
+    "track": {
+      "title": "Track an order",
+      "hint": "Enter the reference you received and the phone number given when ordering.",
+      "find": "Find"
+    },
+    "sales": {
+      "title": "Sales with my code",
+      "hint": "Your coins are credited when the store confirms delivery.",
+      "lines": "Products",
+      "sales": "Sales",
+      "expected": "Expected coins",
+      "none": "No sale with your code yet.",
+      "placedByMe": "placed by you"
+    },
+    "notDelivered": {
+      "Refused": "Parcel refused",
+      "Unreachable": "Client unreachable",
+      "WrongAddress": "Wrong address",
+      "Other": "Other reason"
+    },
+    "actor": {
+      "Store": "by the store",
+      "Client": "by the client",
+      "Admin": "by the platform"
+    },
+    "payment": {
+      "Unpaid": "To collect",
+      "Collected": "Collected"
+    },
+    "paid": "Paid",
+    "cancel": "Cancel this order",
+    "cancelTitle": "Cancel the order with {{store}}?",
+    "cancelHint": "The store will not prepare this parcel. The other stores of the order are not affected.",
+    "cancelReason": "Reason (optional)",
+    "keep": "Keep the order",
+    "history": "History",
+    "byAffiliate": "By an affiliate",
+    "placedByAffiliateForClient": "Ordered by an affiliate for this client"
+  },
+  "storeOrders": {
+    "title": "Orders",
+    "subtitle": "Prepare, ship and confirm the delivery of your orders.",
+    "all": "All",
+    "searchPlaceholder": "Reference, client name or phone",
+    "none": "No order here yet.",
+    "withCode": "Affiliate code",
+    "nextHint": {
+      "Placed": "New order: confirm it when you accept it, or ship it right away.",
+      "Confirmed": "Prepare the parcel, then mark it shipped.",
+      "Shipped": "When the courier has handed over the parcel and collected the payment, confirm delivery."
+    },
+    "do": {
+      "Confirmed": "Confirm",
+      "Shipped": "Mark shipped",
+      "Delivered": "Delivered and paid",
+      "NotDelivered": "Not delivered",
+      "Cancelled": "Cancel"
+    },
+    "toPrepare": "To prepare",
+    "commission": "Commission {{percent}} %:",
+    "noHistory": "No change yet.",
+    "confirm": {
+      "Confirmed": "Confirm order {{reference}}?",
+      "Shipped": "Has parcel {{reference}} left?",
+      "Delivered": "Is parcel {{reference}} delivered and paid?",
+      "NotDelivered": "Was parcel {{reference}} not delivered?",
+      "Cancelled": "Cancel order {{reference}}?"
+    },
+    "confirmHint": {
+      "Confirmed": "The client will see you are preparing the order.",
+      "Shipped": "The client will see the parcel is on its way.",
+      "Delivered": "Confirm that {{amount}} TND were collected. This is final: the affiliate’s coins are credited.",
+      "NotDelivered": "The parcel came back: nothing is collected, no coin is credited and the stock is put back.",
+      "Cancelled": "The stock is put back. The client sees the reason."
+    },
+    "whyNotDelivered": "Why?",
+    "reasonRequired": "Reason (required, shown to the client)",
+    "reasonOptional": "Details (optional)"
+  },
+  "adminOrders": {
+    "title": "Orders",
+    "subtitle": "Every order of the platform, store by store.",
+    "searchPlaceholder": "Reference, client, phone or store",
+    "status": "Status",
+    "allStatuses": "All statuses",
+    "none": "No order matches.",
+    "force": "Change a status",
+    "forceHint": "For a dispute or a store that doesn’t answer. The reason is kept in the audit log; a delivered order never changes.",
+    "forceTitle": "Change the status at {{store}}",
+    "current": "Current status:",
+    "newStatus": "New status",
+    "reason": "Reason (required)",
+    "apply": "Apply"
+  },
+  "coins": {
+    "mine": "My coins",
+    "mineHint": "Credited when the store confirms delivery. Every coin is linked to its order.",
+    "balance": "Balance",
+    "earned": "Earned",
+    "expected": "Expected",
+    "expectedHint": "Parcels still on their way.",
+    "type": {
+      "Earned": "Earned",
+      "PayoutLocked": "Payout requested",
+      "PayoutReleased": "Payout cancelled",
+      "Adjustment": "Correction"
+    },
+    "admin": {
+      "title": "Coins",
+      "subtitle": "The ledger of every coin: each entry traces back to its order, product, store and client. Nothing is ever edited or deleted.",
+      "adjust": "Correct coins",
+      "affiliates": "Affiliates",
+      "searchPlaceholder": "Affiliate, code, order, product or store",
+      "type": "Type",
+      "allTypes": "All types",
+      "from": "From",
+      "to": "To",
+      "none": "No entry matches.",
+      "correct": "Correct",
+      "adjustHint": "A correction adds a signed entry (positive to give, negative to take back). It is kept in the audit log.",
+      "correcting": "Correcting an entry of {{name}} (order {{reference}})",
+      "affiliate": "Affiliate",
+      "affiliatePlaceholder": "Name, e-mail or code",
+      "amount": "Coins (signed)",
+      "amountHint": "E.g. -2.5 to take back 2.5 coins.",
+      "reason": "Reason (required)",
+      "save": "Save the correction"
+    }
+  },
+  "wallet": {
+    "open": "My wallet",
+    "title": "My wallet",
+    "back": "My affiliate space",
+    "subtitle": "All your coins, where they come from and what they are worth. Filter, compare your products and stores, export.",
+    "tabs": {
+      "history": "History",
+      "breakdown": "Breakdown",
+      "orders": "Orders with my code",
+      "payouts": "Payouts"
+    },
+    "searchPlaceholder": "Order, product or store",
+    "store": "Store",
+    "allStores": "All stores",
+    "oneProduct": "One product",
+    "count": "{{count}} entry(ies)",
+    "export": "Export (CSV)",
+    "exporting": "Exporting…",
+    "exportCapped": "Export limited to the {{max}} most recent entries: narrow the period for the rest.",
+    "none": "No coins yet. They arrive when an order with your code is delivered.",
+    "noneFiltered": "No entry matches these filters.",
+    "by": {
+      "Product": "By product",
+      "Store": "By store"
+    },
+    "breakdownHint": "Coins earned on orders delivered in the period (corrections are not included).",
+    "breakdownNone": "No coins earned in this period.",
+    "rowStats": "{{lines}} sale(s) · {{quantity}} item(s)",
+    "viewHistory": "See details",
+    "clientName": "Client: {{name}}",
+    "csv": {
+      "date": "Date",
+      "type": "Type",
+      "coins": "Coins",
+      "reference": "Order",
+      "store": "Store",
+      "product": "Product",
+      "quantity": "Quantity",
+      "lineTotal": "Amount (TND)",
+      "percent": "Commission (%)",
+      "client": "Client",
+      "phone": "Phone",
+      "reason": "Reason"
+    }
+  },
+  "payouts": {
+    "status": {
+      "Requested": "Requested",
+      "Verified": "Verified",
+      "Scheduled": "Scheduled",
+      "Paid": "Paid",
+      "Rejected": "Rejected",
+      "Cancelled": "Cancelled"
+    },
+    "method": {
+      "Cash": "Cash",
+      "BankTransfer": "Bank transfer"
+    },
+    "actor": {
+      "affiliate": "You",
+      "team": "The team"
+    },
+    "lockedHint": "{{coins}} coins set aside for your current payout",
+    "paidOut": "Paid out",
+    "mine": {
+      "title": "Withdraw my coins",
+      "hint": "You ask, we check, then we set a date to give you the money in cash or by bank transfer.",
+      "ask": "Request a payout",
+      "missing": "{{coins}} more coins to reach the minimum",
+      "oneOpen": "A request is already in progress",
+      "ready": "You can request a payout",
+      "cancel": "Cancel the request",
+      "cancelTitle": "Cancel request {{reference}}?",
+      "cancelHint": "The coins go back to your balance right away. You can ask again whenever you want.",
+      "history": "My past requests",
+      "none": "No request yet.",
+      "paidOn": "Paid on {{date}}"
+    },
+    "next": {
+      "Requested": {
+        "Cash": "We are checking your commissions. We will then set the day and place of the handover.",
+        "BankTransfer": "We are checking your commissions. We will then set the transfer date."
+      },
+      "Verified": {
+        "Cash": "Checked. We are setting the day and place of the cash handover.",
+        "BankTransfer": "Checked. We are setting the transfer date."
+      },
+      "Scheduled": {
+        "Cash": "Cash handover planned:",
+        "BankTransfer": "Transfer planned on:"
+      }
+    },
+    "form": {
+      "title": "Request a payout",
+      "hint": "The requested coins are set aside while we check. The TND amount is fixed now.",
+      "coins": "Coins to withdraw",
+      "range": "between {{min}} and {{max}} coins",
+      "method": "Payment method",
+      "bankName": "Bank",
+      "accountHolder": "Account holder",
+      "rib": "RIB (20 digits)",
+      "ribHint": "{{count}} / 20 digits",
+      "cashHint": "We will contact you to set the day and place of the handover.",
+      "note": "Note (optional)",
+      "notePlaceholder": "When you are available, details…",
+      "send": "Send the request"
+    },
+    "admin": {
+      "title": "Affiliate payouts",
+      "subtitle": "Affiliates never withdraw directly: check each request, set a handover or transfer date, then mark it paid. Everything is in the audit log.",
+      "toVerify": "To check",
+      "toSchedule": "To schedule",
+      "planned": "Scheduled",
+      "locked": "Coins set aside",
+      "todayCash": "Today’s cash handovers",
+      "weekTransfers": "This week’s transfers",
+      "searchPlaceholder": "Reference, affiliate, email or code",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "allMethods": "All methods",
+      "from": "Scheduled from",
+      "to": "to",
+      "none": "No request matches.",
+      "requestedOn": "Requested on {{date}}",
+      "next": {
+        "Requested": "Check the covered commissions, then approve or refuse the request.",
+        "Verified": "Set the date (and the place for cash).",
+        "Scheduled": "Once the money is handed over or sent, mark the request paid."
+      },
+      "verify": "Approve the check",
+      "schedule": "Schedule",
+      "reschedule": "Change the date",
+      "markPaid": "Mark paid",
+      "reject": "Refuse",
+      "request": "Request",
+      "scheduledFor": "Planned date",
+      "place": "Place",
+      "paidAt": "Paid on",
+      "paidReference": "Reference / handed by",
+      "rejectionReason": "Reason for refusal",
+      "covered": "Covered commissions",
+      "coveredHint": "Oldest earned coins first, after those taken by earlier requests. You decide case by case.",
+      "fromAdjustments": "{{coins}} coins of this request do not come from sales: they come from corrections (corrections total: {{total}}).",
+      "coveredNone": "No delivered sale covers this request.",
+      "deliveredOn": "delivered on {{date}}",
+      "invoiced": "Billed to the store",
+      "notInvoiced": "Not billed yet",
+      "affiliate": "Affiliate",
+      "cannotEarn": "Code disabled",
+      "seeLedger": "See their coins in the ledger",
+      "steps": "Steps",
+      "others": "Their other requests",
+      "othersNone": "No other request.",
+      "verifyTitle": "Approve the check",
+      "verifyHint": "You confirm you checked the covered commissions. You will set the date next.",
+      "verifyConfirm": "Approve",
+      "rejectTitle": "Refuse the request",
+      "rejectHint": "The coins go back to the affiliate’s balance. They see the reason.",
+      "rejectConfirm": "Refuse the request",
+      "scheduleTitle": "Schedule the payment",
+      "scheduleHint": "The affiliate sees the date right away.",
+      "scheduleConfirm": "Save the date",
+      "paidTitle": "Mark as paid",
+      "paidHint": "Do this once the money is handed over or the transfer sent. It is final.",
+      "paidConfirm": "Mark paid",
+      "noteOptional": "Note (optional)",
+      "reason": "Reason (required)",
+      "whenCash": "Day and time of the handover",
+      "whenTransfer": "Transfer date",
+      "placePlaceholder": "E.g. Office, Les Berges du Lac 2, Tunis",
+      "handedBy": "Handed by (name)",
+      "bankReference": "Transfer reference"
+    },
+    "rate": "1 coin = {{value}} TND"
+  }
+}

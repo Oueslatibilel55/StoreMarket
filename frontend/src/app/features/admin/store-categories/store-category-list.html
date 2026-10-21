@@ -1,0 +1,147 @@
+<header class="flex flex-wrap items-end justify-between gap-4">
+  <div class="min-w-0">
+    <h1 class="page-title">{{ 'admin.storeCategories.title' | transloco }}</h1>
+    <p class="page-subtitle">{{ 'admin.storeCategories.subtitle' | transloco }}</p>
+  </div>
+  <button type="button" (click)="openForm(null)" class="btn btn-primary">
+    <span aria-hidden="true">+</span> {{ 'admin.storeCategories.add' | transloco }}
+  </button>
+</header>
+
+@if (error() && !pending()) {
+  <p role="alert" class="mt-6 alert-danger">{{ error()! | transloco }}</p>
+}
+
+<div class="card mt-6 overflow-hidden">
+  @if (categories.error()) {
+    <p class="m-5 alert-danger">{{ 'errors.unknown' | transloco }}</p>
+  } @else if (categories.value(); as list) {
+    @if (list.length === 0) {
+      <p class="empty-state">{{ 'admin.storeCategories.empty' | transloco }}</p>
+    } @else {
+      <ul class="divide-y divide-line">
+        @for (c of list; track c.id; let first = $first, last = $last) {
+          <li class="row-hover flex flex-wrap items-center gap-4 px-4 py-3.5 sm:px-6" [class.opacity-60]="!c.isActive">
+            <div class="flex flex-col">
+              <button type="button" (click)="move(c, 'up')" [disabled]="first" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"
+                class="flex size-5 items-center justify-center rounded text-[10px] text-muted transition-colors hover:bg-brand-soft hover:text-brand disabled:pointer-events-none disabled:opacity-30">▲</button>
+              <button type="button" (click)="move(c, 'down')" [disabled]="last" [attr.aria-label]="'admin.storeCategories.moveDown' | transloco"
+                class="flex size-5 items-center justify-center rounded text-[10px] text-muted transition-colors hover:bg-brand-soft hover:text-brand disabled:pointer-events-none disabled:opacity-30">▼</button>
+            </div>
+            @if (c.imageUrl) {
+              <img [src]="c.imageUrl" alt="" class="size-11 shrink-0 rounded-lg object-cover ring-1 ring-line" />
+            } @else {
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-xl ring-1 ring-brand/10" aria-hidden="true">{{ c.icon || '🏷️' }}</span>
+            }
+            <div class="min-w-0 flex-1">
+              <p class="truncate font-semibold text-ink">{{ c.name | localized: language.lang() }}</p>
+              <p class="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+                <span>{{ c.name.fr }}</span>
+                @if (c.name.ar) { <span aria-hidden="true">·</span> <span dir="rtl">{{ c.name.ar }}</span> }
+                @if (c.name.en) { <span aria-hidden="true">·</span> <span dir="ltr">{{ c.name.en }}</span> }
+                <span class="code-chip" dir="ltr">/{{ c.slug }}</span>
+              </p>
+            </div>
+            <span class="pill" [class]="c.isActive ? 'pill-success' : 'pill-neutral'">
+              {{ (c.isActive ? 'admin.storeCategories.active' : 'admin.storeCategories.inactive') | transloco }}
+            </span>
+            <div class="flex flex-wrap items-center gap-1">
+              <button type="button" (click)="openForm(c)" class="btn btn-ghost btn-sm">{{ 'admin.storeCategories.edit' | transloco }}</button>
+              <button type="button" (click)="open({ kind: 'toggle', category: c })" class="btn btn-ghost btn-sm">
+                {{ (c.isActive ? 'admin.storeCategories.deactivate' : 'admin.storeCategories.activate') | transloco }}
+              </button>
+              <button type="button" (click)="open({ kind: 'delete', category: c })" class="btn btn-danger-soft btn-sm">{{ 'admin.storeCategories.delete' | transloco }}</button>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  } @else {
+    <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+  }
+</div>
+
+@if (pending(); as p) {
+  <app-modal [label]="'admin.confirm.title' | transloco" (close)="close()">
+    @if (p.kind === 'form') {
+      <h2 class="section-title">{{ (p.category ? 'admin.storeCategories.editTitle' : 'admin.storeCategories.addTitle') | transloco }}</h2>
+      <form [formGroup]="form" (ngSubmit)="save()" novalidate class="mt-5 space-y-5">
+        <div>
+          <label for="nameFr" class="field-label">{{ 'admin.storeCategories.nameFr' | transloco }}</label>
+          <input id="nameFr" formControlName="nameFr" dir="ltr" lang="fr"
+            class="mt-1.5 field" />
+          @if (invalid('nameFr')) {
+            <p class="field-error">{{ 'errors.storeCategory.nameRequired' | transloco }}</p>
+          }
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="nameAr" class="field-label">{{ 'admin.storeCategories.nameAr' | transloco }}</label>
+            <input id="nameAr" formControlName="nameAr" dir="rtl" lang="ar"
+              class="mt-1.5 field" />
+          </div>
+          <div>
+            <label for="nameEn" class="field-label">{{ 'admin.storeCategories.nameEn' | transloco }}</label>
+            <input id="nameEn" formControlName="nameEn" dir="ltr" lang="en"
+              class="mt-1.5 field" />
+          </div>
+        </div>
+        <p class="-mt-2 field-hint">{{ 'admin.storeCategories.fallbackHint' | transloco }}</p>
+        <div>
+          <label for="slug" class="field-label">{{ 'admin.storeCategories.slug' | transloco }}</label>
+          <input id="slug" formControlName="slug" dir="ltr" [placeholder]="'admin.storeCategories.slugAuto' | transloco"
+            class="mt-1.5 field font-mono" />
+          <p [class]="invalid('slug') ? 'field-error' : 'field-hint'">{{ 'admin.storeCategories.slugHint' | transloco }}</p>
+        </div>
+        <div>
+          <p class="field-label">{{ 'admin.storeCategories.image' | transloco }}</p>
+          <div class="mt-1.5">
+            <app-image-upload purpose="CategoryImage" [url]="image()?.url ?? null" (changed)="image.set($event)" />
+          </div>
+        </div>
+        <div>
+          <label for="icon" class="field-label">{{ 'admin.storeCategories.icon' | transloco }}</label>
+          <div class="mt-1.5 flex flex-wrap items-center gap-1.5">
+            <input id="icon" formControlName="icon" class="field w-16 px-2 py-1.5 text-center text-xl" />
+            @for (i of icons; track i) {
+              <button type="button" (click)="form.controls.icon.setValue(i)"
+                class="flex size-9 items-center justify-center rounded-lg text-xl transition-colors hover:bg-brand-soft"
+                [class.bg-brand-soft]="form.controls.icon.value === i" [class.ring-1]="form.controls.icon.value === i"
+                [class.ring-brand]="form.controls.icon.value === i">{{ i }}</button>
+            }
+          </div>
+        </div>
+        @if (error(); as key) {
+          <p role="alert" class="alert-danger">{{ key | transloco }}</p>
+        }
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+          <button type="submit" [disabled]="busy()" class="btn btn-primary">
+            {{ (busy() ? 'common.saving' : 'admin.settings.save') | transloco }}
+          </button>
+        </div>
+      </form>
+    } @else {
+      <h2 class="section-title">
+        {{ (p.kind === 'delete' ? 'admin.storeCategories.confirmDelete'
+          : p.category.isActive ? 'admin.storeCategories.confirmDeactivate' : 'admin.storeCategories.confirmActivate')
+          | transloco: { name: (p.category.name | localized: language.lang()) } }}
+      </h2>
+      <p class="mt-2 text-sm text-muted">
+        {{ (p.kind === 'delete' ? 'admin.storeCategories.deleteHint'
+          : p.category.isActive ? 'admin.storeCategories.deactivateHint' : 'admin.storeCategories.activateHint') | transloco }}
+      </p>
+      @if (error(); as key) {
+        <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
+      }
+      <div class="mt-6 flex justify-end gap-3">
+        <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
+        <button type="button" (click)="confirm()" [disabled]="busy()"
+          class="btn"
+          [class]="p.kind === 'delete' ? 'btn-danger' : 'btn-primary'">
+          {{ (busy() ? 'common.saving' : 'common.confirm') | transloco }}
+        </button>
+      </div>
+    }
+  </app-modal>
+}
