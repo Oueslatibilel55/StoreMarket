@@ -26,3 +26,6 @@ Thumbs.db
 .env.*
 !.env.example
 backend/src/WebApp.Api/uploads/
+
+# Passwords of the hosted demo accounts (backend/scripts/seed-hosted.mjs)
+*.local.txt
