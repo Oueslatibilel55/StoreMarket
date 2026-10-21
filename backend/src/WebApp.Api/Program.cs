@@ -124,6 +124,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(opt =>
     opt.KnownProxies.Clear();
 });
 
+// Hosted demo data, only when DemoSeed__Password is set (ADR 0006).
+builder.Services.AddHostedService<WebApp.Api.DemoSeed.DemoSeeder>();
+
 var app = builder.Build();
 
 // -- Database migrations ---------------------------------------------------------

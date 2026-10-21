@@ -18,6 +18,8 @@ Images (feature 006) were files on the API server disk. A free Render instance h
   - `Disk` (default, local dev): files in `uploads/`, served as static files.
   - `Database` (Render): bytes in the `file_blobs` table (path → bytea), served by `GET /uploads/{**path}` with the same headers (`nosniff`, immutable cache). URLs and the domain don't change. `ImageService` keeps its order: store the bytes, save the image row, remove the bytes if that save fails.
 
+- **Test data:** `DemoSeed__Password` makes the API seed a small demo set once at startup (`DemoSeeder`, through the application services — same rules and audit as a user). The password lives only in Render, never in the repository.
+
 ## Consequences
 
 - Images survive restarts and live next to the data that points to them; a database backup includes them.

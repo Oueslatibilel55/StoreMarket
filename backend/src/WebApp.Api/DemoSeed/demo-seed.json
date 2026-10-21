@@ -1,0 +1,2246 @@
+{
+  "storeCategories": [
+    {
+      "body": {
+        "slug": "mode",
+        "nameFr": "Mode & vêtements",
+        "nameAr": "أزياء وملابس",
+        "nameEn": "Fashion",
+        "icon": "👗"
+      },
+      "image": "store-categories/mode.jpg"
+    },
+    {
+      "body": {
+        "slug": "chaussures",
+        "nameFr": "Chaussures",
+        "nameAr": "أحذية",
+        "nameEn": "Shoes",
+        "icon": "👟"
+      },
+      "image": "store-categories/chaussures.jpg"
+    },
+    {
+      "body": {
+        "slug": "parfums",
+        "nameFr": "Parfums",
+        "nameAr": "عطور",
+        "nameEn": "Perfumes",
+        "icon": "🌸"
+      },
+      "image": "store-categories/parfums.jpg"
+    },
+    {
+      "body": {
+        "slug": "beaute",
+        "nameFr": "Beauté & soins",
+        "nameAr": "جمال وعناية",
+        "nameEn": "Beauty & care",
+        "icon": "💄"
+      },
+      "image": "store-categories/beaute.jpg"
+    },
+    {
+      "body": {
+        "slug": "bijoux",
+        "nameFr": "Bijoux",
+        "nameAr": "مجوهرات",
+        "nameEn": "Jewellery",
+        "icon": "💍"
+      },
+      "image": "store-categories/bijoux.jpg"
+    },
+    {
+      "body": {
+        "slug": "electronique",
+        "nameFr": "Électronique",
+        "nameAr": "إلكترونيات",
+        "nameEn": "Electronics",
+        "icon": "📱"
+      },
+      "image": "store-categories/electronique.jpg"
+    },
+    {
+      "body": {
+        "slug": "maison-deco",
+        "nameFr": "Maison & déco",
+        "nameAr": "المنزل والديكور",
+        "nameEn": "Home & decor",
+        "icon": "🏺"
+      },
+      "image": "store-categories/maison-deco.jpg"
+    },
+    {
+      "body": {
+        "slug": "epicerie-fine",
+        "nameFr": "Épicerie fine",
+        "nameAr": "بقالة فاخرة",
+        "nameEn": "Fine food",
+        "icon": "🫒"
+      },
+      "image": "store-categories/epicerie-fine.jpg"
+    },
+    {
+      "body": {
+        "slug": "patisserie",
+        "nameFr": "Pâtisserie",
+        "nameAr": "حلويات",
+        "nameEn": "Pastry",
+        "icon": "🍰"
+      },
+      "image": "store-categories/patisserie.jpg"
+    },
+    {
+      "body": {
+        "slug": "artisanat",
+        "nameFr": "Artisanat tunisien",
+        "nameAr": "صناعات تقليدية",
+        "nameEn": "Tunisian crafts",
+        "icon": "🧺"
+      },
+      "image": "store-categories/artisanat.jpg"
+    }
+  ],
+  "productCategories": [
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Mode femme",
+        "nameAr": "أزياء نسائية",
+        "nameEn": "Women's fashion",
+        "slug": "mode-femme"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Taille",
+          "nameAr": "المقاس",
+          "nameEn": "Size",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": true,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "XS",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "S",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "M",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "L",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "XL",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "XXL",
+                "ar": null,
+                "en": null
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Couleur",
+          "nameAr": "اللون",
+          "nameEn": "Colour",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Noir",
+                "ar": "أسود",
+                "en": "Black"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Blanc",
+                "ar": "أبيض",
+                "en": "White"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Beige",
+                "ar": "بيج",
+                "en": "Beige"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Rouge",
+                "ar": "أحمر",
+                "en": "Red"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Bleu",
+                "ar": "أزرق",
+                "en": "Blue"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Vert",
+                "ar": "أخضر",
+                "en": "Green"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Marron",
+                "ar": "بني",
+                "en": "Brown"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Rose",
+                "ar": "وردي",
+                "en": "Pink"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Gris",
+                "ar": "رمادي",
+                "en": "Grey"
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Matière",
+          "nameAr": "الخامة",
+          "nameEn": "Material",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "mode-femme",
+      "body": {
+        "nameFr": "Robes",
+        "nameAr": "فساتين",
+        "nameEn": "Dresses",
+        "slug": "robes"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Longueur",
+          "nameAr": "الطول",
+          "nameEn": "Length",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Courte",
+                "ar": "قصير",
+                "en": "Short"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Midi",
+                "ar": "متوسط",
+                "en": "Midi"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Longue",
+                "ar": "طويل",
+                "en": "Long"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "mode-femme",
+      "body": {
+        "nameFr": "Hauts & chemisiers",
+        "nameAr": "قمصان وبلوزات",
+        "nameEn": "Tops & blouses",
+        "slug": "hauts-chemisiers"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Manches",
+          "nameAr": "الأكمام",
+          "nameEn": "Sleeves",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Courtes",
+                "ar": "قصيرة",
+                "en": "Short"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Longues",
+                "ar": "طويلة",
+                "en": "Long"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Sans manches",
+                "ar": "بدون أكمام",
+                "en": "Sleeveless"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "mode-femme",
+      "body": {
+        "nameFr": "Tenues traditionnelles",
+        "nameAr": "لباس تقليدي",
+        "nameEn": "Traditional wear",
+        "slug": "tenues-traditionnelles"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Occasion",
+          "nameAr": "المناسبة",
+          "nameEn": "Occasion",
+          "type": "MultiChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Mariage",
+                "ar": "عرس",
+                "en": "Wedding"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Fête",
+                "ar": "عيد",
+                "en": "Celebration"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Quotidien",
+                "ar": "يومي",
+                "en": "Everyday"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Mode homme",
+        "nameAr": "أزياء رجالية",
+        "nameEn": "Men's fashion",
+        "slug": "mode-homme"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Taille",
+          "nameAr": "المقاس",
+          "nameEn": "Size",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": true,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "XS",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "S",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "M",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "L",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "XL",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "XXL",
+                "ar": null,
+                "en": null
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Couleur",
+          "nameAr": "اللون",
+          "nameEn": "Colour",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Noir",
+                "ar": "أسود",
+                "en": "Black"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Blanc",
+                "ar": "أبيض",
+                "en": "White"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Beige",
+                "ar": "بيج",
+                "en": "Beige"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Rouge",
+                "ar": "أحمر",
+                "en": "Red"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Bleu",
+                "ar": "أزرق",
+                "en": "Blue"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Vert",
+                "ar": "أخضر",
+                "en": "Green"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Marron",
+                "ar": "بني",
+                "en": "Brown"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Rose",
+                "ar": "وردي",
+                "en": "Pink"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Gris",
+                "ar": "رمادي",
+                "en": "Grey"
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Matière",
+          "nameAr": "الخامة",
+          "nameEn": "Material",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "mode-homme",
+      "body": {
+        "nameFr": "T-shirts & polos",
+        "nameAr": "تيشيرتات وبولو",
+        "nameEn": "T-shirts & polos",
+        "slug": "t-shirts-polos"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Coupe",
+          "nameAr": "القصّة",
+          "nameEn": "Fit",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Slim",
+                "ar": "ضيّق",
+                "en": "Slim"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Regular",
+                "ar": "عادي",
+                "en": "Regular"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Oversize",
+                "ar": "واسع",
+                "en": "Oversize"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Chaussures",
+        "nameAr": "أحذية",
+        "nameEn": "Shoes",
+        "slug": "chaussures"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Pointure",
+          "nameAr": "المقاس",
+          "nameEn": "Size",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": true,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "36",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "37",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "38",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "39",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "40",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "41",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "42",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "43",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "44",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "45",
+                "ar": null,
+                "en": null
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Couleur",
+          "nameAr": "اللون",
+          "nameEn": "Colour",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Noir",
+                "ar": "أسود",
+                "en": "Black"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Blanc",
+                "ar": "أبيض",
+                "en": "White"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Beige",
+                "ar": "بيج",
+                "en": "Beige"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Rouge",
+                "ar": "أحمر",
+                "en": "Red"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Bleu",
+                "ar": "أزرق",
+                "en": "Blue"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Vert",
+                "ar": "أخضر",
+                "en": "Green"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Marron",
+                "ar": "بني",
+                "en": "Brown"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Rose",
+                "ar": "وردي",
+                "en": "Pink"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Gris",
+                "ar": "رمادي",
+                "en": "Grey"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "chaussures",
+      "body": {
+        "nameFr": "Baskets",
+        "nameAr": "أحذية رياضية",
+        "nameEn": "Sneakers",
+        "slug": "baskets"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "chaussures",
+      "body": {
+        "nameFr": "Sandales",
+        "nameAr": "صنادل",
+        "nameEn": "Sandals",
+        "slug": "sandales"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Matière",
+          "nameAr": "الخامة",
+          "nameEn": "Material",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Cuir",
+                "ar": "جلد",
+                "en": "Leather"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Synthétique",
+                "ar": "اصطناعي",
+                "en": "Synthetic"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "chaussures",
+      "body": {
+        "nameFr": "Babouches & balghas",
+        "nameAr": "بلغة وشلاكة",
+        "nameEn": "Babouches",
+        "slug": "babouches-balghas"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Matière",
+          "nameAr": "الخامة",
+          "nameEn": "Material",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Cuir",
+                "ar": "جلد",
+                "en": "Leather"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Daim",
+                "ar": "شمواه",
+                "en": "Suede"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Parfums",
+        "nameAr": "عطور",
+        "nameEn": "Perfumes",
+        "slug": "parfums"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Contenance",
+          "nameAr": "السعة",
+          "nameEn": "Size",
+          "type": "Number",
+          "unit": "ml",
+          "required": true,
+          "filterable": true,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Genre",
+          "nameAr": "الجنس",
+          "nameEn": "Gender",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Homme",
+                "ar": "رجالي",
+                "en": "Men"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Femme",
+                "ar": "نسائي",
+                "en": "Women"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Unisexe",
+                "ar": "للجنسين",
+                "en": "Unisex"
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Concentration",
+          "nameAr": "التركيز",
+          "nameEn": "Concentration",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Eau de toilette",
+                "ar": "أو دو تواليت",
+                "en": "Eau de toilette"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Eau de parfum",
+                "ar": "أو دو برفان",
+                "en": "Eau de parfum"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Extrait de parfum",
+                "ar": "خلاصة عطر",
+                "en": "Extrait de parfum"
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "Famille olfactive",
+          "nameAr": "العائلة العطرية",
+          "nameEn": "Scent family",
+          "type": "MultiChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Boisé",
+                "ar": "خشبي",
+                "en": "Woody"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Floral",
+                "ar": "زهري",
+                "en": "Floral"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Oriental",
+                "ar": "شرقي",
+                "en": "Oriental"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Frais",
+                "ar": "منعش",
+                "en": "Fresh"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Musqué",
+                "ar": "مسكي",
+                "en": "Musky"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "parfums",
+      "body": {
+        "nameFr": "Parfums femme",
+        "nameAr": "عطور نسائية",
+        "nameEn": "Women's perfumes",
+        "slug": "parfums-femme"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "parfums",
+      "body": {
+        "nameFr": "Parfums homme",
+        "nameAr": "عطور رجالية",
+        "nameEn": "Men's perfumes",
+        "slug": "parfums-homme"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "parfums",
+      "body": {
+        "nameFr": "Oud & musc",
+        "nameAr": "عود ومسك",
+        "nameEn": "Oud & musk",
+        "slug": "oud-musc"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Beauté & soins",
+        "nameAr": "جمال وعناية",
+        "nameEn": "Beauty & care",
+        "slug": "beaute"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Contenance",
+          "nameAr": "السعة",
+          "nameEn": "Size",
+          "type": "Number",
+          "unit": "ml",
+          "required": false,
+          "filterable": false,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Bio",
+          "nameAr": "عضوي",
+          "nameEn": "Organic",
+          "type": "Boolean",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "beaute",
+      "body": {
+        "nameFr": "Maquillage",
+        "nameAr": "مكياج",
+        "nameEn": "Make-up",
+        "slug": "maquillage"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Teinte",
+          "nameAr": "اللون",
+          "nameEn": "Shade",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "beaute",
+      "body": {
+        "nameFr": "Soins visage",
+        "nameAr": "العناية بالوجه",
+        "nameEn": "Face care",
+        "slug": "soins-visage"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Type de peau",
+          "nameAr": "نوع البشرة",
+          "nameEn": "Skin type",
+          "type": "MultiChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Sèche",
+                "ar": "جافة",
+                "en": "Dry"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Grasse",
+                "ar": "دهنية",
+                "en": "Oily"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Mixte",
+                "ar": "مختلطة",
+                "en": "Combination"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Normale",
+                "ar": "عادية",
+                "en": "Normal"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Sensible",
+                "ar": "حساسة",
+                "en": "Sensitive"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "beaute",
+      "body": {
+        "nameFr": "Soins cheveux",
+        "nameAr": "العناية بالشعر",
+        "nameEn": "Hair care",
+        "slug": "soins-cheveux"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Type de cheveux",
+          "nameAr": "نوع الشعر",
+          "nameEn": "Hair type",
+          "type": "MultiChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Secs",
+                "ar": "جاف",
+                "en": "Dry"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Gras",
+                "ar": "دهني",
+                "en": "Oily"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Bouclés",
+                "ar": "مجعد",
+                "en": "Curly"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Normaux",
+                "ar": "عادي",
+                "en": "Normal"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "beaute",
+      "body": {
+        "nameFr": "Hammam & savons",
+        "nameAr": "حمّام وصابون",
+        "nameEn": "Hammam & soaps",
+        "slug": "hammam-savons"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Ingrédients",
+          "nameAr": "المكونات",
+          "nameEn": "Ingredients",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Bijoux",
+        "nameAr": "مجوهرات",
+        "nameEn": "Jewellery",
+        "slug": "bijoux"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Métal",
+          "nameAr": "المعدن",
+          "nameEn": "Metal",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Or 18 carats",
+                "ar": "ذهب عيار 18",
+                "en": "18-carat gold"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Argent 925",
+                "ar": "فضة 925",
+                "en": "Sterling silver"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Plaqué or",
+                "ar": "مطلي بالذهب",
+                "en": "Gold-plated"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Laiton",
+                "ar": "نحاس أصفر",
+                "en": "Brass"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "bijoux",
+      "body": {
+        "nameFr": "Colliers",
+        "nameAr": "قلائد",
+        "nameEn": "Necklaces",
+        "slug": "colliers"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Longueur de chaîne",
+          "nameAr": "طول السلسلة",
+          "nameEn": "Chain length",
+          "type": "Number",
+          "unit": "cm",
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "bijoux",
+      "body": {
+        "nameFr": "Bagues",
+        "nameAr": "خواتم",
+        "nameEn": "Rings",
+        "slug": "bagues"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Taille de bague",
+          "nameAr": "مقاس الخاتم",
+          "nameEn": "Ring size",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": true,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "50",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "52",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "54",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "56",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "58",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "60",
+                "ar": null,
+                "en": null
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "bijoux",
+      "body": {
+        "nameFr": "Boucles d'oreilles",
+        "nameAr": "أقراط",
+        "nameEn": "Earrings",
+        "slug": "boucles-oreilles"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "bijoux",
+      "body": {
+        "nameFr": "Bracelets",
+        "nameAr": "أساور",
+        "nameEn": "Bracelets",
+        "slug": "bracelets"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Électronique",
+        "nameAr": "إلكترونيات",
+        "nameEn": "Electronics",
+        "slug": "electronique"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Marque",
+          "nameAr": "العلامة",
+          "nameEn": "Brand",
+          "type": "Text",
+          "unit": null,
+          "required": true,
+          "filterable": true,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Garantie",
+          "nameAr": "الضمان",
+          "nameEn": "Warranty",
+          "type": "Number",
+          "unit": "mois",
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "electronique",
+      "body": {
+        "nameFr": "Smartphones",
+        "nameAr": "هواتف ذكية",
+        "nameEn": "Smartphones",
+        "slug": "smartphones"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Stockage",
+          "nameAr": "التخزين",
+          "nameEn": "Storage",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": true,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "64 Go",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "128 Go",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "256 Go",
+                "ar": null,
+                "en": null
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "512 Go",
+                "ar": null,
+                "en": null
+              }
+            }
+          ]
+        },
+        {
+          "key": null,
+          "nameFr": "RAM",
+          "nameAr": "الذاكرة",
+          "nameEn": "RAM",
+          "type": "Number",
+          "unit": "Go",
+          "required": false,
+          "filterable": false,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Couleur",
+          "nameAr": "اللون",
+          "nameEn": "Colour",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Noir",
+                "ar": "أسود",
+                "en": "Black"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Bleu",
+                "ar": "أزرق",
+                "en": "Blue"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Vert",
+                "ar": "أخضر",
+                "en": "Green"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Gris",
+                "ar": "رمادي",
+                "en": "Grey"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "electronique",
+      "body": {
+        "nameFr": "Écouteurs & audio",
+        "nameAr": "سماعات وصوتيات",
+        "nameEn": "Headphones & audio",
+        "slug": "audio"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Sans fil",
+          "nameAr": "لاسلكي",
+          "nameEn": "Wireless",
+          "type": "Boolean",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Autonomie",
+          "nameAr": "مدة البطارية",
+          "nameEn": "Battery life",
+          "type": "Number",
+          "unit": "h",
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "electronique",
+      "body": {
+        "nameFr": "Accessoires téléphone",
+        "nameAr": "إكسسوارات الهاتف",
+        "nameEn": "Phone accessories",
+        "slug": "accessoires-telephone"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Compatibilité",
+          "nameAr": "التوافق",
+          "nameEn": "Compatibility",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Maison & déco",
+        "nameAr": "المنزل والديكور",
+        "nameEn": "Home & decor",
+        "slug": "maison"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Dimensions",
+          "nameAr": "المقاسات",
+          "nameEn": "Dimensions",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Fait main",
+          "nameAr": "صنع يدوي",
+          "nameEn": "Handmade",
+          "type": "Boolean",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "maison",
+      "body": {
+        "nameFr": "Poterie & céramique",
+        "nameAr": "فخار وخزف",
+        "nameEn": "Pottery & ceramics",
+        "slug": "poterie-ceramique"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "maison",
+      "body": {
+        "nameFr": "Tapis & kilims",
+        "nameAr": "زرابي ومرقوم",
+        "nameEn": "Rugs & kilims",
+        "slug": "tapis-kilims"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Matière",
+          "nameAr": "الخامة",
+          "nameEn": "Material",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Laine",
+                "ar": "صوف",
+                "en": "Wool"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Coton",
+                "ar": "قطن",
+                "en": "Cotton"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "maison",
+      "body": {
+        "nameFr": "Cuisine & arts de la table",
+        "nameAr": "المطبخ والمائدة",
+        "nameEn": "Kitchen & table",
+        "slug": "cuisine"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Capacité",
+          "nameAr": "السعة",
+          "nameEn": "Capacity",
+          "type": "Number",
+          "unit": "L",
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Épicerie fine",
+        "nameAr": "بقالة فاخرة",
+        "nameEn": "Fine food",
+        "slug": "epicerie-fine"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Origine",
+          "nameAr": "المنشأ",
+          "nameEn": "Origin",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Bio",
+          "nameAr": "عضوي",
+          "nameEn": "Organic",
+          "type": "Boolean",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "epicerie-fine",
+      "body": {
+        "nameFr": "Huile d'olive",
+        "nameAr": "زيت زيتون",
+        "nameEn": "Olive oil",
+        "slug": "huile-olive"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Contenance",
+          "nameAr": "السعة",
+          "nameEn": "Volume",
+          "type": "Number",
+          "unit": "ml",
+          "required": true,
+          "filterable": false,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Qualité",
+          "nameAr": "الجودة",
+          "nameEn": "Grade",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Extra vierge",
+                "ar": "بكر ممتاز",
+                "en": "Extra virgin"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Vierge",
+                "ar": "بكر",
+                "en": "Virgin"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "epicerie-fine",
+      "body": {
+        "nameFr": "Dattes",
+        "nameAr": "تمور",
+        "nameEn": "Dates",
+        "slug": "dattes"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Poids",
+          "nameAr": "الوزن",
+          "nameEn": "Weight",
+          "type": "Number",
+          "unit": "g",
+          "required": true,
+          "filterable": false,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Variété",
+          "nameAr": "الصنف",
+          "nameEn": "Variety",
+          "type": "SingleChoice",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": [
+            {
+              "key": null,
+              "name": {
+                "fr": "Deglet Nour",
+                "ar": "دقلة نور",
+                "en": "Deglet Nour"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Alig",
+                "ar": "عليق",
+                "en": "Alig"
+              }
+            },
+            {
+              "key": null,
+              "name": {
+                "fr": "Kentichi",
+                "ar": "كنتيشي",
+                "en": "Kentichi"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "parentSlug": "epicerie-fine",
+      "body": {
+        "nameFr": "Épices & harissa",
+        "nameAr": "توابل وهريسة",
+        "nameEn": "Spices & harissa",
+        "slug": "epices-harissa"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Poids",
+          "nameAr": "الوزن",
+          "nameEn": "Weight",
+          "type": "Number",
+          "unit": "g",
+          "required": true,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Pâtisserie",
+        "nameAr": "حلويات",
+        "nameEn": "Pastry",
+        "slug": "patisserie"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Poids",
+          "nameAr": "الوزن",
+          "nameEn": "Weight",
+          "type": "Number",
+          "unit": "g",
+          "required": true,
+          "filterable": false,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Sans gluten",
+          "nameAr": "خالٍ من الغلوتين",
+          "nameEn": "Gluten-free",
+          "type": "Boolean",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "patisserie",
+      "body": {
+        "nameFr": "Pâtisserie tunisienne",
+        "nameAr": "حلويات تونسية",
+        "nameEn": "Tunisian pastries",
+        "slug": "patisserie-tunisienne"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "patisserie",
+      "body": {
+        "nameFr": "Gâteaux",
+        "nameAr": "كعك وتورتات",
+        "nameEn": "Cakes",
+        "slug": "gateaux"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Parts",
+          "nameAr": "عدد الحصص",
+          "nameEn": "Servings",
+          "type": "Number",
+          "unit": null,
+          "required": false,
+          "filterable": false,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": null,
+      "body": {
+        "nameFr": "Artisanat",
+        "nameAr": "صناعات تقليدية",
+        "nameEn": "Crafts",
+        "slug": "artisanat"
+      },
+      "attributes": [
+        {
+          "key": null,
+          "nameFr": "Région",
+          "nameAr": "الجهة",
+          "nameEn": "Region",
+          "type": "Text",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        },
+        {
+          "key": null,
+          "nameFr": "Fait main",
+          "nameAr": "صنع يدوي",
+          "nameEn": "Handmade",
+          "type": "Boolean",
+          "unit": null,
+          "required": false,
+          "filterable": true,
+          "options": []
+        }
+      ]
+    },
+    {
+      "parentSlug": "artisanat",
+      "body": {
+        "nameFr": "Vannerie & couffins",
+        "nameAr": "سعف وقفاف",
+        "nameEn": "Baskets & weaving",
+        "slug": "vannerie"
+      },
+      "attributes": []
+    },
+    {
+      "parentSlug": "artisanat",
+      "body": {
+        "nameFr": "Cuivre & dinanderie",
+        "nameAr": "نحاس",
+        "nameEn": "Copperware",
+        "slug": "cuivre"
+      },
+      "attributes": []
+    }
+  ],
+  "stores": [
+    {
+      "owner": "owner",
+      "categorySlug": "parfums",
+      "body": {
+        "name": "Parfumerie Karim",
+        "slug": "parfumerie-karim",
+        "description": "Parfumerie familiale à Sousse depuis 1998 : créations orientales, ouds et eaux fraîches, flacons remplis à la commande.",
+        "city": "sousse",
+        "defaultAffiliatePercent": 15,
+        "deliveryFee": 7,
+        "deliveryCities": [
+          "sousse",
+          "monastir",
+          "mahdia",
+          "tunis",
+          "ariana",
+          "nabeul"
+        ],
+        "deliveryMinDays": 1,
+        "deliveryMaxDays": 3
+      },
+      "logo": "stores/parfumerie-karim/logo.jpg",
+      "banner": "stores/parfumerie-karim/banner.jpg",
+      "products": [
+        {
+          "categorySlug": "oud-musc",
+          "body": {
+            "name": "Armani Privé — Oud Royal, 100 ml",
+            "slug": "oud-royal",
+            "description": "Oud boisé, rose et ambre, de la collection Armani Privé. Flacon authentique, facture fournie.",
+            "price": 1150,
+            "compareAtPrice": 1290,
+            "stock": 20,
+            "affiliatePercent": 8
+          },
+          "values": {
+            "contenance": 100,
+            "genre": "unisexe",
+            "concentration": "eau-de-parfum",
+            "famille-olfactive": [
+              "oriental",
+              "boise"
+            ]
+          },
+          "images": [
+            "products/oud-royal/1.jpg"
+          ]
+        },
+        {
+          "categorySlug": "oud-musc",
+          "body": {
+            "name": "Oud Al Qasr — 100 ml",
+            "slug": "oud-al-qasr-100ml",
+            "description": "Création de la maison : oud fumé, safran et rose de Damas. Tenue plus de 10 heures.",
+            "price": 145,
+            "compareAtPrice": 170,
+            "stock": 20,
+            "affiliatePercent": 20
+          },
+          "values": {
+            "contenance": 100,
+            "genre": "unisexe",
+            "concentration": "extrait-de-parfum",
+            "famille-olfactive": [
+              "oriental",
+              "boise"
+            ]
+          },
+          "images": [
+            "products/oud-al-qasr-100ml/1.jpg"
+          ]
+        },
+        {
+          "categorySlug": "oud-musc",
+          "body": {
+            "name": "Musc blanc — 50 ml",
+            "slug": "musc-blanc-50ml",
+            "description": "Musc blanc doux et poudré, à porter au quotidien.",
+            "price": 45,
+            "compareAtPrice": null,
+            "stock": 40,
+            "affiliatePercent": null
+          },
+          "values": {
+            "contenance": 50,
+            "genre": "unisexe",
+            "concentration": "eau-de-parfum",
+            "famille-olfactive": [
+              "musque"
+            ]
+          },
+          "images": [
+            "products/musc-blanc-50ml/1.png"
+          ]
+        },
+        {
+          "categorySlug": "parfums-femme",
+          "body": {
+            "name": "Jasmin de Tunis — 100 ml",
+            "slug": "jasmin-de-tunis",
+            "description": "Création de la maison : le jasmin tunisien (machmoum) cueilli à l’aube, sur un fond de musc blanc.",
+            "price": 89,
+            "compareAtPrice": null,
+            "stock": 25,
+            "affiliatePercent": null
+          },
+          "values": {
+            "contenance": 100,
+            "genre": "femme",
+            "concentration": "eau-de-parfum",
+            "famille-olfactive": [
+              "floral"
+            ]
+          },
+          "images": [
+            "products/jasmin-de-tunis/1.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "owner2",
+      "categorySlug": "patisserie",
+      "body": {
+        "name": "Douceurs d'Amel",
+        "slug": "douceurs-d-amel",
+        "description": "Pâtisserie tunisienne faite maison à Nabeul, au beurre et au miel. Commandes pour fêtes et mariages.",
+        "city": "nabeul",
+        "defaultAffiliatePercent": 12,
+        "deliveryFee": 6,
+        "deliveryCities": [
+          "nabeul",
+          "tunis",
+          "ariana",
+          "ben-arous",
+          "sousse"
+        ],
+        "deliveryMinDays": 1,
+        "deliveryMaxDays": 2
+      },
+      "logo": "stores/douceurs-d-amel/logo.jpg",
+      "banner": "stores/douceurs-d-amel/banner.jpg",
+      "products": [
+        {
+          "categorySlug": "patisserie-tunisienne",
+          "body": {
+            "name": "Baklawa aux amandes — 500 g",
+            "slug": "baklawa-amandes-500g",
+            "description": "Feuilles de brick, amandes et pistaches, sirop au miel et à la fleur d’oranger.",
+            "price": 38,
+            "compareAtPrice": null,
+            "stock": 20,
+            "affiliatePercent": null
+          },
+          "values": {
+            "poids": 500,
+            "sans-gluten": false
+          },
+          "images": [
+            "products/baklawa-amandes-500g/1.jpg"
+          ]
+        },
+        {
+          "categorySlug": "patisserie-tunisienne",
+          "body": {
+            "name": "Makroudh de Kairouan — 500 g",
+            "slug": "makroudh-kairouan-500g",
+            "description": "Semoule et pâte de dattes, frit puis trempé dans le miel.",
+            "price": 26,
+            "compareAtPrice": null,
+            "stock": 25,
+            "affiliatePercent": null
+          },
+          "values": {
+            "poids": 500,
+            "sans-gluten": false
+          },
+          "images": [
+            "products/makroudh-kairouan-500g/1.jpg"
+          ]
+        },
+        {
+          "categorySlug": "patisserie-tunisienne",
+          "body": {
+            "name": "Kaak warka — 400 g",
+            "slug": "kaak-warka-400g",
+            "description": "Anneaux à la pâte d’amande parfumée à l’eau de géranium.",
+            "price": 42,
+            "compareAtPrice": null,
+            "stock": 20,
+            "affiliatePercent": null
+          },
+          "values": {
+            "poids": 400,
+            "sans-gluten": false
+          },
+          "images": [
+            "products/kaak-warka-400g/1.jpg"
+          ]
+        },
+        {
+          "categorySlug": "patisserie-tunisienne",
+          "body": {
+            "name": "Ghraiba au sorgho — 500 g",
+            "slug": "ghraiba-sorgho-500g",
+            "description": "Fondante, au drôo (sorgho) et au beurre.",
+            "price": 24,
+            "compareAtPrice": null,
+            "stock": 20,
+            "affiliatePercent": null
+          },
+          "values": {
+            "poids": 500,
+            "sans-gluten": true
+          },
+          "images": [
+            "products/ghraiba-sorgho-500g/1.jpg"
+          ]
+        }
+      ]
+    }
+  ]
+}

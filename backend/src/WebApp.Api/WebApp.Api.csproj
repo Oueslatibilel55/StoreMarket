@@ -16,6 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Demo data seeded on the hosted app when DemoSeed__Password is set (DemoSeed/DemoSeeder.cs). -->
+    <None Update="DemoSeed\images\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Update="DemoSeed\demo-seed.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WebApp.Application\WebApp.Application.csproj" />
     <ProjectReference Include="..\WebApp.Infrastructure\WebApp.Infrastructure.csproj" />
     <ProjectReference Include="..\WebApp.ServiceDefaults\WebApp.ServiceDefaults.csproj" />

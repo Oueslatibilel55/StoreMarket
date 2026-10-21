@@ -77,8 +77,10 @@ Code: `https://github.com/Oueslatibilel55/StoreMarket`. Each push to `main` rede
 Render environment variables (values only in Render): `ASPNETCORE_ENVIRONMENT=Production`, `Jwt__Secret`,
 `ConnectionStrings__DefaultConnection` (Npgsql key=value form, Neon's **direct** host — not `-pooler` — with
 `SSL Mode=Require`), `Database__MigrateOnStartup=true`, `Storage__Provider=Database`, `BootstrapAdmin__Emails__0`
-(the first admin). `/health` and `/alive` answer in production. Build the image locally with
+(the first admin), optional `DemoSeed__Password` (test data: see below). `/health` and `/alive` answer in production. Build the image locally with
 `docker build -f src/WebApp.Api/Dockerfile .` from `backend/`.
+
+**Test data on the hosted app:** when `DemoSeed__Password` is set, `DemoSeed/DemoSeeder.cs` creates once, at startup and through the application services, one account per role (`leila.gharbi` client, `sana.trabelsi` affiliate, `karim.bensalah` and `amel.zouari` store owners, all `@storemarket.demo`, password = that variable), the categories, two stores with 4 products each, an accepted partnership and an order with the affiliate code (one store delivered). The admin is the BootstrapAdmin account, which must exist first. Skipped once the demo client exists. Data: `DemoSeed/demo-seed.json` + images, rebuilt by `node backend/scripts/demo-data/export-hosted-seed.mjs`.
 
 
 ## Architecture rules
