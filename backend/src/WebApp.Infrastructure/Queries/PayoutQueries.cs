@@ -4,6 +4,7 @@ using WebApp.Application.Interfaces;
 using WebApp.Domain.Entities;
 using WebApp.Domain.Enums;
 using WebApp.Infrastructure.Persistence;
+using WebApp.Infrastructure.Persistence.Configurations;
 
 namespace WebApp.Infrastructure.Queries;
 
@@ -109,7 +110,13 @@ internal sealed class PayoutQueries(AppDbContext db) : IPayoutQueries
         var earned = await db.CoinEntries.AsNoTracking()
             .Where(e => e.AffiliateId == payout.AffiliateId && e.Type == CoinEntryType.Earned)
             .OrderBy(e => e.CreatedAt).ThenBy(e => e.Id)
-            .Select(e => new { e.Id, e.CreatedAt, e.OrderReference, e.StoreId, e.StoreName, e.ProductName, e.Coins, e.InvoiceId })
+            .Select(e => new
+            {
+                e.Id, e.CreatedAt, e.OrderReference, e.StoreId, e.StoreName, e.ProductName, e.Coins,
+                // The store invoice that billed this commission (025): the ledger itself is never written.
+                InvoiceId = db.Set<CommissionInvoiceLine>().Where(l => l.CoinEntryId == e.Id)
+                    .Select(l => (Guid?)EF.Property<Guid>(l, CommissionInvoiceConfiguration.InvoiceKey)).FirstOrDefault(),
+            })
             .ToListAsync(ct).ConfigureAwait(false);
 
         var covered = new List<PayoutCoveredEntry>();

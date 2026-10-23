@@ -4,11 +4,12 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { StoreCard as StoreCardModel } from '../../core/catalog/catalog-api';
 import { LanguageService } from '../../core/i18n/language.service';
 import { LocalizedPipe } from '../i18n/localized';
+import { StarRating } from '../reviews/star-rating';
 
 /** Store tile of the shop lists. */
 @Component({
   selector: 'app-store-card',
-  imports: [RouterLink, TranslocoPipe, LocalizedPipe],
+  imports: [RouterLink, TranslocoPipe, LocalizedPipe, StarRating],
   template: `
     @let s = store();
     <a [routerLink]="['/stores', s.slug]" class="group card-interactive flex h-full flex-col overflow-hidden">
@@ -25,6 +26,9 @@ import { LocalizedPipe } from '../i18n/localized';
         </div>
         <p class="mt-2 font-semibold text-ink transition-colors group-hover:text-brand">{{ s.name }}</p>
         <p class="text-xs text-muted">{{ s.category.name | localized: language.lang() }} · {{ 'cities.' + s.city | transloco }}</p>
+        @if (s.rating.count) {
+          <app-star-rating [value]="s.rating.average" [count]="s.rating.count" [showValue]="true" size="sm" />
+        }
         <p class="mt-auto flex items-center justify-between pt-3 text-xs">
           <span class="pill pill-neutral">{{ 'shop.productCount' | transloco: { count: s.productCount } }}</span>
           @if (!s.isOpen) { <span class="pill pill-danger">{{ 'shop.storeClosed' | transloco }}</span> }

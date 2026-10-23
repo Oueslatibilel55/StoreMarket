@@ -115,6 +115,16 @@
 @utility card-body {
   @apply p-5 sm:p-6;
 }
+/* Dashboard numbers (023): a KPI tile, its label and its figure. */
+@utility stat-tile {
+  @apply block rounded-xl border border-line bg-card p-4 shadow-card;
+}
+@utility stat-label {
+  @apply text-xs font-medium text-muted;
+}
+@utility stat-value {
+  @apply mt-1 text-2xl font-bold tracking-tight text-ink tabular-nums;
+}
 @utility row-hover {
   @apply transition-colors duration-150 hover:bg-subtle/70;
 }

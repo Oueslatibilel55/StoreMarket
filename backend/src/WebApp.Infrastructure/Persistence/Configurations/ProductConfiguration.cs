@@ -21,6 +21,8 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasIndex(p => p.Slug).IsUnique();
         builder.Property(p => p.Description).HasMaxLength(Product.MaxDescriptionLength);
         builder.Property(p => p.Price).HasPrecision(12, 3);
+        builder.Property(p => p.FromPrice).HasPrecision(12, 3);
+        builder.HasIndex(p => p.FromPrice);
         builder.Property(p => p.CompareAtPrice).HasPrecision(12, 3);
         builder.Property(p => p.Sku).HasMaxLength(Product.MaxSkuLength);
         builder.Property(p => p.Status).IsRequired();
@@ -40,6 +42,14 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasIndex(p => new { p.StoreId, p.Status });
         builder.HasIndex(p => p.CategoryId);
+
+        // Ratings (017), recomputed from the visible reviews; the shop sorts "top rated" on the score.
+        builder.Property(p => p.AverageRating).HasPrecision(3, 2);
+        builder.Property(p => p.RankingScore).HasPrecision(6, 4);
+        builder.HasIndex(p => p.RankingScore);
+
+        // Shop search (018): name + description.
+        builder.HasSearchVector();
         builder.Ignore(p => p.DomainEvents);
     }
 }

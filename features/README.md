@@ -35,7 +35,7 @@ Statuses: `Draft` → `Ready` → `In progress` → `Review` → `Done`
 | 008 | [Product categories & dynamic attributes](008-product-categories-attributes/SPEC.md) | 003 | **Done** |
 | 009 | [Product management (affiliate % per product, variants)](009-product-management/SPEC.md) | 006, 007, 008 | **Done** |
 | 010 | [Store & product moderation — disable / delete fakes](010-store-product-moderation/SPEC.md) | 007, 009 | **Done** (suspicious view skipped) |
-| 011 | [Public catalog: store & product pages](011-public-catalog/SPEC.md) | 009, 010 ("disabled" filter added) | **Done** (top-rated with 017) |
+| 011 | [Public catalog: store & product pages](011-public-catalog/SPEC.md) | 009, 010 ("disabled" filter added) | **Done** (top-rated added with 017) |
 
 ### Phase 3 — Orders & affiliate codes
 | # | Feature | Depends on | Status |
@@ -49,8 +49,8 @@ Statuses: `Draft` → `Ready` → `In progress` → `Review` → `Done`
 ### Phase 4 — Ratings & search
 | # | Feature | Depends on | Status |
 |---|---|---|---|
-| 017 | [Ratings & reviews (products & stores)](017-ratings-reviews/SPEC.md) | 016 | Draft |
-| 018 | [Search with rating-first ranking](018-search/SPEC.md) | 011, 017 | Draft |
+| 017 | [Ratings & reviews (products & stores)](017-ratings-reviews/SPEC.md) | 016 | **Done** (photos later; notifications with 022) |
+| 018 | [Search with rating-first ranking](018-search/SPEC.md) | 011, 017 | **Done** (number / text field filters later) |
 
 ### Phase 5 — Money: coins, payouts & billing
 | # | Feature | Depends on | Status |
@@ -58,7 +58,7 @@ Statuses: `Draft` → `Ready` → `In progress` → `Review` → `Done`
 | 019 | [Coin ledger (credited on delivery)](019-coin-ledger/SPEC.md) | 004, 014, 016 | **Done** |
 | 020 | [Affiliate wallet & history](020-affiliate-wallet/SPEC.md) | 019 | **Done** |
 | 021 | [Payout requests (request → verify → scheduled cash / transfer → paid)](021-payouts/SPEC.md) | 004, 019 | **Done** |
-| 025 | [Store billing (per-store subscription price + offers, monthly commissions, suspend if unpaid)](025-store-billing/SPEC.md) | 004, 007, 010, 019 | Draft |
+| 025 | [Store billing (per-store subscription price + offers, monthly commissions, suspend if unpaid)](025-store-billing/SPEC.md) | 004, 007, 010, 019 | **Done** (reminders with 022) |
 
 ### Later
 | # | Feature | Depends on | Status |
@@ -69,7 +69,7 @@ Statuses: `Draft` → `Ready` → `In progress` → `Review` → `Done`
 | # | Feature | Depends on | Status |
 |---|---|---|---|
 | 022 | [Notifications (email + in-app)](022-notifications/SPEC.md) | 016 | Draft |
-| 023 | [Admin dashboard & stats (affiliates, stores, products, users)](023-admin-dashboard-reports/SPEC.md) | 019, 021 | Draft |
+| 023 | [Admin dashboard & stats (affiliates, stores, products, users)](023-admin-dashboard-reports/SPEC.md) | 019, 021 | **Done** |
 | 024 | [Affiliate anti-fraud rules](024-affiliate-fraud-checks/SPEC.md) | 019 | Draft |
 
 ## How the money trail works

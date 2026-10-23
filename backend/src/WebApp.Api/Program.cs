@@ -126,6 +126,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(opt =>
 
 // Hosted demo data, only when DemoSeed__Password is set (ADR 0006).
 builder.Services.AddHostedService<WebApp.Api.DemoSeed.DemoSeeder>();
+builder.Services.AddHostedService<WebApp.Api.Billing.BillingJob>();
 
 var app = builder.Build();
 
@@ -205,6 +206,9 @@ app.MapOrderEndpoints();
 app.MapOrderLifecycleEndpoints();
 app.MapCoinEndpoints();
 app.MapPayoutEndpoints();
+app.MapReviewEndpoints();
+app.MapStatsEndpoints();
+app.MapBillingEndpoints();
 
 await app.RunAsync();
 

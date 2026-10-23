@@ -77,4 +77,5 @@ public sealed record PublicStoreDto(
     int DeliveryMaxDays,
     string? FacebookUrl,
     string? InstagramUrl,
-    string? WebsiteUrl);
+    string? WebsiteUrl,
+    RatingDto Rating);

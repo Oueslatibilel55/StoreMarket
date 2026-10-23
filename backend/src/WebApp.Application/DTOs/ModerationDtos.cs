@@ -100,7 +100,9 @@ public sealed record AdminProductListItem(
     Guid StoreId,
     string StoreName,
     string StoreSlug,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    /// <summary>The % affiliates earn on it: its own, else the store default (023).</summary>
+    int AffiliatePercent);
 
 /// <summary>Audit snapshot of a store's moderation state.</summary>
 public sealed record StoreModerationSnapshot(StoreStatus Status, bool IsDeleted, string? ModerationReason);

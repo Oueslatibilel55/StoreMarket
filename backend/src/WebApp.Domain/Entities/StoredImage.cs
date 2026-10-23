@@ -46,6 +46,7 @@ public sealed class StoredImage : BaseEntity
         ImagePurpose.StoreBanner => "store-banners",
         ImagePurpose.ProductPhoto => "product-photos",
         ImagePurpose.CategoryImage => "category-images",
+        ImagePurpose.PaymentReceipt => "payment-receipts",
         _ => throw new ArgumentOutOfRangeException(nameof(purpose), purpose, null),
     };
 

@@ -133,6 +133,30 @@ public static class DomainErrors
         public const string ReasonRequired = "moderation.reasonRequired";
     }
 
+    /// <summary>Store billing (025): subscription, offers, commission invoices, payments.</summary>
+    public static class Billing
+    {
+        public const string PriceInvalid = "billing.priceInvalid";
+        public const string MonthsInvalid = "billing.monthsInvalid";
+        public const string AmountInvalid = "billing.amountInvalid";
+        public const string AmountTooHigh = "billing.amountTooHigh";
+        public const string MethodInvalid = "billing.methodInvalid";
+        public const string ReferenceTooLong = "billing.referenceTooLong";
+        public const string NoteTooLong = "billing.noteTooLong";
+        public const string ReasonRequired = "billing.reasonRequired";
+        public const string ReasonTooLong = "billing.reasonTooLong";
+        public const string NotDeclared = "billing.notDeclared";
+        public const string InvoicePaid = "billing.invoicePaid";
+        public const string OfferNameRequired = "billing.offerNameRequired";
+        public const string OfferNameTooLong = "billing.offerNameTooLong";
+        public const string OfferDiscountInvalid = "billing.offerDiscountInvalid";
+        public const string OfferMonthsInvalid = "billing.offerMonthsInvalid";
+        public const string OfferDatesInvalid = "billing.offerDatesInvalid";
+        public const string OfferTargetInvalid = "billing.offerTargetInvalid";
+        public const string OfferNotApplicable = "billing.offerNotApplicable";
+        public const string NothingToInvoice = "billing.nothingToInvoice";
+    }
+
     public static class ProductCategory
     {
         public const string NameRequired = "productCategory.nameRequired";
@@ -178,5 +202,19 @@ public static class DomainErrors
         public const string Required = "image.required";
         public const string TooLarge = "image.tooLarge";
         public const string UnsupportedType = "image.unsupportedType";
+    }
+
+    public static class Review
+    {
+        public const string StarsInvalid = "review.starsInvalid";
+        public const string CommentTooLong = "review.commentTooLong";
+        public const string EditWindowClosed = "review.editWindowClosed";
+        public const string Hidden = "review.hidden";
+        public const string ReplyRequired = "review.replyRequired";
+        public const string ReplyTooLong = "review.replyTooLong";
+        public const string ReasonRequired = "review.reasonRequired";
+        public const string ReasonTooLong = "review.reasonTooLong";
+        public const string AlreadyHidden = "review.alreadyHidden";
+        public const string NotHidden = "review.notHidden";
     }
 }

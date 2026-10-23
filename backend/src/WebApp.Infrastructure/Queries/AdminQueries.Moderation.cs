@@ -118,7 +118,7 @@ internal sealed partial class AdminQueries
 
         var storeIds = page.Select(p => p.StoreId).Distinct().ToList();
         var stores = await db.Stores.AsNoTracking().Where(s => storeIds.Contains(s.Id))
-            .ToDictionaryAsync(s => s.Id, s => new { s.Name, s.Slug }, ct).ConfigureAwait(false);
+            .ToDictionaryAsync(s => s.Id, s => new { s.Name, s.Slug, s.DefaultAffiliatePercent }, ct).ConfigureAwait(false);
         var categoryIds = page.Select(p => p.CategoryId).Distinct().ToList();
         var names = await db.ProductCategories.AsNoTracking().Where(c => categoryIds.Contains(c.Id))
             .ToDictionaryAsync(c => c.Id, c => new LocalizedName(c.NameFr, c.NameAr, c.NameEn), ct).ConfigureAwait(false);
@@ -129,7 +129,8 @@ internal sealed partial class AdminQueries
         var items = page.Select(p => new AdminProductListItem(
             p.Id, p.Slug, p.Name, p.ImageIds.Count > 0 ? urls.GetValueOrDefault(p.ImageIds[0]) : null,
             p.Price, ProductMapping.MinPrice(p), p.ImageIds.Count, p.Status, p.IsDisabled, p.IsDeleted, p.ModerationReason,
-            names[p.CategoryId], p.StoreId, stores[p.StoreId].Name, stores[p.StoreId].Slug, p.CreatedAt)).ToList();
+            names[p.CategoryId], p.StoreId, stores[p.StoreId].Name, stores[p.StoreId].Slug, p.CreatedAt,
+            p.AffiliatePercent ?? stores[p.StoreId].DefaultAffiliatePercent)).ToList();
         return new PagedResult<AdminProductListItem>(items, paging.Page, paging.PageSize, total);
     }
 }

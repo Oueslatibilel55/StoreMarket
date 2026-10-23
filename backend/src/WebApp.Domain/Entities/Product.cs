@@ -58,6 +58,8 @@ public sealed class Product : AggregateRoot
     public Guid CategoryId { get; private set; }
     public string? Description { get; private set; }
     public decimal Price { get; private set; }
+    /// <summary>"From" price shown on tiles: the cheapest variant, else <see cref="Price"/>. Stored so the shop filters and sorts on it (018).</summary>
+    public decimal FromPrice { get; private set; }
     /// <summary>Old price shown crossed out; above <see cref="Price"/>.</summary>
     public decimal? CompareAtPrice { get; private set; }
     public string? Sku { get; private set; }
@@ -75,6 +77,13 @@ public sealed class Product : AggregateRoot
     public DateTime? DisabledAt { get; private set; }
     /// <summary>Why an admin disabled or deleted the product — shown to the owner.</summary>
     public string? ModerationReason { get; private set; }
+
+    /// <summary>Average of the visible product reviews (017), two decimals; null when none.</summary>
+    /// <remarks>The three rating values are maintained by the review repository, in the review's transaction.</remarks>
+    public decimal? AverageRating { get; private set; }
+    public int RatingCount { get; private set; }
+    /// <summary>Bayesian average used to sort the shop (<see cref="Ranking"/>); null when not rated.</summary>
+    public decimal? RankingScore { get; private set; }
 
     /// <summary>Product photos in display order; the first one is the main image.</summary>
     public IReadOnlyList<Guid> ImageIds => _imageIds;
@@ -267,6 +276,7 @@ public sealed class Product : AggregateRoot
         _variantAxes.Clear();
         _variantAxes.AddRange(axes);
         SyncVariants(variants);
+        FromPrice = _variants.Count > 0 ? _variants.Min(v => v.Price ?? Price) : Price;
         return Result.Ok();
     }
 

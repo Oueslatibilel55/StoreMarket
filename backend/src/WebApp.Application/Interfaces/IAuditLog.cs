@@ -50,6 +50,14 @@ public static class AuditActions
     public const string PayoutReject = "payout.reject";
     public const string PayoutSchedule = "payout.schedule";
     public const string PayoutPaid = "payout.paid";
+    public const string ReviewHide = "review.hide";
+    public const string ReviewUnhide = "review.unhide";
+    public const string BillingPrice = "billing.price";
+    public const string BillingOfferCreate = "billing.offer.create";
+    public const string BillingOfferUpdate = "billing.offer.update";
+    public const string BillingPaymentRecord = "billing.payment.record";
+    public const string BillingPaymentApprove = "billing.payment.approve";
+    public const string BillingPaymentReject = "billing.payment.reject";
 }
 
 public static class AuditTargets
@@ -62,4 +70,7 @@ public static class AuditTargets
     public const string Product = "Product";
     public const string Order = "Order";
     public const string Payout = "Payout";
+    public const string Review = "Review";
+    public const string Offer = "Offer";
+    public const string StorePayment = "StorePayment";
 }

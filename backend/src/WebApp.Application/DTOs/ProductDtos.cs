@@ -99,7 +99,8 @@ public sealed record PublicProductDto(
     IReadOnlyList<PublicAttributeDto> Attributes,
     IReadOnlyList<PublicVariantAxisDto> VariantAxes,
     IReadOnlyList<PublicVariantDto> Variants,
-    ProductStoreRef Store);
+    ProductStoreRef Store,
+    RatingDto Rating);
 
 public static class ProductMapping
 {
@@ -109,10 +110,10 @@ public static class ProductMapping
         return v.Selection.ToDictionary(s => s.Key, s => s.Value, StringComparer.Ordinal);
     }
 
-    /// <summary>Lowest price a client can pay: the product price, or the cheapest variant.</summary>
+    /// <summary>Lowest price a client can pay: the product price, or the cheapest variant (stored as <see cref="Product.FromPrice"/>).</summary>
     public static decimal MinPrice(Product p)
     {
         ArgumentNullException.ThrowIfNull(p);
-        return p.HasVariants && p.Variants.Count > 0 ? p.Variants.Min(v => v.Price ?? p.Price) : p.Price;
+        return p.FromPrice;
     }
 }

@@ -22,14 +22,22 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<CoinEntry> CoinEntries => Set<CoinEntry>();
     public DbSet<CoinAccount> CoinAccounts => Set<CoinAccount>();
     public DbSet<PayoutRequest> PayoutRequests => Set<PayoutRequest>();
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<BillingOffer> BillingOffers => Set<BillingOffer>();
+    public DbSet<CommissionInvoice> CommissionInvoices => Set<CommissionInvoice>();
+    public DbSet<StorePayment> StorePayments => Set<StorePayment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
 
+        modelBuilder.HasPostgresExtension("unaccent");
+        FullTextSearch.MapFunctions(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         modelBuilder.HasSequence<long>(Configurations.OrderConfiguration.NumberSequence);
         modelBuilder.HasSequence<long>(Configurations.PayoutRequestConfiguration.NumberSequence);
+        modelBuilder.HasSequence<long>(Configurations.CommissionInvoiceConfiguration.NumberSequence);
+        modelBuilder.HasSequence<long>(Configurations.StorePaymentConfiguration.NumberSequence);
 
         // Guid keys are assigned by the domain (BaseEntity), never by the database.
         // With EF's default (ValueGeneratedOnAdd) a new child reached through a navigation

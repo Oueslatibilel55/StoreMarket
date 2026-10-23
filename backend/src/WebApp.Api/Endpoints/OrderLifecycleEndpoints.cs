@@ -29,7 +29,8 @@ internal static class OrderLifecycleEndpoints
             .WithSummary("Cancel my order with one store, before it ships");
 
         var admin = app.MapGroup("/api/admin").WithTags("Admin · Orders").RequireAuthorization(AuthPolicies.Admin);
-        admin.MapGet("/orders", AdminList).Produces<PagedResult<AdminOrderListItem>>().WithSummary("Every order; filter by status / store, search");
+        admin.MapGet("/orders", AdminList).Produces<PagedResult<AdminOrderListItem>>()
+            .WithSummary("Every order; filter by status, store, affiliate, client, product, from / to (placed or delivered), search");
         admin.MapGet("/orders/{reference}", AdminGet).Produces<OrderDto>().WithSummary("One order with every store's history");
         admin.MapPost("/store-orders/{id:guid}/status", AdminForce).Produces<OrderDto>()
             .WithSummary("Force a store order's status — reason required, audited; Delivered stays final");
@@ -55,9 +56,14 @@ internal static class OrderLifecycleEndpoints
     private static async Task<IResult> CancelAsClient(string reference, Guid id, CancelStoreOrderRequest? request, OrderLifecycleService service, HttpContext http, CancellationToken ct) =>
         Respond(await service.CancelAsClientAsync(UserId(http), reference, id, request ?? new CancelStoreOrderRequest(null), ct));
 
-    private static Task<PagedResult<AdminOrderListItem>> AdminList(StoreOrderStatus? status, string? search, Guid? storeId, int? page, int? pageSize,
-        OrderLifecycleService service, CancellationToken ct) =>
-        service.ListAsync(new AdminOrderQuery(status, search, storeId, page, pageSize), ct);
+    private static Task<PagedResult<AdminOrderListItem>> AdminList([AsParameters] AdminOrderRequest r, OrderLifecycleService service, CancellationToken ct) =>
+        service.ListAsync(new AdminOrderQuery(r.Status, r.Search, r.StoreId, r.Page, r.PageSize,
+            r.AffiliateId, r.ClientId, r.ProductId, r.From, r.To, r.DateField), ct);
+
+    /// <summary>Query string of <c>GET /api/admin/orders</c>; <c>from</c> / <c>to</c> are inclusive days on <c>dateField</c> (Placed by default).</summary>
+    internal sealed record AdminOrderRequest(
+        StoreOrderStatus? Status, string? Search, Guid? StoreId, Guid? AffiliateId, Guid? ClientId, Guid? ProductId,
+        DateOnly? From, DateOnly? To, OrderDateField? DateField, int? Page, int? PageSize);
 
     private static async Task<IResult> AdminGet(string reference, OrderLifecycleService service, CancellationToken ct) =>
         Respond(await service.GetAsync(reference, ct));

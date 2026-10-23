@@ -71,6 +71,10 @@ public sealed class Store : AggregateRoot
 
     /// <summary>Monthly price for this store, copied from the default setting at creation; the admin changes it per store (025).</summary>
     public decimal SubscriptionMonthlyPrice { get; private set; }
+    /// <summary>Last day the subscription covers (025): the trial days for a new store, extended by every approved payment.</summary>
+    public DateOnly PaidUntil { get; private set; }
+    /// <summary>When billing suspended the store for an unpaid subscription or invoice (025); null otherwise.</summary>
+    public DateTime? SuspendedAt { get; private set; }
 
     /// <summary>Why an admin disabled or deleted the store — shown to the owner (010).</summary>
     public string? ModerationReason { get; private set; }
@@ -78,15 +82,26 @@ public sealed class Store : AggregateRoot
     /// <summary>Soft delete by an admin: hidden everywhere, kept for order and coin history.</summary>
     public DateTime? DeletedAt { get; private set; }
 
+    /// <summary>Average of the visible store reviews (017), two decimals; null when none.</summary>
+    /// <remarks>The three rating values are maintained by the review repository, in the review's transaction.</remarks>
+    public decimal? AverageRating { get; private set; }
+    public int RatingCount { get; private set; }
+    /// <summary>Bayesian average used to sort the shop (<see cref="Ranking"/>); null when not rated.</summary>
+    public decimal? RankingScore { get; private set; }
+
     private Store() { }
 
     /// <summary>
     /// New active store. <paramref name="percentMin"/> / <paramref name="percentMax"/> are the platform
     /// limits (settings). Category, images and slug uniqueness are checked by the caller.
     /// </summary>
-    public static Result<Store> Create(Guid ownerId, StoreDetails details, int percentMin, int percentMax, decimal subscriptionMonthlyPrice)
+    public static Result<Store> Create(Guid ownerId, StoreDetails details, int percentMin, int percentMax, decimal subscriptionMonthlyPrice,
+        DateOnly paidUntil)
     {
-        var store = new Store { OwnerId = ownerId, Status = StoreStatus.Active, SubscriptionMonthlyPrice = subscriptionMonthlyPrice };
+        var store = new Store
+        {
+            OwnerId = ownerId, Status = StoreStatus.Active, SubscriptionMonthlyPrice = subscriptionMonthlyPrice, PaidUntil = paidUntil,
+        };
         var applied = store.Apply(details, percentMin, percentMax);
         return applied.IsSuccess ? Result.Ok(store) : Result.Fail<Store>(applied.Error!);
     }
@@ -115,6 +130,7 @@ public sealed class Store : AggregateRoot
         if (Status == StoreStatus.Disabled) return Result.Ok();
 
         Status = StoreStatus.Disabled;
+        SuspendedAt = null; // the admin decision replaces a billing suspension
         ModerationReason = trimmed;
         DisabledAt = utcNow;
         MarkUpdated();
@@ -143,11 +159,67 @@ public sealed class Store : AggregateRoot
         if (IsDeleted) return Result.Ok();
 
         Status = StoreStatus.Disabled;
+        SuspendedAt = null; // the admin decision replaces a billing suspension
         ModerationReason = trimmed;
         DisabledAt ??= utcNow;
         DeletedAt = utcNow;
         MarkUpdated();
         return Result.Ok();
+    }
+
+    // -- Billing (025) -----------------------------------------------------------
+
+    public const decimal MaxSubscriptionPrice = 100_000m;
+
+    /// <summary>The admin sets this store's monthly price. Past payments keep the price they were made at.</summary>
+    public Result SetSubscriptionPrice(decimal monthlyPrice)
+    {
+        if (IsDeleted) return Result.Fail(DomainErrors.Store.Deleted);
+        if (monthlyPrice < 0 || monthlyPrice > MaxSubscriptionPrice || decimal.Round(monthlyPrice, 3) != monthlyPrice)
+            return Result.Fail(DomainErrors.Billing.PriceInvalid);
+        if (monthlyPrice == SubscriptionMonthlyPrice) return Result.Ok();
+        SubscriptionMonthlyPrice = monthlyPrice;
+        MarkUpdated();
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// An approved payment of <paramref name="months"/> months: counted from the day after paid-until, or from today when
+    /// paid-until is already past (the months a store could not sell are not charged afterwards). Returns the days covered.
+    /// </summary>
+    public (DateOnly From, DateOnly To) ExtendSubscription(int months, DateOnly today)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(months, 1);
+        var from = PaidUntil >= today ? PaidUntil.AddDays(1) : today;
+        var to = from.AddMonths(months).AddDays(-1);
+        PaidUntil = to;
+        MarkUpdated();
+        return (from, to);
+    }
+
+    public bool IsSuspended => Status == StoreStatus.Suspended;
+
+    /// <summary>
+    /// Billing suspends an active or closed store (unpaid subscription or invoice): out of the shop, no new orders, the
+    /// owner still processes the orders already placed. A disabled or deleted store is left alone. True when it changed.
+    /// </summary>
+    public bool Suspend(DateTime utcNow)
+    {
+        if (IsDeleted || Status is not (StoreStatus.Active or StoreStatus.Closed)) return false;
+        Status = StoreStatus.Suspended;
+        SuspendedAt = utcNow;
+        MarkUpdated();
+        return true;
+    }
+
+    /// <summary>Everything overdue is paid: a suspended store is active again. True when it changed.</summary>
+    public bool Reactivate()
+    {
+        if (Status != StoreStatus.Suspended) return false;
+        Status = StoreStatus.Active;
+        SuspendedAt = null;
+        MarkUpdated();
+        return true;
     }
 
     /// <summary>The owner closes their store for a while. Only an active store can be closed.</summary>

@@ -12,12 +12,14 @@ import { AdminApi } from '../admin-api';
 import { AuditEntryItem } from '../audit/audit-entry-item';
 import { AdminStore, ModerationApi } from './moderation-api';
 import { ModerationAction, ModerationDialog } from './moderation-dialog';
+import { StoreBillingSection } from '../billing/store-billing-section';
+import { StoreStatsSection } from '../stats/store-stats-section';
 import { StateBadge } from './state-badge';
 
 /** A store seen by the admin: configuration, owner, product counts, moderation actions and their history. */
 @Component({
   selector: 'app-store-moderation-detail',
-  imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, ModerationReason, AuditEntryItem, ModerationDialog, StateBadge],
+  imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, ModerationReason, AuditEntryItem, ModerationDialog, StateBadge, StoreBillingSection, StoreStatsSection],
   templateUrl: './store-moderation-detail.html',
 })
 export class StoreModerationDetail {

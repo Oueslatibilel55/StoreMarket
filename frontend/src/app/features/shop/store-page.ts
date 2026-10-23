@@ -12,14 +12,16 @@ import { Referrals } from '../../core/cart/referrals';
 import { ProductCard } from '../../shared/catalog/product-card';
 import { LocalizedPipe } from '../../shared/i18n/localized';
 import { Pagination } from '../../shared/ui/pagination';
+import { ReviewSection } from '../../shared/reviews/review-section';
+import { StarRating } from '../../shared/reviews/star-rating';
 import { SORTS } from './product-catalog';
 
 const PAGE_SIZE = 24;
 
-/** `/stores/:slug?sort=&page=` — a store and its products. */
+/** `/stores/:slug?sort=&page=` — a store, its products and the reviews of its service. */
 @Component({
   selector: 'app-store-page',
-  imports: [DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, ProductCard, Pagination, PartnershipCta],
+  imports: [DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, ProductCard, Pagination, PartnershipCta, ReviewSection, StarRating],
   templateUrl: './store-page.html',
 })
 export class StorePage {
@@ -54,6 +56,10 @@ export class StorePage {
       const s = this.store.value();
       if (s && this.ref()) referrals.remember(s.id, this.ref());
     });
+  }
+
+  protected scrollToReviews(): void {
+    document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
   }
 
   protected apply(params: Record<string, string | number | null>): void {

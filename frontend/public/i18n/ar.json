@@ -24,7 +24,8 @@
         "title": "للمسوّقين بالعمولة",
         "text": "شارك رمزك، اربح عملات على كل بيع تم تسليمه، ثم اسحب أرباحك."
       }
-    }
+    },
+    "topRatedProducts": "الأعلى تقييمًا"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -303,6 +304,49 @@
       "paidReferenceRequired": "أدخل مرجع التحويل أو من سلّم المال.",
       "paidReferenceTooLong": "المرجع طويل جدًا (120 حرفًا كحد أقصى).",
       "paidInFuture": "لا يمكن أن يكون تاريخ الدفع في المستقبل."
+    },
+    "review": {
+      "starsInvalid": "اختر تقييمًا من 1 إلى 5 نجوم.",
+      "commentTooLong": "التعليق طويل جدًا (1000 حرف كحد أقصى).",
+      "editWindowClosed": "انتهت مهلة تعديل هذا الرأي.",
+      "hidden": "أخفت الإدارة هذا الرأي.",
+      "replyRequired": "اكتب ردّك.",
+      "replyTooLong": "الرد طويل جدًا (1000 حرف كحد أقصى).",
+      "reasonRequired": "اذكر السبب.",
+      "reasonTooLong": "السبب طويل جدًا (500 حرف كحد أقصى).",
+      "alreadyHidden": "هذا الرأي مخفي بالفعل.",
+      "notHidden": "هذا الرأي غير مخفي.",
+      "notFound": "الرأي غير موجود.",
+      "orderNotFound": "الطلب غير موجود.",
+      "notDelivered": "يمكنك التقييم بعد التوصيل.",
+      "alreadyReviewed": "لقد قيّمت هذا الشراء من قبل.",
+      "ownStore": "لا يمكنك تقييم متجرك الخاص."
+    },
+    "billing": {
+      "priceInvalid": "سعر غير صالح.",
+      "monthsInvalid": "عدد أشهر غير صالح (1 إلى 36).",
+      "amountInvalid": "مبلغ غير صالح.",
+      "amountTooHigh": "المبلغ يتجاوز ما تبقى للدفع.",
+      "methodInvalid": "طريقة دفع غير صالحة.",
+      "referenceTooLong": "المرجع طويل جدًا.",
+      "noteTooLong": "الملاحظة طويلة جدًا.",
+      "reasonRequired": "اذكر السبب.",
+      "reasonTooLong": "السبب طويل جدًا.",
+      "notDeclared": "تمت معالجة هذه الدفعة.",
+      "invoicePaid": "هذه الفاتورة مدفوعة.",
+      "offerNameRequired": "اسم العرض بالفرنسية إجباري.",
+      "offerNameTooLong": "الاسم طويل جدًا.",
+      "offerDiscountInvalid": "اختر تخفيضًا: نسبة (1 إلى 100) أو مبلغًا بالدينار.",
+      "offerMonthsInvalid": "عدد أشهر غير صالح (1 إلى 36).",
+      "offerDatesInvalid": "تاريخ النهاية قبل تاريخ البداية.",
+      "offerTargetInvalid": "اختر فئة أو متجرًا على الأقل.",
+      "offerNotApplicable": "هذا العرض لا ينطبق على هذه الدفعة.",
+      "nothingToInvoice": "لا شيء للفوترة.",
+      "offerNotFound": "العرض غير موجود.",
+      "invoiceNotFound": "الفاتورة غير موجودة.",
+      "paymentNotFound": "الدفعة غير موجودة.",
+      "alreadyDeclared": "هناك دفعة تنتظر التحقق.",
+      "changed": "تم التعديل في الأثناء: أعد تحميل الصفحة."
     }
   },
   "affiliate": {
@@ -328,7 +372,9 @@
     "saving": "جارٍ الحفظ…",
     "yes": "نعم",
     "no": "لا",
-    "choose": "اختر…"
+    "choose": "اختر…",
+    "save": "حفظ",
+    "edit": "تعديل"
   },
   "admin": {
     "title": "الإدارة",
@@ -347,7 +393,8 @@
       "coins": "العملات",
       "payouts": "سحوبات المسوّقين",
       "billing": "الفوترة",
-      "partnerships": "الشراكات"
+      "partnerships": "الشراكات",
+      "dashboard": "لوحة القيادة"
     },
     "status": {
       "Active": "نشط",
@@ -577,6 +624,22 @@
         "reject": "تم رفض سحب",
         "schedule": "تمت برمجة سحب",
         "paid": "تم دفع سحب"
+      },
+      "review": {
+        "hide": "رأي مخفي",
+        "unhide": "رأي أُعيد إظهاره"
+      },
+      "billing": {
+        "price": "تعديل سعر الاشتراك",
+        "offer": {
+          "create": "إنشاء عرض",
+          "update": "تعديل عرض"
+        },
+        "payment": {
+          "record": "تسجيل دفعة",
+          "approve": "قبول دفعة",
+          "reject": "رفض دفعة"
+        }
       }
     },
     "fields": {
@@ -690,6 +753,10 @@
       "defaultMonthlyPriceTnd": {
         "label": "اشتراك المتجر الافتراضي",
         "hint": "السعر الشهري لمتجر جديد. يمكن لكل متجر أن يكون له سعره الخاص."
+      },
+      "trialDays": {
+        "label": "أيام مجانية للمتجر الجديد",
+        "hint": "لا يدفع المتجر الجديد اشتراكه إلا بعد هذه الأيام."
       }
     },
     "commissionInvoice": {
@@ -714,6 +781,12 @@
       "maxImageSizeMb": {
         "label": "الحجم الأقصى للصورة",
         "hint": "أكبر صورة أو شعار أو لافتة يمكن للمستخدم رفعها."
+      }
+    },
+    "reviews": {
+      "editWindowDays": {
+        "label": "مهلة تعديل الرأي",
+        "hint": "عدد الأيام التي يمكن خلالها للعميل تعديل رأيه. تُحدَّد عند نشر الرأي."
       }
     }
   },
@@ -781,7 +854,10 @@
       "store": "متجري",
       "products": "منتجاتي",
       "affiliates": "مسوّقيّ",
-      "orders": "الطلبات"
+      "orders": "الطلبات",
+      "reviews": "الآراء",
+      "stats": "الإحصائيات",
+      "billing": "الفوترة"
     },
     "moderation": {
       "disabled": "قام المشرف بتعطيل متجرك.",
@@ -878,11 +954,31 @@
     "breadcrumb": "أنت هنا",
     "searchProducts": "ابحث عن منتج",
     "searchStores": "ابحث عن متجر",
+    "search": "بحث",
+    "searchPlaceholder": "منتجات، متاجر…",
+    "searchTitle": "بحث",
+    "searchResults": "نتائج « {{q}} »",
+    "seeAllStores": "عرض المتاجر ({{count}})",
+    "noResults": "لا يوجد منتج مطابق. جرّب كلمات أخرى أو أزل بعض عوامل التصفية.",
+    "filters": "تصفية",
+    "clearFilters": "مسح عوامل التصفية",
+    "price": "السعر (د.ت)",
+    "priceMin": "الأدنى",
+    "priceMax": "الأقصى",
+    "minRating": "أدنى تقييم",
+    "anyRating": "كل التقييمات",
+    "ratingAtLeast": "{{n}} ★ فأكثر",
+    "storeCategory": "نوع المتجر",
+    "allStoreCategories": "كل الأنواع",
+    "fieldFiltersHint": "اختر فئة للتصفية أيضًا حسب المقاس واللون…",
+    "yes": "نعم",
+    "no": "لا",
     "sortBy": "ترتيب حسب",
     "sort": {
       "Newest": "الأحدث",
       "PriceAsc": "السعر: من الأقل",
-      "PriceDesc": "السعر: من الأعلى"
+      "PriceDesc": "السعر: من الأعلى",
+      "TopRated": "الأعلى تقييمًا"
     },
     "resultCount": "{{count}} منتج",
     "noProducts": "لا توجد منتجات هنا بعد.",
@@ -962,7 +1058,6 @@
     },
     "productCounts": "{{ total }} منتج · {{ live }} معروض · {{ disabled }} معطّل",
     "seeProducts": "عرض منتجاته",
-    "statsSoon": "إحصائيات المتجر: قريبًا (023).",
     "actions": "الإشراف",
     "stores": {
       "title": "المتاجر",
@@ -1469,5 +1564,372 @@
       "bankReference": "مرجع التحويل"
     },
     "rate": "النقطة = {{value}} د.ت"
+  },
+  "reviews": {
+    "starsLabel": "التقييم {{value}} من 5",
+    "yourRating": "تقييمك",
+    "nStars": "{{n}} ★",
+    "starWords": {
+      "1": "سيئ جدًا",
+      "2": "سيئ",
+      "3": "مقبول",
+      "4": "جيد",
+      "5": "ممتاز"
+    },
+    "productTitle": "آراء العملاء",
+    "storeTitle": "آراء حول خدمة المتجر",
+    "storeHint": "التحضير والتوصيل والتواصل، يقيّمها العملاء الذين استلموا طلباتهم.",
+    "none": "لا توجد آراء بعد.",
+    "verifiedHint": "فقط العملاء الذين استلموا طلبهم يمكنهم إضافة رأي.",
+    "count": "{{count}} رأي",
+    "allStars": "كل التقييمات",
+    "edited": "معدّل",
+    "storeReply": "ردّ المتجر",
+    "noneWithStars": "لا توجد آراء مطابقة.",
+    "seeAll": "عرض الآراء",
+    "mine": "آرائي",
+    "mineHint": "قيّم المنتجات والمتاجر التي أوصلت إليك طلباتك: آراؤك تساعد العملاء الآخرين.",
+    "toWrite": "للتقييم",
+    "nothingToWrite": "لا شيء للتقييم حاليًا. بعد كل توصيل يمكنك تقييم المنتجات والمتجر هنا.",
+    "rateStore": "خدمة {{name}}",
+    "deliveredOn": "تم التوصيل في {{date}}",
+    "rate": "قيّم",
+    "rateOrder": "قيّم",
+    "comment": "تعليق",
+    "optional": "اختياري",
+    "productPlaceholder": "الجودة، المطابقة للوصف، ما أعجبك…",
+    "storePlaceholder": "السرعة، التغليف، التواصل مع المتجر…",
+    "publish": "نشر الرأي",
+    "written": "آرائي المنشورة",
+    "noneWritten": "لم تنشر أي رأي بعد.",
+    "noComment": "بدون تعليق",
+    "target": {
+      "Product": "منتج",
+      "Store": "متجر"
+    },
+    "hiddenPill": "مخفي",
+    "hiddenNotice": "أخفت الإدارة هذا الرأي: {{reason}}",
+    "editableUntil": "قابل للتعديل حتى {{date}}",
+    "editClosed": "لم يعد قابلًا للتعديل.",
+    "edit": "تعديل",
+    "save": "حفظ",
+    "admin": {
+      "title": "الآراء",
+      "subtitle": "كل آراء العملاء. أخفِ رأيًا مسيئًا أو مزيفًا: يختفي من الصفحات العامة ومن المعدلات.",
+      "total": "الآراء",
+      "lowStars": "1–2 ★ ظاهرة",
+      "hidden": "مخفية",
+      "visible": "ظاهرة",
+      "searchPlaceholder": "تعليق، عميل، متجر، منتج، طلب…",
+      "target": "النوع",
+      "allTargets": "المنتجات والمتاجر",
+      "stars": "التقييم",
+      "allStars": "كل التقييمات",
+      "visibility": "الظهور",
+      "allVisibility": "الظاهرة والمخفية",
+      "empty": "لا توجد آراء.",
+      "hide": "إخفاء",
+      "unhide": "إظهار من جديد",
+      "hideTitle": "إخفاء هذا الرأي؟",
+      "hideHint": "يختفي من المتجر ومن المعدلات. يرى العميل والمتجر السبب.",
+      "unhideTitle": "إظهار هذا الرأي من جديد؟",
+      "unhideHint": "يعود إلى الصفحات العامة وإلى المعدلات.",
+      "reason": "السبب (سجل التدقيق)",
+      "hiddenBecause": "مخفي: {{reason}}"
+    },
+    "store": {
+      "title": "آراء العملاء",
+      "subtitle": "ما يقوله عملاؤك عن منتجاتك وخدمتك بعد التوصيل. ردّ عليهم علنًا.",
+      "serviceRating": "تقييم الخدمة",
+      "productsRating": "تقييم المنتجات",
+      "unanswered": "بدون رد",
+      "answered": "مع رد",
+      "toAnswer": "بدون رد",
+      "allAnswers": "مع رد أو بدونه",
+      "empty": "لا توجد آراء بعد. يمكن للعملاء تقييم الطلب بعد توصيله.",
+      "hiddenNotice": "أخفته الإدارة: {{reason}}. لم يعد يُحتسب في تقييماتك.",
+      "yourReply": "ردّك العلني",
+      "replyPlaceholder": "شكرًا على رأيك…",
+      "replyHint": "يراه الجميع تحت الرأي. حافظ على اللباقة.",
+      "publishReply": "نشر الرد",
+      "removeReply": "حذف",
+      "reply": "ردّ"
+    }
+  },
+  "filters": {
+    "remove": "إزالة هذا الفلتر",
+    "store": "المتجر {{value}}…",
+    "affiliate": "المسوّق {{value}}…",
+    "client": "الحريف {{value}}…",
+    "product": "المنتج {{value}}…",
+    "placedBetween": "مُرسلة {{value}}",
+    "deliveredBetween": "مُسلّمة {{value}}"
+  },
+  "stats": {
+    "title": "لوحة القيادة",
+    "subtitle": "الطلبات والمبيعات والكوينز والدفعات خلال الفترة. كل رقم يفتح القائمة التي يتكوّن منها.",
+    "period": "الفترة",
+    "lastDays": "{{n}} يوم",
+    "from": "من",
+    "to": "إلى",
+    "ordersAndSales": "الطلبات والمبيعات",
+    "coinsAndPayouts": "الكوينز والدفعات",
+    "platform": "المنصة",
+    "csv": "تصدير CSV",
+    "noData": "لا شيء في هذه الفترة.",
+    "col": {
+      "store": "المتجر",
+      "product": "المنتج",
+      "affiliate": "المسوّق",
+      "orders": "طلبات مُسلّمة",
+      "lines": "أسطر مُحتسبة",
+      "quantity": "الكمية",
+      "amount": "المبيعات (د.ت)",
+      "coins": "كوينز",
+      "detail": "التفاصيل"
+    },
+    "kpi": {
+      "placed": "طلبات مُرسلة",
+      "openHint": "{{n}} قيد التنفيذ",
+      "delivered": "مُسلّمة",
+      "rate": "{{n}} % من الطلبات المُرسلة",
+      "notDelivered": "غير مُسلّمة",
+      "cancelled": "مُلغاة",
+      "sales": "مبيعات مُسلّمة",
+      "salesHint": "{{orders}} طلب · {{quantity}} قطعة",
+      "viaAffiliates": "مبيعات عبر المسوّقين",
+      "viaHint": "{{orders}} طلب · {{n}} % من المبيعات",
+      "coinsGenerated": "كوينز مُنحت للمسوّقين",
+      "rating": "التقييم",
+      "ratingCount": "{{n}} تقييم",
+      "partners": "مسوّقون شركاء",
+      "pendingRequests": "{{n}} طلب في الانتظار",
+      "coinsEarned": "كوينز مكتسبة",
+      "adjusted": "تصحيحات: {{n}}",
+      "coinsExpected": "كوينز منتظرة",
+      "expectedHint": "طرود في الطريق، الآن",
+      "payoutsPending": "دفعات للمعالجة",
+      "payoutsPendingHint": "{{coins}} كوينز · {{tnd}} د.ت",
+      "paidOut": "مدفوع للمسوّقين",
+      "paidOutHint": "{{n}} دفعة · {{coins}} كوينز",
+      "activeStores": "متاجر نشطة",
+      "closedStores": "{{n}} مغلقة حاليًا",
+      "suspendedStores": "متاجر موقوفة",
+      "disabledStores": "{{n}} معطّلة",
+      "activeAffiliates": "مسوّقون نشطون",
+      "activeAffiliatesHint": "ربحوا كوينز خلال الفترة",
+      "newUsers": "حسابات جديدة",
+      "coinsEarnedHere": "كوينز مكتسبة على هذا المنتج",
+      "expectedNow": "{{n}} منتظرة الآن",
+      "partnerStores": "متاجر شريكة",
+      "partnersHint": "{{requested}} في الانتظار · {{refused}} مرفوضة · {{ended}} منتهية",
+      "subscriptionsCollected": "اشتراكات محصّلة",
+      "commissionsBilled": "عمولات مفوترة",
+      "commissionsCollected": "{{n}} د.ت محصّلة",
+      "commissionsDue": "عمولات مستحقة",
+      "declaredPayments": "دفعات للتحقق"
+    },
+    "daily": {
+      "sales": "المبيعات المُسلّمة يوميًا",
+      "placed": "الطلبات المُرسلة يوميًا",
+      "delivered": "الطلبات المُسلّمة يوميًا",
+      "measure": "المقياس المعروض",
+      "short": {
+        "sales": "المبيعات",
+        "placed": "مُرسلة",
+        "delivered": "مُسلّمة"
+      },
+      "total": "مجموع الفترة",
+      "table": "عرض الجدول",
+      "date": "التاريخ"
+    },
+    "topStores": "أفضل المتاجر",
+    "topProducts": "أفضل المنتجات",
+    "topAffiliates": "أفضل المسوّقين",
+    "backToProducts": "المنتجات",
+    "visible": "معروض",
+    "hidden": "مخفي",
+    "seeInShop": "عرض في المتجر",
+    "affiliateTitle": "نتائج المسوّق",
+    "coinsByStore": "الكوينز حسب المتجر",
+    "coinsByProduct": "الكوينز حسب المنتج",
+    "storeTitle": "نتائج المتجر",
+    "seeProducts": "عرض منتجاته",
+    "seeOrders": "عرض الطلبات",
+    "seeCodeOrders": "الطلبات بكوده",
+    "ordersAsClient": "الطلبات",
+    "affiliatePercent": "عمولة المسوّق",
+    "storeDashboard": "الإحصائيات",
+    "storeDashboardHint": "مبيعاتك، وما جلبه المسوّقون، والكوينز التي ربحوها على منتجاتك.",
+    "billing": "فوترة المتاجر"
+  },
+  "billing": {
+    "title": "الفوترة",
+    "monthlyPrice": "السعر الشهري",
+    "paidUntil": "مدفوع إلى غاية",
+    "commissionsDue": "عمولات للدفع",
+    "state": "الحالة",
+    "notInvoicedYet": "+ {{amount}} د.ت لم تُفوتر بعد ({{n}} سطر)",
+    "thisMonth": "هذا الشهر (لم يُفوتر بعد)",
+    "thisMonthHint": "{{n}} عمولة للمسوّقين",
+    "stateLabel": {
+      "suspended": "موقوف",
+      "overdue": "متأخر",
+      "countdown": "إغلاق خلال {{n}} يوم",
+      "ok": "مسدّد",
+      "waiting": "دفعة للتحقق"
+    },
+    "banner": {
+      "suspended": "تم إيقاف متجرك لعدم الدفع: لم يعد يظهر ولا يستقبل طلبات. يمكنك معالجة الطلبات السابقة.",
+      "overdue": "هناك دفعة متأخرة: سيتم إيقاف متجرك.",
+      "countdown": "سيُغلق متجرك خلال {{n}} يوم — ادفع الآن.",
+      "waiting": "تم إرسال الدفعة — في انتظار التحقق.",
+      "rejected": "تم رفض دفعتك.",
+      "reason": "السبب:",
+      "due": "عليك {{amount}} د.ت من عمولات المسوّقين.",
+      "detail": "للدفع: {{amount}} د.ت من العمولات — أقرب أجل {{date}}.",
+      "open": "عرض ودفع"
+    },
+    "method": {
+      "Cash": "نقدًا",
+      "BankTransfer": "تحويل بنكي"
+    },
+    "fields": {
+      "method": "طريقة الدفع",
+      "paidOn": "تاريخ الدفع",
+      "reference": "المرجع",
+      "referenceTransfer": "مرجع التحويل",
+      "referenceCash": "رقم الوصل (اختياري)",
+      "note": "ملاحظة (اختياري)",
+      "amount": "المبلغ (د.ت)"
+    },
+    "statement": {
+      "title": "كشف شهري",
+      "month": "الشهر",
+      "subscription": "اشتراك مدفوع",
+      "commissions": "العمولات",
+      "paid": "مدفوع",
+      "left": "المتبقي",
+      "invoice": "الفاتورة",
+      "months": "{{n}} شهر",
+      "inProgress": "الشهر الجاري",
+      "none": "لا شيء للفوترة"
+    },
+    "invoiceStatus": {
+      "Issued": "للدفع",
+      "PartiallyPaid": "مدفوعة جزئيًا",
+      "Paid": "مدفوعة"
+    },
+    "paymentStatus": {
+      "Declared": "للتحقق",
+      "Approved": "مقبول",
+      "Rejected": "مرفوض"
+    },
+    "payments": {
+      "title": "الدفعات",
+      "none": "لا توجد دفعات بعد.",
+      "subscription": "اشتراك · {{n}} شهر",
+      "commission": "عمولات",
+      "byOwner": "صرّح بها المتجر",
+      "byAdmin": "سجّلها مشرف",
+      "covers": "من {{from}} إلى {{to}}",
+      "rejected": "مرفوض:",
+      "receipt": "عرض الوصل",
+      "approve": "قبول",
+      "reject": "رفض"
+    },
+    "invoice": {
+      "title": "فاتورة عمولات",
+      "month": "الشهر",
+      "issued": "تاريخ الإصدار",
+      "due": "للدفع قبل",
+      "lines": "الأسطر",
+      "order": "الطلب",
+      "product": "المنتج",
+      "quantity": "الكمية",
+      "lineTotal": "البيع (د.ت)",
+      "affiliate": "المسوّق",
+      "amount": "العمولة (د.ت)",
+      "adjustment": "تصحيح",
+      "total": "المجموع",
+      "paid": "مدفوع",
+      "left": "المتبقي للدفع",
+      "print": "طباعة / PDF"
+    },
+    "reject": {
+      "title": "رفض الدفعة {{number}}",
+      "reason": "السبب (يظهر للمتجر)",
+      "placeholder": "مثال: لم يصل أي تحويل إلى الحساب."
+    },
+    "record": {
+      "subscription": "تسجيل اشتراك مدفوع",
+      "invoice": "تسجيل دفعة",
+      "months": "عدد الأشهر",
+      "offer": "العرض",
+      "noOffer": "بدون عرض",
+      "total": "{{months}} شهر × {{price}} د.ت، بعد التخفيض:",
+      "confirm": "تسجيل"
+    },
+    "declare": {
+      "title": "التصريح بدفعة",
+      "invoice": "دفعت هذه الفاتورة",
+      "subscription": "دفع الاشتراك",
+      "hint": "ادفع نقدًا أو بتحويل، ثم صرّح بذلك هنا: يتحقق مشرف ويؤكّد.",
+      "left": "المتبقي للدفع: {{amount}} د.ت",
+      "price": "{{months}} × {{price}} د.ت = {{total}} د.ت (يُطبّق أفضل عرض)",
+      "receipt": "صورة الوصل (اختياري)",
+      "send": "إرسال"
+    },
+    "mine": {
+      "title": "الفوترة",
+      "subtitle": "اشتراكك وعمولات المسوّقين المستحقة للمنصة، شهرًا بشهر.",
+      "rule": "تُفوتر عمولات كل شهر في بداية الشهر الموالي. دون دفع بعد {{n}} يوم من الأجل، يُوقف المتجر (ولا يُحذف أبدًا).",
+      "offers": "العروض المتاحة"
+    },
+    "offers": {
+      "new": "عرض جديد",
+      "edit": "تعديل العرض",
+      "none": "لا توجد عروض.",
+      "nameFr": "الاسم (فرنسية)",
+      "nameAr": "الاسم (عربية)",
+      "nameEn": "الاسم (إنجليزية)",
+      "months": "الأشهر للدفع",
+      "anyMonths": "أي مدة",
+      "forMonths": "{{n}} شهر",
+      "discount": "التخفيض",
+      "startsOn": "البداية",
+      "endsOn": "النهاية",
+      "target": "لـ",
+      "targets": {
+        "AllStores": "كل المتاجر",
+        "StoreCategories": "فئات متاجر",
+        "Stores": "متاجر مختارة"
+      },
+      "searchStores": "ابحث عن متجر",
+      "selected": "{{n}} مختار",
+      "firstPaymentOnly": "الدفعة الأولى فقط",
+      "active": "نشط",
+      "on": "نشط",
+      "off": "غير نشط",
+      "used": "استُعمل {{n}} مرة · −{{amount}} د.ت"
+    },
+    "admin": {
+      "title": "فوترة المتاجر",
+      "subtitle": "دفعات للتحقق، متاجر متأخرة، عروض ومداخيل.",
+      "run": "تشغيل التحقق",
+      "ran": "{{invoices}} فاتورة صادرة، {{suspended}} متجر موقوف، {{reactivated}} أُعيد تفعيله.",
+      "tabs": {
+        "queue": "للتحقق",
+        "overdue": "متأخرة",
+        "offers": "العروض",
+        "revenue": "المداخيل"
+      },
+      "noOverdue": "لا توجد متاجر متأخرة."
+    },
+    "revenue": {
+      "subscriptions": "اشتراكات محصّلة",
+      "billed": "عمولات مفوترة",
+      "collected": "عمولات محصّلة"
+    }
   }
 }

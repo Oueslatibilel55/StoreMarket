@@ -13,6 +13,7 @@ import { RoleBadge } from '../../../shared/ui/role-badge';
 import { AdminApi } from '../admin-api';
 import { AdminUser } from '../admin.models';
 import { AuditEntryItem } from '../audit/audit-entry-item';
+import { AffiliateStats } from '../stats/affiliate-stats';
 
 type PendingAction =
   | { kind: 'grant' | 'revoke'; role: Role }
@@ -28,7 +29,7 @@ const MANAGEABLE: Role[] = ['StoreOwner', 'Admin'];
 
 @Component({
   selector: 'app-user-detail',
-  imports: [DatePipe, RouterLink, TranslocoPipe, Modal, RoleBadge, AuditEntryItem],
+  imports: [DatePipe, RouterLink, TranslocoPipe, Modal, RoleBadge, AuditEntryItem, AffiliateStats],
   templateUrl: './user-detail.html',
 })
 export class UserDetail {

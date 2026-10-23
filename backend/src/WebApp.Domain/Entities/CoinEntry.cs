@@ -39,8 +39,6 @@ public sealed class CoinEntry : AggregateRoot
     public Guid? RelatedEntryId { get; private set; }
     /// <summary>The payout request that locked or released these coins (021).</summary>
     public Guid? PayoutRequestId { get; private set; }
-    /// <summary>The store invoice this commission was billed on (025) — set once.</summary>
-    public Guid? InvoiceId { get; private set; }
     public string? Reason { get; private set; }
     /// <summary>The admin who made an adjustment.</summary>
     public Guid? CreatedById { get; private set; }

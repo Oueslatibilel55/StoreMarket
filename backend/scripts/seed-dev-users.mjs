@@ -31,7 +31,7 @@ const RESET_CATALOG = process.argv.includes('--reset-catalog');
 //   decide: 'approve' | 'refuse' (admin, audited) | 'cancel' (the user withdraws) | none (stays pending).
 // blocked: reason, to have the admin block the account.
 const users = [
-  // -- One account per role (see dev-users.txt) --------------------------------------
+  // -- One account per role (see dev-users.xlsx) -------------------------------------
   { email: 'admin@webapp.local', fullName: 'Admin Démo', phone: '20 000 001', accountType: 'Buyer', admin: true },
   { email: 'leila.gharbi@webapp.local', fullName: 'Leila Gharbi', phone: '50 112 233', accountType: 'Buyer' },
   { email: 'sana.trabelsi@webapp.local', fullName: 'Sana Trabelsi', phone: '55 321 987', accountType: 'Affiliate' },

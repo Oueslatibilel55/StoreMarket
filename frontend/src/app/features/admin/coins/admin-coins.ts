@@ -1,5 +1,5 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, inject, input, numberAttribute, signal } from '@angular/core';
+import { Component, computed, inject, input, numberAttribute, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -7,6 +7,7 @@ import { CoinEntry, CoinEntryType } from '../../../core/coins/coin-api';
 import { errorKey } from '../../../core/http/problem';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { Modal } from '../../../shared/ui/modal';
+import { FilterChip, FilterChips, shortId } from '../../../shared/ui/filter-chips';
 import { Pagination } from '../../../shared/ui/pagination';
 import { AdminApi } from '../admin-api';
 import { AdminUserListItem } from '../admin.models';
@@ -19,7 +20,7 @@ const PAGE_SIZE = 25;
  */
 @Component({
   selector: 'app-admin-coins',
-  imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, Modal, Pagination],
+  imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, FilterChips, Modal, Pagination],
   template: `
     <header class="flex flex-wrap items-end justify-between gap-4">
       <div>
@@ -49,6 +50,7 @@ const PAGE_SIZE = 25;
         <input type="date" [value]="from() ?? ''" (change)="apply({ from: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.from' | transloco" class="field" dir="ltr" />
         <input type="date" [value]="to() ?? ''" (change)="apply({ to: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.to' | transloco" class="field" dir="ltr" />
       </div>
+      <app-filter-chips [chips]="drillDown()" (cleared)="apply($event)" />
 
       @if (entries.value(); as result) {
         @if (result.items.length === 0) {
@@ -144,14 +146,29 @@ export class AdminCoins {
   readonly search = input<string | undefined>();
   readonly from = input<string | undefined>();
   readonly to = input<string | undefined>();
+  /** Set by a dashboard number (023). */
+  readonly affiliateId = input<string | undefined>();
+  readonly storeId = input<string | undefined>();
+  readonly productId = input<string | undefined>();
   readonly page = input(1, { transform: (v: unknown) => numberAttribute(v, 1) });
 
   protected readonly types: CoinEntryType[] = ['Earned', 'Adjustment', 'PayoutLocked', 'PayoutReleased'];
   protected readonly pageSize = PAGE_SIZE;
   protected readonly totals = rxResource({ stream: () => this.api.coinTotals() });
   protected readonly entries = rxResource({
-    params: () => ({ type: this.type(), search: this.search(), from: this.from(), to: this.to(), page: this.page(), pageSize: PAGE_SIZE }),
+    params: () => ({
+      type: this.type(), search: this.search(), from: this.from(), to: this.to(),
+      affiliateId: this.affiliateId(), storeId: this.storeId(), productId: this.productId(), page: this.page(), pageSize: PAGE_SIZE,
+    }),
     stream: ({ params }) => this.api.coinEntries(params),
+  });
+
+  protected readonly drillDown = computed(() => {
+    const chips: FilterChip[] = [];
+    if (this.affiliateId()) chips.push({ label: 'filters.affiliate', value: shortId(this.affiliateId()!), clear: { affiliateId: null } });
+    if (this.storeId()) chips.push({ label: 'filters.store', value: shortId(this.storeId()!), clear: { storeId: null } });
+    if (this.productId()) chips.push({ label: 'filters.product', value: shortId(this.productId()!), clear: { productId: null } });
+    return chips;
   });
 
   protected readonly adjusting = signal(false);

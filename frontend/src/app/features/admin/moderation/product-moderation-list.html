@@ -84,9 +84,11 @@
             }
             <div class="min-w-0 flex-1 basis-40">
               <p class="truncate font-semibold text-ink">
+                <a [routerLink]="['/admin/products', p.id]" class="transition-colors hover:text-brand">{{ p.name }}</a>
                 @if (!p.isDeleted && !p.isDisabled && p.status === 'Published') {
-                  <a [routerLink]="['/products', p.slug]" target="_blank" class="transition-colors hover:text-brand">{{ p.name }}</a>
-                } @else { {{ p.name }} }
+                  <a [routerLink]="['/products', p.slug]" target="_blank" class="ms-1.5 text-xs font-normal text-muted hover:text-ink"
+                    [attr.aria-label]="'admin.users.storePublic' | transloco">↗</a>
+                }
               </p>
               <p class="mt-0.5 truncate text-sm text-muted">
                 <button type="button" (click)="apply({ storeId: p.storeId, page: null })" class="cursor-pointer font-medium text-ink-soft transition-colors hover:text-brand">{{ p.storeName }}</button>
@@ -97,6 +99,7 @@
             <p class="text-end text-sm font-semibold text-ink">
               @if (p.minPrice < p.price) { <span class="text-xs font-normal text-muted">{{ 'products.from' | transloco }}</span> }
               <span dir="ltr">{{ p.minPrice | number: '1.0-3' : language.locale() }}</span> TND
+              <span class="pill pill-brand ms-1.5" dir="ltr" [title]="'stats.affiliatePercent' | transloco">{{ p.affiliatePercent }} %</span>
             </p>
             <app-state-badge kind="product" [state]="stateOf(p)" />
             @if (!p.isDeleted) {

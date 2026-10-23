@@ -157,3 +157,27 @@ public static class PayoutErrors
     /// <summary>Someone changed this request at the same time: reload it.</summary>
     public const string Changed = "payout.changed";
 }
+
+/// <summary>Error codes for ratings and reviews (017).</summary>
+public static class ReviewErrors
+{
+    public const string NotFound = "review.notFound";
+    /// <summary>Not one of the user's orders (or no such line) — reported as missing.</summary>
+    public const string OrderNotFound = "review.orderNotFound";
+    /// <summary>Only a delivered parcel can be rated.</summary>
+    public const string NotDelivered = "review.notDelivered";
+    public const string AlreadyReviewed = "review.alreadyReviewed";
+    /// <summary>A store owner never rates their own store or products.</summary>
+    public const string OwnStore = "review.ownStore";
+}
+
+/// <summary>Error codes for store billing (025).</summary>
+public static class BillingErrors
+{
+    public const string OfferNotFound = "billing.offerNotFound";
+    public const string InvoiceNotFound = "billing.invoiceNotFound";
+    public const string PaymentNotFound = "billing.paymentNotFound";
+    /// <summary>A payment of the same thing is already waiting for an admin.</summary>
+    public const string AlreadyDeclared = "billing.alreadyDeclared";
+    public const string Changed = "billing.changed";
+}

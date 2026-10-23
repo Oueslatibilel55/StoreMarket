@@ -2,6 +2,7 @@ import { Component, effect, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { map } from 'rxjs';
 import { CatalogApi } from '../../core/catalog/catalog-api';
 import { LanguageService } from '../../core/i18n/language.service';
 import { Seo } from '../../core/seo/seo';
@@ -9,7 +10,7 @@ import { ProductCard } from '../../shared/catalog/product-card';
 import { StoreCard } from '../../shared/catalog/store-card';
 import { LocalizedPipe } from '../../shared/i18n/localized';
 
-/** Home: store categories, newest products, stores. "Top-rated" sections come with the ratings (017). */
+/** Home: store categories, best-rated products (017), newest products, stores (best rated first). */
 @Component({
   selector: 'app-home',
   imports: [RouterLink, TranslocoPipe, LocalizedPipe, ProductCard, StoreCard],
@@ -27,8 +28,12 @@ export class Home {
   ];
 
   protected readonly categories = rxResource({ stream: () => this.catalog.storeCategories() });
+  /** Rated products only: unrated ones come last in the TopRated sort and are dropped here. */
+  protected readonly topRated = rxResource({
+    stream: () => this.catalog.products({ sort: 'TopRated', pageSize: 4 }).pipe(map((r) => r.items.filter((p) => p.rating.count > 0))),
+  });
   protected readonly products = rxResource({ stream: () => this.catalog.products({ pageSize: 8 }) });
-  protected readonly stores = rxResource({ stream: () => this.catalog.stores({ pageSize: 4 }) });
+  protected readonly stores = rxResource({ stream: () => this.catalog.stores({ sort: 'TopRated', pageSize: 4 }) });
 
   constructor() {
     const seo = inject(Seo);

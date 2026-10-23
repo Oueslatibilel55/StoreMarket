@@ -1,6 +1,6 @@
 # 011 — Public catalog: store & product pages
 
-- **Status:** Done (v1 — top-rated sections wait for ratings, 017)
+- **Status:** Done (top-rated sections and ratings added with 017)
 - **Phase:** 2 — Stores & catalog
 - **Depends on:** 009 (010 only adds the "disabled by the admin" filter)
 - **Created:** 2026-10-19 · **Done:** 2026-10-20
@@ -13,14 +13,14 @@ Visitors and buyers browse the marketplace: stores, products, prices, variants, 
 
 - Built **before 010** (the user wanted to see the shop): visibility is *published, not deleted, store Active or Closed*. **010 added "not disabled"** (done 2026-10-20) in one place: `CatalogQueries.VisibleProducts()` (+ the store list / store page / product page filters).
 - **Closed stores stay visible**, marked closed (their products too) — orders resume when they reopen.
-- No ratings yet → the home shows **store categories, newest products and stores**; "top-rated" sections and rating-first sorting come with 017 / 018.
+- At launch (no ratings yet) the home showed **store categories, newest products and stores**; "top-rated" sections and rating-first sorting come with 017 / 018.
 - **Buying is not possible yet**: the "Add to cart" button is shown disabled ("coming soon") until the cart (013).
 - Affiliates see on a product: the % it gives, the coins they'd earn per item (`price × % ÷ coin value`) and their code to copy — with a note that it counts once the store accepts them (partnerships, 012).
 
 ## Acceptance criteria
 
 - [x] Home page: store categories (→ stores of the category), newest products, stores
-- [ ] Home "top-rated stores / products" → 017 (ratings)
+- [x] Home "top-rated" products (rated only) and stores sorted by rating → added with 017
 - [x] Store list `/stores`: store category chips, city, search, paging; open stores first
 - [x] Store page `/stores/{slug}`: banner, logo, category, city, description, delivery (fee, delay, zones), contact & links, products with sort and paging; closed stores shown as closed
 - [x] Product catalogue `/products`: by product category (sub-categories included, breadcrumb + sub-category chips), search, sort (newest, price ↑ / ↓ on the "from" price), paging
@@ -28,7 +28,7 @@ Visitors and buyers browse the marketplace: stores, products, prices, variants, 
 - [x] Only published, not deleted products of active / closed stores are visible
 - [x] … and not disabled by the admin (added by 010 in `VisibleProducts()`, which the product page now uses too)
 - [x] Slugs in URLs; page title + meta description (+ og:title / og:description) per page
-- [ ] Rating & reviews on store / product pages → 017
+- [x] Rating & reviews on store / product pages → added with 017 (`<app-review-section>`)
 
 ## API contract
 

@@ -58,7 +58,7 @@ internal sealed partial class CatalogQueries(AppDbContext db) : ICatalogQueries
                 db.Images.Where(i => i.Id == s.LogoImageId).Select(i => ImageUrls.RequestPath + "/" + i.Path).FirstOrDefault(),
                 db.Images.Where(i => i.Id == s.BannerImageId).Select(i => ImageUrls.RequestPath + "/" + i.Path).FirstOrDefault(),
                 s.Status == StoreStatus.Active, s.DefaultAffiliatePercent, s.DeliveryFee, s.DeliveryCities,
-                s.DeliveryMinDays, s.DeliveryMaxDays, s.FacebookUrl, s.InstagramUrl, s.WebsiteUrl))
+                s.DeliveryMinDays, s.DeliveryMaxDays, s.FacebookUrl, s.InstagramUrl, s.WebsiteUrl, new RatingDto(s.AverageRating, s.RatingCount)))
             .FirstOrDefaultAsync(ct);
 
     public Task<MyStoreDto?> GetStoreOfOwnerAsync(Guid ownerId, CancellationToken ct = default) =>

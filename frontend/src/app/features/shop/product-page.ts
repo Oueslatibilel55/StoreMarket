@@ -15,12 +15,14 @@ import { PlatformSettings } from '../../core/settings/platform-settings';
 import { coinsPerItem } from '../../core/stores/product-api';
 import { LocalizedPipe, pickName } from '../../shared/i18n/localized';
 import { PartnershipCta } from '../../shared/partnerships/partnership-cta';
+import { ReviewSection } from '../../shared/reviews/review-section';
+import { StarRating } from '../../shared/reviews/star-rating';
 import { optionExists, selectedVariant } from './variant-picker';
 
-/** `/products/:slug` — gallery, price, variant choice, details, store; affiliates see their code and the coins they'd earn. */
+/** `/products/:slug` — gallery, price, variant choice, details, store, reviews; affiliates see their code and the coins they'd earn. */
 @Component({
   selector: 'app-product-page',
-  imports: [DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, PartnershipCta],
+  imports: [DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, PartnershipCta, ReviewSection, StarRating],
   templateUrl: './product-page.html',
 })
 export class ProductPage {
@@ -152,6 +154,10 @@ export class ProductPage {
       case 'MultiChoice': return a.options.map((o) => pickName(o.name, lang)).join(', ');
       default: return a.text ?? '';
     }
+  }
+
+  protected scrollToReviews(): void {
+    document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
   }
 
   protected async copyCode(code: string): Promise<void> {

@@ -50,6 +50,18 @@
     </section>
   }
 
+  @if (topRated.value()?.length) {
+    <section>
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="section-title text-xl">★ {{ 'home.topRatedProducts' | transloco }}</h2>
+        <a routerLink="/products" [queryParams]="{ sort: 'TopRated' }" class="link text-sm">{{ 'home.seeAll' | transloco }} <span class="inline-block rtl:rotate-180" aria-hidden="true">→</span></a>
+      </div>
+      <ul class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+        @for (p of topRated.value(); track p.id) { <li><app-product-card [product]="p" /></li> }
+      </ul>
+    </section>
+  }
+
   @if (products.value()?.items?.length) {
     <section>
       <div class="flex items-end justify-between gap-4">

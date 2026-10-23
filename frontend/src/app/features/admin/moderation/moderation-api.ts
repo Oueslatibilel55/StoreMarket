@@ -107,6 +107,8 @@ export interface AdminProductListItem {
   storeName: string;
   storeSlug: string;
   createdAt: string;
+  /** The % affiliates earn on it: its own, else the store default. */
+  affiliatePercent: number;
 }
 
 /** Admin moderation of stores and products (010). Disable / delete always take a reason. */

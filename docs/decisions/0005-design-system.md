@@ -23,6 +23,7 @@ Design tokens and a small set of **component utilities** live in `frontend/src/s
 | `field-label`, `field`, `field-hint`, `field-error`, `checkbox` | Forms (`field` works on input, select, textarea) |
 | `alert-danger` / `alert-success` / `alert-info`, `empty-state` | Feedback |
 | `pill` + `pill-neutral` / `pill-brand` / `pill-success` / `pill-warning` / `pill-danger` / `pill-dark`, `code-chip` | Compact status, role and commission badges; codes like `#DRF-45` |
+| `stat-tile` + `stat-label` / `stat-value` | Dashboard KPI tiles (023): a figure with its label; a linked tile adds `card-interactive` hover |
 | `nav-link`, `nav-link-active` | Header, sidebar and tab navigation |
 
 Tokens: `brand`, `brand-hover`, `brand-soft`, `brand-ring`, `accent`, `accent-ink`, `surface`, `subtle`, `card`, `ink`, `ink-soft`, `muted`, `line`, `line-strong`, `success`, `danger`; shadows `card`, `card-hover`, `pop`, `brand`; animations `animate-fade-in`, `animate-pop-in`.

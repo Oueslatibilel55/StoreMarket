@@ -37,6 +37,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseSetting("RateLimiting:CartPerMinute", "10000");
         builder.UseSetting("BootstrapAdmin:Emails:0", TestApi.AdminEmail);
         builder.UseSetting("Storage:RootPath", StorageRoot);
+        // Tests run the billing checks per store, at a date they choose (BillingService.RunForStoreAsync).
+        builder.UseSetting("Billing:JobEnabled", "false");
     }
 
     public override async ValueTask DisposeAsync()

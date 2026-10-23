@@ -17,7 +17,7 @@ public sealed class StoreTests
         return change is null ? details : change(details);
     }
 
-    private static Result<Store> Create(StoreDetails details) => Store.Create(OwnerId, details, 0, 50, 30m);
+    private static Result<Store> Create(StoreDetails details) => Store.Create(OwnerId, details, 0, 50, 30m, new DateOnly(2026, 11, 22));
 
     [Fact]
     public void Create_NormalizesAndIsActive()

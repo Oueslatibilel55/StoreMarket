@@ -24,7 +24,8 @@
         "title": "For affiliates",
         "text": "Share your code, earn coins on every delivered sale, get paid out."
       }
-    }
+    },
+    "topRatedProducts": "Top rated"
   },
   "auth": {
     "login": "Sign in",
@@ -303,6 +304,49 @@
       "paidReferenceRequired": "Enter the transfer reference or who handed the money.",
       "paidReferenceTooLong": "The reference is too long (120 characters max).",
       "paidInFuture": "The payment date cannot be in the future."
+    },
+    "review": {
+      "starsInvalid": "Choose a rating from 1 to 5 stars.",
+      "commentTooLong": "The comment is too long (1,000 characters max).",
+      "editWindowClosed": "The time to edit this review has passed.",
+      "hidden": "This review was hidden by moderation.",
+      "replyRequired": "Write your reply.",
+      "replyTooLong": "The reply is too long (1,000 characters max).",
+      "reasonRequired": "Give the reason.",
+      "reasonTooLong": "The reason is too long (500 characters max).",
+      "alreadyHidden": "This review is already hidden.",
+      "notHidden": "This review is not hidden.",
+      "notFound": "Review not found.",
+      "orderNotFound": "Order not found.",
+      "notDelivered": "You can rate it once it is delivered.",
+      "alreadyReviewed": "You already rated this purchase.",
+      "ownStore": "You can't rate your own store."
+    },
+    "billing": {
+      "priceInvalid": "Invalid price.",
+      "monthsInvalid": "Invalid number of months (1 to 36).",
+      "amountInvalid": "Invalid amount.",
+      "amountTooHigh": "The amount is more than what is left to pay.",
+      "methodInvalid": "Invalid payment method.",
+      "referenceTooLong": "Reference too long.",
+      "noteTooLong": "Note too long.",
+      "reasonRequired": "Give a reason.",
+      "reasonTooLong": "Reason too long.",
+      "notDeclared": "This payment was already handled.",
+      "invoicePaid": "This invoice is already paid.",
+      "offerNameRequired": "The French name of the offer is required.",
+      "offerNameTooLong": "Name too long.",
+      "offerDiscountInvalid": "Choose a discount: a % (1 to 100) or an amount in TND.",
+      "offerMonthsInvalid": "Invalid number of months (1 to 36).",
+      "offerDatesInvalid": "The end date is before the start date.",
+      "offerTargetInvalid": "Choose at least one category or store.",
+      "offerNotApplicable": "This offer does not apply to this payment.",
+      "nothingToInvoice": "Nothing to bill.",
+      "offerNotFound": "Offer not found.",
+      "invoiceNotFound": "Invoice not found.",
+      "paymentNotFound": "Payment not found.",
+      "alreadyDeclared": "A payment is already waiting to be checked.",
+      "changed": "Changed meanwhile: reload the page."
     }
   },
   "affiliate": {
@@ -328,7 +372,9 @@
     "saving": "Saving…",
     "yes": "Yes",
     "no": "No",
-    "choose": "Choose…"
+    "choose": "Choose…",
+    "save": "Save",
+    "edit": "Edit"
   },
   "admin": {
     "title": "Admin",
@@ -347,7 +393,8 @@
       "coins": "Coins",
       "payouts": "Affiliate payouts",
       "billing": "Billing",
-      "partnerships": "Partnerships"
+      "partnerships": "Partnerships",
+      "dashboard": "Dashboard"
     },
     "status": {
       "Active": "Active",
@@ -577,6 +624,22 @@
         "reject": "Payout refused",
         "schedule": "Payout scheduled",
         "paid": "Payout paid"
+      },
+      "review": {
+        "hide": "Review hidden",
+        "unhide": "Review shown again"
+      },
+      "billing": {
+        "price": "Subscription price changed",
+        "offer": {
+          "create": "Offer created",
+          "update": "Offer changed"
+        },
+        "payment": {
+          "record": "Payment recorded",
+          "approve": "Payment approved",
+          "reject": "Payment rejected"
+        }
       }
     },
     "fields": {
@@ -690,6 +753,10 @@
       "defaultMonthlyPriceTnd": {
         "label": "Default store subscription",
         "hint": "Monthly price for a new store. Each store can get its own price."
+      },
+      "trialDays": {
+        "label": "Free days for a new store",
+        "hint": "A new store only pays its subscription after these days."
       }
     },
     "commissionInvoice": {
@@ -714,6 +781,12 @@
       "maxImageSizeMb": {
         "label": "Maximum image size",
         "hint": "Largest photo, logo or banner a user can upload."
+      }
+    },
+    "reviews": {
+      "editWindowDays": {
+        "label": "Time to edit a review",
+        "hint": "Days during which a customer can edit their review. Fixed when the review is published."
       }
     }
   },
@@ -781,7 +854,10 @@
       "store": "My store",
       "products": "My products",
       "affiliates": "My affiliates",
-      "orders": "Orders"
+      "orders": "Orders",
+      "reviews": "Reviews",
+      "stats": "Stats",
+      "billing": "Billing"
     },
     "moderation": {
       "disabled": "Your store was disabled by the administrator.",
@@ -878,11 +954,31 @@
     "breadcrumb": "You are here",
     "searchProducts": "Search a product",
     "searchStores": "Search a store",
+    "search": "Search",
+    "searchPlaceholder": "Products, stores…",
+    "searchTitle": "Search",
+    "searchResults": "Results for “{{q}}”",
+    "seeAllStores": "See all {{count}} stores",
+    "noResults": "No product matches. Try other words or remove some filters.",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "price": "Price (TND)",
+    "priceMin": "Min",
+    "priceMax": "Max",
+    "minRating": "Minimum rating",
+    "anyRating": "Any rating",
+    "ratingAtLeast": "{{n}} ★ & up",
+    "storeCategory": "Store type",
+    "allStoreCategories": "All types",
+    "fieldFiltersHint": "Pick a category to also filter by size, colour…",
+    "yes": "Yes",
+    "no": "No",
     "sortBy": "Sort by",
     "sort": {
       "Newest": "Newest",
       "PriceAsc": "Price: low to high",
-      "PriceDesc": "Price: high to low"
+      "PriceDesc": "Price: high to low",
+      "TopRated": "Top rated"
     },
     "resultCount": "{{count}} product(s)",
     "noProducts": "No product here yet.",
@@ -962,7 +1058,6 @@
     },
     "productCounts": "{{ total }} product(s) · {{ live }} live · {{ disabled }} disabled",
     "seeProducts": "See its products",
-    "statsSoon": "Store statistics: coming soon (023).",
     "actions": "Moderation",
     "stores": {
       "title": "Stores",
@@ -1469,5 +1564,372 @@
       "bankReference": "Transfer reference"
     },
     "rate": "1 coin = {{value}} TND"
+  },
+  "reviews": {
+    "starsLabel": "Rated {{value}} out of 5",
+    "yourRating": "Your rating",
+    "nStars": "{{n}} ★",
+    "starWords": {
+      "1": "Very poor",
+      "2": "Poor",
+      "3": "Okay",
+      "4": "Good",
+      "5": "Excellent"
+    },
+    "productTitle": "Customer reviews",
+    "storeTitle": "Reviews of the store's service",
+    "storeHint": "Preparation, delivery and contact, rated by delivered customers.",
+    "none": "No reviews yet.",
+    "verifiedHint": "Only customers whose order was delivered can review.",
+    "count": "{{count}} reviews",
+    "allStars": "All ratings",
+    "edited": "edited",
+    "storeReply": "Reply from the store",
+    "noneWithStars": "No matching reviews.",
+    "seeAll": "See reviews",
+    "mine": "My reviews",
+    "mineHint": "Rate the products and stores that delivered to you: your reviews help other customers.",
+    "toWrite": "To rate",
+    "nothingToWrite": "Nothing to rate yet. After each delivery you can rate the products and the store here.",
+    "rateStore": "{{name}} service",
+    "deliveredOn": "delivered on {{date}}",
+    "rate": "Rate",
+    "rateOrder": "Rate",
+    "comment": "Comment",
+    "optional": "optional",
+    "productPlaceholder": "Quality, matches the description, what you liked…",
+    "storePlaceholder": "Speed, packaging, contact with the store…",
+    "publish": "Publish review",
+    "written": "My published reviews",
+    "noneWritten": "You haven't published any reviews yet.",
+    "noComment": "No comment",
+    "target": {
+      "Product": "Product",
+      "Store": "Store"
+    },
+    "hiddenPill": "Hidden",
+    "hiddenNotice": "Review hidden by moderation: {{reason}}",
+    "editableUntil": "Editable until {{date}}",
+    "editClosed": "Can no longer be edited.",
+    "edit": "Edit",
+    "save": "Save",
+    "admin": {
+      "title": "Reviews",
+      "subtitle": "Every customer review. Hide an abusive or fake one: it leaves the public pages and the averages.",
+      "total": "Reviews",
+      "lowStars": "Visible 1–2 ★",
+      "hidden": "Hidden",
+      "visible": "Visible",
+      "searchPlaceholder": "Comment, customer, store, product, order…",
+      "target": "Type",
+      "allTargets": "Products and stores",
+      "stars": "Rating",
+      "allStars": "All ratings",
+      "visibility": "Visibility",
+      "allVisibility": "Visible and hidden",
+      "empty": "No reviews.",
+      "hide": "Hide",
+      "unhide": "Show again",
+      "hideTitle": "Hide this review?",
+      "hideHint": "It disappears from the shop and the averages. The customer and the store see the reason.",
+      "unhideTitle": "Show this review again?",
+      "unhideHint": "It comes back on the public pages and in the averages.",
+      "reason": "Reason (audit log)",
+      "hiddenBecause": "Hidden: {{reason}}"
+    },
+    "store": {
+      "title": "Customer reviews",
+      "subtitle": "What your delivered customers say about your products and your service. Reply publicly.",
+      "serviceRating": "Service rating",
+      "productsRating": "Products rating",
+      "unanswered": "Unanswered",
+      "answered": "Answered",
+      "toAnswer": "Unanswered",
+      "allAnswers": "Answered or not",
+      "empty": "No reviews yet. Customers can rate an order once it is delivered.",
+      "hiddenNotice": "Hidden by moderation: {{reason}}. It no longer counts in your ratings.",
+      "yourReply": "Your public reply",
+      "replyPlaceholder": "Thank you for your review…",
+      "replyHint": "Visible to everyone under the review. Stay polite.",
+      "publishReply": "Publish reply",
+      "removeReply": "Remove",
+      "reply": "Reply"
+    }
+  },
+  "filters": {
+    "remove": "Remove this filter",
+    "store": "Store {{value}}…",
+    "affiliate": "Affiliate {{value}}…",
+    "client": "Client {{value}}…",
+    "product": "Product {{value}}…",
+    "placedBetween": "Placed {{value}}",
+    "deliveredBetween": "Delivered {{value}}"
+  },
+  "stats": {
+    "title": "Dashboard",
+    "subtitle": "Orders, sales, coins and payouts of the period. Every number opens the list behind it.",
+    "period": "Period",
+    "lastDays": "{{n}} d",
+    "from": "From",
+    "to": "To",
+    "ordersAndSales": "Orders and sales",
+    "coinsAndPayouts": "Coins and payouts",
+    "platform": "Platform",
+    "csv": "Export CSV",
+    "noData": "Nothing in this period.",
+    "col": {
+      "store": "Store",
+      "product": "Product",
+      "affiliate": "Affiliate",
+      "orders": "Delivered orders",
+      "lines": "Credited lines",
+      "quantity": "Quantity",
+      "amount": "Sales (TND)",
+      "coins": "Coins",
+      "detail": "Detail"
+    },
+    "kpi": {
+      "placed": "Orders placed",
+      "openHint": "{{n}} in progress",
+      "delivered": "Delivered",
+      "rate": "{{n}} % of placed orders",
+      "notDelivered": "Not delivered",
+      "cancelled": "Cancelled",
+      "sales": "Delivered sales",
+      "salesHint": "{{orders}} order(s) · {{quantity}} item(s)",
+      "viaAffiliates": "Sales via affiliates",
+      "viaHint": "{{orders}} order(s) · {{n}} % of sales",
+      "coinsGenerated": "Coins given to affiliates",
+      "rating": "Rating",
+      "ratingCount": "{{n}} review(s)",
+      "partners": "Partner affiliates",
+      "pendingRequests": "{{n}} pending request(s)",
+      "coinsEarned": "Coins earned",
+      "adjusted": "Corrections: {{n}}",
+      "coinsExpected": "Coins expected",
+      "expectedHint": "Parcels on their way, now",
+      "payoutsPending": "Payouts to handle",
+      "payoutsPendingHint": "{{coins}} coins · {{tnd}} TND",
+      "paidOut": "Paid to affiliates",
+      "paidOutHint": "{{n}} payout(s) · {{coins}} coins",
+      "activeStores": "Active stores",
+      "closedStores": "{{n}} closed for now",
+      "suspendedStores": "Suspended stores",
+      "disabledStores": "{{n}} disabled",
+      "activeAffiliates": "Active affiliates",
+      "activeAffiliatesHint": "Earned coins in the period",
+      "newUsers": "New accounts",
+      "coinsEarnedHere": "Coins earned on this product",
+      "expectedNow": "{{n}} expected now",
+      "partnerStores": "Partner stores",
+      "partnersHint": "{{requested}} pending · {{refused}} refused · {{ended}} ended",
+      "subscriptionsCollected": "Subscriptions collected",
+      "commissionsBilled": "Commissions billed",
+      "commissionsCollected": "{{n}} TND collected",
+      "commissionsDue": "Commissions due",
+      "declaredPayments": "Payments to check"
+    },
+    "daily": {
+      "sales": "Delivered sales per day",
+      "placed": "Orders placed per day",
+      "delivered": "Orders delivered per day",
+      "measure": "Measure shown",
+      "short": {
+        "sales": "Sales",
+        "placed": "Placed",
+        "delivered": "Delivered"
+      },
+      "total": "Period total",
+      "table": "Show the table",
+      "date": "Date"
+    },
+    "topStores": "Top stores",
+    "topProducts": "Top products",
+    "topAffiliates": "Top affiliates",
+    "backToProducts": "Products",
+    "visible": "Live",
+    "hidden": "Hidden",
+    "seeInShop": "See in the shop",
+    "affiliateTitle": "Affiliate results",
+    "coinsByStore": "Coins per store",
+    "coinsByProduct": "Coins per product",
+    "storeTitle": "Store results",
+    "seeProducts": "See its products",
+    "seeOrders": "See the orders",
+    "seeCodeOrders": "Orders with their code",
+    "ordersAsClient": "Orders",
+    "affiliatePercent": "Affiliate commission",
+    "storeDashboard": "Stats",
+    "storeDashboardHint": "Your sales, the ones affiliates brought and the coins they earned on your products.",
+    "billing": "Store billing"
+  },
+  "billing": {
+    "title": "Billing",
+    "monthlyPrice": "Monthly price",
+    "paidUntil": "Paid until",
+    "commissionsDue": "Commissions to pay",
+    "state": "State",
+    "notInvoicedYet": "+ {{amount}} TND not billed yet ({{n}} line(s))",
+    "thisMonth": "This month (not billed yet)",
+    "thisMonthHint": "{{n}} affiliate commission(s)",
+    "stateLabel": {
+      "suspended": "Suspended",
+      "overdue": "Overdue",
+      "countdown": "Closes in {{n}} d",
+      "ok": "Up to date",
+      "waiting": "Payment to check"
+    },
+    "banner": {
+      "suspended": "Your store is suspended for non-payment: it is hidden and gets no new orders. You can still process the orders already placed.",
+      "overdue": "A payment is overdue: your store is about to be suspended.",
+      "countdown": "Your store will be closed in {{n}} day(s) — pay now.",
+      "waiting": "Payment sent — waiting for approval.",
+      "rejected": "Your payment was rejected.",
+      "reason": "Reason:",
+      "due": "You owe {{amount}} TND of affiliate commissions.",
+      "detail": "To pay: {{amount}} TND of commissions — next deadline {{date}}.",
+      "open": "See and pay"
+    },
+    "method": {
+      "Cash": "Cash",
+      "BankTransfer": "Bank transfer"
+    },
+    "fields": {
+      "method": "Payment method",
+      "paidOn": "Payment date",
+      "reference": "Reference",
+      "referenceTransfer": "Transfer reference",
+      "referenceCash": "Receipt number (optional)",
+      "note": "Note (optional)",
+      "amount": "Amount (TND)"
+    },
+    "statement": {
+      "title": "Month by month",
+      "month": "Month",
+      "subscription": "Subscription paid",
+      "commissions": "Commissions",
+      "paid": "Paid",
+      "left": "Left",
+      "invoice": "Invoice",
+      "months": "{{n}} month(s)",
+      "inProgress": "Current month",
+      "none": "Nothing to bill"
+    },
+    "invoiceStatus": {
+      "Issued": "To pay",
+      "PartiallyPaid": "Partly paid",
+      "Paid": "Paid"
+    },
+    "paymentStatus": {
+      "Declared": "To check",
+      "Approved": "Approved",
+      "Rejected": "Rejected"
+    },
+    "payments": {
+      "title": "Payments",
+      "none": "No payment yet.",
+      "subscription": "Subscription · {{n}} month(s)",
+      "commission": "Commissions",
+      "byOwner": "declared by the store",
+      "byAdmin": "recorded by an admin",
+      "covers": "from {{from}} to {{to}}",
+      "rejected": "Rejected:",
+      "receipt": "See the receipt",
+      "approve": "Approve",
+      "reject": "Reject"
+    },
+    "invoice": {
+      "title": "Commission invoice",
+      "month": "Month",
+      "issued": "Issued on",
+      "due": "Pay before",
+      "lines": "Lines",
+      "order": "Order",
+      "product": "Product",
+      "quantity": "Qty",
+      "lineTotal": "Sale (TND)",
+      "affiliate": "Affiliate",
+      "amount": "Commission (TND)",
+      "adjustment": "correction",
+      "total": "Total",
+      "paid": "Already paid",
+      "left": "Left to pay",
+      "print": "Print / PDF"
+    },
+    "reject": {
+      "title": "Reject payment {{number}}",
+      "reason": "Reason (shown to the store)",
+      "placeholder": "E.g. no transfer received on the account."
+    },
+    "record": {
+      "subscription": "Record a subscription payment",
+      "invoice": "Record a payment",
+      "months": "Number of months",
+      "offer": "Offer",
+      "noOffer": "No offer",
+      "total": "{{months}} month(s) × {{price}} TND, after discount:",
+      "confirm": "Record"
+    },
+    "declare": {
+      "title": "Declare a payment",
+      "invoice": "I paid this invoice",
+      "subscription": "Pay the subscription",
+      "hint": "Pay in cash or by bank transfer, then declare it here: an admin checks and confirms.",
+      "left": "Left to pay: {{amount}} TND",
+      "price": "{{months}} × {{price}} TND = {{total}} TND (the best offer applies)",
+      "receipt": "Receipt photo (optional)",
+      "send": "Send"
+    },
+    "mine": {
+      "title": "Billing",
+      "subtitle": "Your subscription and the affiliate commissions you owe the platform, month by month.",
+      "rule": "A month’s commissions are billed at the start of the next month. Unpaid {{n}} day(s) after the due date, the store is suspended (never deleted).",
+      "offers": "Offers you can use"
+    },
+    "offers": {
+      "new": "New offer",
+      "edit": "Edit offer",
+      "none": "No offer.",
+      "nameFr": "Name (French)",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "months": "Months to pay",
+      "anyMonths": "Any length",
+      "forMonths": "{{n}} month(s)",
+      "discount": "Discount",
+      "startsOn": "Starts",
+      "endsOn": "Ends",
+      "target": "For",
+      "targets": {
+        "AllStores": "All stores",
+        "StoreCategories": "Store categories",
+        "Stores": "Chosen stores"
+      },
+      "searchStores": "Search a store",
+      "selected": "{{n}} selected",
+      "firstPaymentOnly": "First payment only",
+      "active": "Active",
+      "on": "Active",
+      "off": "Inactive",
+      "used": "Used {{n}} time(s) · −{{amount}} TND"
+    },
+    "admin": {
+      "title": "Store billing",
+      "subtitle": "Payments to check, stores behind, offers and revenue.",
+      "run": "Run the checks",
+      "ran": "{{invoices}} invoice(s) issued, {{suspended}} store(s) suspended, {{reactivated}} reactivated.",
+      "tabs": {
+        "queue": "To check",
+        "overdue": "Behind",
+        "offers": "Offers",
+        "revenue": "Revenue"
+      },
+      "noOverdue": "No store is behind."
+    },
+    "revenue": {
+      "subscriptions": "Subscriptions collected",
+      "billed": "Commissions billed",
+      "collected": "Commissions collected"
+    }
   }
 }

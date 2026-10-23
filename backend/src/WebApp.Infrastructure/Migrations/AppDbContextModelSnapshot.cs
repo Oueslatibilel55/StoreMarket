@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 using WebApp.Infrastructure.Persistence;
 
 #nullable disable
@@ -20,11 +21,16 @@ namespace WebApp.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "unaccent");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.HasSequence("commission_invoice_number_seq");
 
             modelBuilder.HasSequence("order_number_seq");
 
             modelBuilder.HasSequence("payout_number_seq");
+
+            modelBuilder.HasSequence("store_payment_number_seq");
 
             modelBuilder.Entity("WebApp.Domain.Entities.AttributeDefinition", b =>
                 {
@@ -168,6 +174,80 @@ namespace WebApp.Infrastructure.Migrations
                         .HasDatabaseName("ix_audit_entries_target_type_target_id_created_at");
 
                     b.ToTable("audit_entries", (string)null);
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.BillingOffer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<decimal?>("DiscountAmount")
+                        .HasPrecision(12, 3)
+                        .HasColumnType("numeric(12,3)")
+                        .HasColumnName("discount_amount");
+
+                    b.Property<int?>("DiscountPercent")
+                        .HasColumnType("integer")
+                        .HasColumnName("discount_percent");
+
+                    b.Property<DateOnly?>("EndsOn")
+                        .HasColumnType("date")
+                        .HasColumnName("ends_on");
+
+                    b.Property<bool>("FirstPaymentOnly")
+                        .HasColumnType("boolean")
+                        .HasColumnName("first_payment_only");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_active");
+
+                    b.Property<int?>("Months")
+                        .HasColumnType("integer")
+                        .HasColumnName("months");
+
+                    b.Property<string>("NameAr")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name_ar");
+
+                    b.Property<string>("NameEn")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name_en");
+
+                    b.Property<string>("NameFr")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name_fr");
+
+                    b.Property<DateOnly?>("StartsOn")
+                        .HasColumnType("date")
+                        .HasColumnName("starts_on");
+
+                    b.Property<int>("Target")
+                        .HasColumnType("integer")
+                        .HasColumnName("target");
+
+                    b.PrimitiveCollection<Guid[]>("TargetIds")
+                        .IsRequired()
+                        .HasColumnType("uuid[]")
+                        .HasColumnName("target_ids");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_billing_offers");
+
+                    b.ToTable("billing_offers", (string)null);
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.Cart", b =>
@@ -320,10 +400,6 @@ namespace WebApp.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("created_by_id");
 
-                    b.Property<Guid?>("InvoiceId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("invoice_id");
-
                     b.Property<decimal?>("LineTotal")
                         .HasPrecision(14, 3)
                         .HasColumnType("numeric(14,3)")
@@ -418,6 +494,171 @@ namespace WebApp.Infrastructure.Migrations
                         .HasDatabaseName("ix_coin_entries_store_id_created_at");
 
                     b.ToTable("coin_entries", (string)null);
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.CommissionInvoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateOnly>("DueOn")
+                        .HasColumnType("date")
+                        .HasColumnName("due_on");
+
+                    b.Property<DateOnly>("Month")
+                        .HasColumnType("date")
+                        .HasColumnName("month");
+
+                    b.Property<decimal>("PaidAmount")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("paid_amount");
+
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("paid_at");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("character varying(24)")
+                        .HasColumnName("reference");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("store_id");
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)")
+                        .HasColumnName("store_name");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("total");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id")
+                        .HasName("pk_commission_invoices");
+
+                    b.HasIndex("Reference")
+                        .IsUnique()
+                        .HasDatabaseName("ix_commission_invoices_reference");
+
+                    b.HasIndex("Status", "DueOn")
+                        .HasDatabaseName("ix_commission_invoices_status_due_on");
+
+                    b.HasIndex("StoreId", "Month")
+                        .IsUnique()
+                        .HasDatabaseName("ix_commission_invoices_store_id_month");
+
+                    b.ToTable("commission_invoices", (string)null);
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.CommissionInvoiceLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AffiliateCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("affiliate_code");
+
+                    b.Property<int?>("AffiliatePercent")
+                        .HasColumnType("integer")
+                        .HasColumnName("affiliate_percent");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("amount");
+
+                    b.Property<Guid>("CoinEntryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("coin_entry_id");
+
+                    b.Property<decimal>("CoinValueInTnd")
+                        .HasPrecision(12, 3)
+                        .HasColumnType("numeric(12,3)")
+                        .HasColumnName("coin_value_in_tnd");
+
+                    b.Property<decimal>("Coins")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("coins");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("CreditedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("credited_at");
+
+                    b.Property<Guid>("InvoiceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("invoice_id");
+
+                    b.Property<decimal?>("LineTotal")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("line_total");
+
+                    b.Property<string>("OrderReference")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("order_reference");
+
+                    b.Property<string>("ProductName")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)")
+                        .HasColumnName("product_name");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_commission_invoice_lines");
+
+                    b.HasIndex("CoinEntryId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_commission_invoice_lines_coin_entry_id");
+
+                    b.HasIndex("InvoiceId")
+                        .HasDatabaseName("ix_commission_invoice_lines_invoice_id");
+
+                    b.ToTable("commission_invoice_lines", (string)null);
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.Order", b =>
@@ -903,6 +1144,11 @@ namespace WebApp.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("affiliate_percent");
 
+                    b.Property<decimal?>("AverageRating")
+                        .HasPrecision(3, 2)
+                        .HasColumnType("numeric(3,2)")
+                        .HasColumnName("average_rating");
+
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid")
                         .HasColumnName("category_id");
@@ -929,6 +1175,11 @@ namespace WebApp.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("disabled_at");
 
+                    b.Property<decimal>("FromPrice")
+                        .HasPrecision(12, 3)
+                        .HasColumnType("numeric(12,3)")
+                        .HasColumnName("from_price");
+
                     b.PrimitiveCollection<Guid[]>("ImageIds")
                         .IsRequired()
                         .HasColumnType("uuid[]")
@@ -949,6 +1200,21 @@ namespace WebApp.Infrastructure.Migrations
                         .HasPrecision(12, 3)
                         .HasColumnType("numeric(12,3)")
                         .HasColumnName("price");
+
+                    b.Property<decimal?>("RankingScore")
+                        .HasPrecision(6, 4)
+                        .HasColumnType("numeric(6,4)")
+                        .HasColumnName("ranking_score");
+
+                    b.Property<int>("RatingCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating_count");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasComputedColumnSql("setweight(to_tsvector('simple', immutable_unaccent(coalesce(name, ''))), 'A') || setweight(to_tsvector('simple', immutable_unaccent(coalesce(description, ''))), 'B')", true);
 
                     b.Property<string>("Sku")
                         .HasMaxLength(64)
@@ -987,6 +1253,17 @@ namespace WebApp.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId")
                         .HasDatabaseName("ix_products_category_id");
+
+                    b.HasIndex("FromPrice")
+                        .HasDatabaseName("ix_products_from_price");
+
+                    b.HasIndex("RankingScore")
+                        .HasDatabaseName("ix_products_ranking_score");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("ix_products_search_vector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.HasIndex("Slug")
                         .IsUnique()
@@ -1156,6 +1433,120 @@ namespace WebApp.Infrastructure.Migrations
                     b.ToTable("refresh_tokens", (string)null);
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)")
+                        .HasColumnName("author_name");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("comment");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("EditableUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("editable_until");
+
+                    b.Property<DateTime?>("EditedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("edited_at");
+
+                    b.Property<DateTime?>("HiddenAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("hidden_at");
+
+                    b.Property<string>("HiddenReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("hidden_reason");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_id");
+
+                    b.Property<Guid?>("OrderLineId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("order_line_id");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("product_id");
+
+                    b.Property<DateTime?>("RepliedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("replied_at");
+
+                    b.Property<string>("Reply")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("reply");
+
+                    b.Property<int>("Stars")
+                        .HasColumnType("integer")
+                        .HasColumnName("stars");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("store_id");
+
+                    b.Property<Guid>("StoreOrderId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("store_order_id");
+
+                    b.Property<int>("Target")
+                        .HasColumnType("integer")
+                        .HasColumnName("target");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_reviews");
+
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_reviews_order_id");
+
+                    b.HasIndex("OrderLineId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_reviews_order_line_id_product")
+                        .HasFilter("target = 1");
+
+                    b.HasIndex("StoreOrderId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_reviews_store_order_id_store")
+                        .HasFilter("target = 2");
+
+                    b.HasIndex("AuthorId", "CreatedAt")
+                        .HasDatabaseName("ix_reviews_author_id_created_at");
+
+                    b.HasIndex("ProductId", "CreatedAt")
+                        .HasDatabaseName("ix_reviews_product_id_created_at");
+
+                    b.HasIndex("StoreId", "Target", "CreatedAt")
+                        .HasDatabaseName("ix_reviews_store_id_target_created_at");
+
+                    b.ToTable("reviews", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_reviews_stars", "stars BETWEEN 1 AND 5");
+                        });
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.RoleRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1234,6 +1625,11 @@ namespace WebApp.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("address");
+
+                    b.Property<decimal?>("AverageRating")
+                        .HasPrecision(3, 2)
+                        .HasColumnType("numeric(3,2)")
+                        .HasColumnName("average_rating");
 
                     b.Property<Guid?>("BannerImageId")
                         .HasColumnType("uuid")
@@ -1317,11 +1713,30 @@ namespace WebApp.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("owner_id");
 
+                    b.Property<DateOnly>("PaidUntil")
+                        .HasColumnType("date")
+                        .HasColumnName("paid_until");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone");
+
+                    b.Property<decimal?>("RankingScore")
+                        .HasPrecision(6, 4)
+                        .HasColumnType("numeric(6,4)")
+                        .HasColumnName("ranking_score");
+
+                    b.Property<int>("RatingCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating_count");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasComputedColumnSql("setweight(to_tsvector('simple', immutable_unaccent(coalesce(name, ''))), 'A') || setweight(to_tsvector('simple', immutable_unaccent(coalesce(description, ''))), 'B')", true);
 
                     b.Property<string>("Slug")
                         .IsRequired()
@@ -1337,6 +1752,10 @@ namespace WebApp.Infrastructure.Migrations
                         .HasPrecision(10, 3)
                         .HasColumnType("numeric(10,3)")
                         .HasColumnName("subscription_monthly_price");
+
+                    b.Property<DateTime?>("SuspendedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("suspended_at");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -1362,6 +1781,11 @@ namespace WebApp.Infrastructure.Migrations
                     b.HasIndex("OwnerId")
                         .IsUnique()
                         .HasDatabaseName("ix_stores_owner_id");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("ix_stores_search_vector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.HasIndex("Slug")
                         .IsUnique()
@@ -1588,6 +2012,154 @@ namespace WebApp.Infrastructure.Migrations
                         .HasDatabaseName("ix_store_order_events_store_order_id_at");
 
                     b.ToTable("store_order_events", (string)null);
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.StorePayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("amount");
+
+                    b.Property<DateOnly?>("CoversFrom")
+                        .HasColumnType("date")
+                        .HasColumnName("covers_from");
+
+                    b.Property<DateOnly?>("CoversTo")
+                        .HasColumnType("date")
+                        .HasColumnName("covers_to");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("DecidedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("decided_at");
+
+                    b.Property<Guid?>("DecidedById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("decided_by_id");
+
+                    b.Property<Guid?>("DeclaredById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("declared_by_id");
+
+                    b.Property<decimal>("Discount")
+                        .HasPrecision(14, 3)
+                        .HasColumnType("numeric(14,3)")
+                        .HasColumnName("discount");
+
+                    b.Property<Guid?>("InvoiceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("invoice_id");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer")
+                        .HasColumnName("kind");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("integer")
+                        .HasColumnName("method");
+
+                    b.Property<decimal?>("MonthlyPrice")
+                        .HasPrecision(12, 3)
+                        .HasColumnType("numeric(12,3)")
+                        .HasColumnName("monthly_price");
+
+                    b.Property<int?>("Months")
+                        .HasColumnType("integer")
+                        .HasColumnName("months");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("note");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("number");
+
+                    b.Property<Guid?>("OfferId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("offer_id");
+
+                    b.Property<string>("OfferName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("offer_name");
+
+                    b.Property<DateOnly>("PaidOn")
+                        .HasColumnType("date")
+                        .HasColumnName("paid_on");
+
+                    b.Property<Guid?>("ReceiptImageId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("receipt_image_id");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)")
+                        .HasColumnName("reference");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("rejection_reason");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<Guid>("StoreId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("store_id");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("Id")
+                        .HasName("pk_store_payments");
+
+                    b.HasIndex("DecidedById")
+                        .HasDatabaseName("ix_store_payments_decided_by_id");
+
+                    b.HasIndex("DeclaredById")
+                        .HasDatabaseName("ix_store_payments_declared_by_id");
+
+                    b.HasIndex("InvoiceId")
+                        .HasDatabaseName("ix_store_payments_invoice_id");
+
+                    b.HasIndex("Number")
+                        .IsUnique()
+                        .HasDatabaseName("ix_store_payments_number");
+
+                    b.HasIndex("OfferId")
+                        .HasDatabaseName("ix_store_payments_offer_id");
+
+                    b.HasIndex("ReceiptImageId")
+                        .HasDatabaseName("ix_store_payments_receipt_image_id");
+
+                    b.HasIndex("Status", "CreatedAt")
+                        .HasDatabaseName("ix_store_payments_status_created_at");
+
+                    b.HasIndex("StoreId", "CreatedAt")
+                        .HasDatabaseName("ix_store_payments_store_id_created_at");
+
+                    b.ToTable("store_payments", (string)null);
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.StoredImage", b =>
@@ -1882,6 +2454,33 @@ namespace WebApp.Infrastructure.Migrations
                         .HasConstraintName("fk_coin_entries_coin_entries_related_entry_id");
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.CommissionInvoice", b =>
+                {
+                    b.HasOne("WebApp.Domain.Entities.Store", null)
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_commission_invoices_stores_store_id");
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.CommissionInvoiceLine", b =>
+                {
+                    b.HasOne("WebApp.Domain.Entities.CoinEntry", null)
+                        .WithMany()
+                        .HasForeignKey("CoinEntryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_commission_invoice_lines_coin_entries_coin_entry_id");
+
+                    b.HasOne("WebApp.Domain.Entities.CommissionInvoice", null)
+                        .WithMany("Lines")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_commission_invoice_lines_commission_invoices_invoice_id");
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.Order", b =>
                 {
                     b.HasOne("WebApp.Domain.Entities.User", null)
@@ -2125,6 +2724,49 @@ namespace WebApp.Infrastructure.Migrations
                         .HasConstraintName("fk_refresh_tokens_users_user_id");
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.Review", b =>
+                {
+                    b.HasOne("WebApp.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_users_author_id");
+
+                    b.HasOne("WebApp.Domain.Entities.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_orders_order_id");
+
+                    b.HasOne("WebApp.Domain.Entities.OrderLine", null)
+                        .WithMany()
+                        .HasForeignKey("OrderLineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_reviews_order_lines_order_line_id");
+
+                    b.HasOne("WebApp.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_reviews_products_product_id");
+
+                    b.HasOne("WebApp.Domain.Entities.Store", null)
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_stores_store_id");
+
+                    b.HasOne("WebApp.Domain.Entities.StoreOrder", null)
+                        .WithMany()
+                        .HasForeignKey("StoreOrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_reviews_store_order_store_order_id");
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.RoleRequest", b =>
                 {
                     b.HasOne("WebApp.Domain.Entities.User", null)
@@ -2212,6 +2854,46 @@ namespace WebApp.Infrastructure.Migrations
                         .HasConstraintName("fk_store_order_events_store_orders_store_order_id");
                 });
 
+            modelBuilder.Entity("WebApp.Domain.Entities.StorePayment", b =>
+                {
+                    b.HasOne("WebApp.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("DecidedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_store_payments_users_decided_by_id");
+
+                    b.HasOne("WebApp.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("DeclaredById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_store_payments_users_declared_by_id");
+
+                    b.HasOne("WebApp.Domain.Entities.CommissionInvoice", null)
+                        .WithMany()
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_store_payments_commission_invoices_invoice_id");
+
+                    b.HasOne("WebApp.Domain.Entities.BillingOffer", null)
+                        .WithMany()
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_store_payments_billing_offers_offer_id");
+
+                    b.HasOne("WebApp.Domain.Entities.StoredImage", null)
+                        .WithMany()
+                        .HasForeignKey("ReceiptImageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_store_payments_images_receipt_image_id");
+
+                    b.HasOne("WebApp.Domain.Entities.Store", null)
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_store_payments_stores_store_id");
+                });
+
             modelBuilder.Entity("WebApp.Domain.Entities.StoredImage", b =>
                 {
                     b.HasOne("WebApp.Domain.Entities.User", null)
@@ -2223,6 +2905,11 @@ namespace WebApp.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("WebApp.Domain.Entities.Cart", b =>
+                {
+                    b.Navigation("Lines");
+                });
+
+            modelBuilder.Entity("WebApp.Domain.Entities.CommissionInvoice", b =>
                 {
                     b.Navigation("Lines");
                 });

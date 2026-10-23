@@ -63,6 +63,9 @@ import { LocalizedPipe } from '../../shared/i18n/localized';
                 @if (cancellable() && s.canCancel) {
                   <button type="button" (click)="cancel.emit(s)" class="btn btn-danger-soft btn-sm self-start">{{ 'orders.cancel' | transloco }}</button>
                 }
+                @if (cancellable() && s.status === 'Delivered') {
+                  <a routerLink="/reviews" class="btn btn-secondary btn-sm self-start">★ {{ 'reviews.rateOrder' | transloco }}</a>
+                }
               </div>
             }
           </section>

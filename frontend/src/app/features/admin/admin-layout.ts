@@ -4,6 +4,8 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { filter, map } from 'rxjs';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+const HOME = '/admin';
+
 interface NavItem {
   key: string;
   link?: string;
@@ -25,11 +27,13 @@ export class AdminLayout {
   /** Section of the current page, for the phone menu (a detail page belongs to its list). */
   protected readonly current = computed(() => {
     const path = this.url().split('?')[0];
-    return this.nav.find((i) => i.link && (path === i.link || path.startsWith(i.link + '/')))?.link ?? '';
+    // The dashboard (/admin) is only itself: every other page starts with /admin/.
+    return this.nav.find((i) => i.link && (path === i.link || (i.link !== HOME && path.startsWith(i.link + '/'))))?.link ?? '';
   });
   protected readonly links = computed(() => this.nav.filter((i) => i.link));
 
   protected readonly nav: NavItem[] = [
+    { key: 'dashboard', link: HOME },
     { key: 'users', link: '/admin/users' },
     { key: 'roleRequests', link: '/admin/role-requests' },
     { key: 'audit', link: '/admin/audit' },
@@ -40,9 +44,9 @@ export class AdminLayout {
     { key: 'products', link: '/admin/products' },
     { key: 'partnerships', link: '/admin/partnerships' },
     { key: 'orders', link: '/admin/orders' },
-    { key: 'reviews', soon: '017' },
+    { key: 'reviews', link: '/admin/reviews' },
     { key: 'coins', link: '/admin/coins' },
     { key: 'payouts', link: '/admin/payouts' },
-    { key: 'billing', soon: '025' },
+    { key: 'billing', link: '/admin/billing' },
   ];
 }

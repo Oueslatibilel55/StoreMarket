@@ -148,6 +148,20 @@ public sealed class ProductTests
     }
 
     [Fact]
+    public void FromPrice_IsTheCheapestVariant_OrThePrice()
+    {
+        VariantInput V(string size, decimal? price) => new(null, new Dictionary<string, string> { ["taille"] = size }, 1, price, null);
+        var p = Create(Details(d => d with { Price = 60m, VariantAxes = ["taille"], Variants = [V("s", 45m), V("m", null), V("l", 70m)] })).Value;
+        Assert.Equal(45m, p.FromPrice);
+
+        p.Update(Details(d => d with { Price = 40m, VariantAxes = ["taille"], Variants = [V("s", 45m), V("m", null)] }), Schema, 0, 50);
+        Assert.Equal(40m, p.FromPrice); // the variant without its own price costs the product price
+
+        p.Update(Details(d => d with { Price = 30m }), Schema, 0, 50);
+        Assert.Equal(30m, p.FromPrice); // no variants any more
+    }
+
+    [Fact]
     public void Update_KeepsVariantIds_ForTheSameCombination()
     {
         VariantInput V(string size, int stock) => new(null, new Dictionary<string, string> { ["taille"] = size }, stock, null, null);

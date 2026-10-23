@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-export type ImagePurpose = 'StoreLogo' | 'StoreBanner' | 'ProductPhoto' | 'CategoryImage';
+export type ImagePurpose = 'StoreLogo' | 'StoreBanner' | 'ProductPhoto' | 'CategoryImage' | 'PaymentReceipt';
 
 export interface UploadedImage {
   id: string;

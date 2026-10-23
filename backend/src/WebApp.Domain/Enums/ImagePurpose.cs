@@ -7,4 +7,6 @@ public enum ImagePurpose
     StoreBanner = 2,
     ProductPhoto = 3,
     CategoryImage = 4,
+    /// <summary>Photo of a payment receipt a store owner attaches to a declared payment (025).</summary>
+    PaymentReceipt = 5,
 }

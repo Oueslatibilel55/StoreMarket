@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LocalizedName } from '../../shared/i18n/localized';
-import { CategoryNode } from '../stores/product-api';
+import { CategoryNode, CategorySchema } from '../stores/product-api';
 
 export interface StoreCategory {
   id: string;
@@ -14,7 +14,14 @@ export interface StoreCategory {
   imageUrl: string | null;
 }
 
-export type ProductSort = 'Newest' | 'PriceAsc' | 'PriceDesc';
+/** Average of the visible reviews (017); `average` is null when none. */
+export interface Rating {
+  average: number | null;
+  count: number;
+}
+
+export type ProductSort = 'Newest' | 'PriceAsc' | 'PriceDesc' | 'TopRated';
+export type StoreSort = 'Name' | 'TopRated';
 
 export interface ProductCard {
   id: string;
@@ -30,6 +37,7 @@ export interface ProductCard {
   storeName: string;
   storeSlug: string;
   storeOpen: boolean;
+  rating: Rating;
 }
 
 export interface StoreCard {
@@ -43,6 +51,7 @@ export interface StoreCard {
   isOpen: boolean;
   productCount: number;
   deliveryFee: number;
+  rating: Rating;
 }
 
 export interface PublicStore {
@@ -65,6 +74,7 @@ export interface PublicStore {
   facebookUrl: string | null;
   instagramUrl: string | null;
   websiteUrl: string | null;
+  rating: Rating;
 }
 
 export interface PublicOption {
@@ -99,6 +109,7 @@ export interface PublicProduct {
   variantAxes: { key: string; name: LocalizedName; options: PublicOption[] }[];
   variants: { id: string; options: Record<string, string>; price: number; inStock: boolean }[];
   store: { id: string; name: string; slug: string; logoUrl: string | null; isOpen: boolean };
+  rating: Rating;
 }
 
 export interface Paged<T> {
@@ -109,9 +120,29 @@ export interface Paged<T> {
   totalPages: number;
 }
 
+/** `GET /api/products` (018): full-text `search`, filters on the "from" price, rating, store category and fields. */
+export interface ProductQuery {
+  category?: string;
+  store?: string;
+  storeCategory?: string;
+  search?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
+  /** `field:choice,choice`, one per field. */
+  attr?: string[];
+  /** Default: newest, or best rated when searching. */
+  sort?: ProductSort;
+  page?: number;
+  pageSize?: number;
+}
+
 const params = (query: object) => {
   let p = new HttpParams();
-  for (const [k, v] of Object.entries(query)) if (v !== undefined && v !== null && v !== '') p = p.set(k, String(v));
+  for (const [k, v] of Object.entries(query)) {
+    if (Array.isArray(v)) for (const item of v) p = p.append(k, String(item)); // repeated: ?attr=a&attr=b
+    else if (v !== undefined && v !== null && v !== '') p = p.set(k, String(v));
+  }
   return p;
 };
 
@@ -125,11 +156,16 @@ export class CatalogApi {
     return this.http.get<StoreCategory[]>(`${this.base}/store-categories`);
   }
 
+  /** Fields of a category and its ancestors — the filterable ones become search filters (018). */
+  categorySchema(slug: string): Observable<CategorySchema> {
+    return this.http.get<CategorySchema>(`${this.base}/product-categories/${slug}/schema`);
+  }
+
   productCategories(): Observable<CategoryNode[]> {
     return this.http.get<CategoryNode[]>(`${this.base}/product-categories`);
   }
 
-  products(query: { category?: string; store?: string; search?: string; sort?: ProductSort; page?: number; pageSize?: number }): Observable<Paged<ProductCard>> {
+  products(query: ProductQuery): Observable<Paged<ProductCard>> {
     return this.http.get<Paged<ProductCard>>(`${this.base}/products`, { params: params(query) });
   }
 
@@ -137,7 +173,7 @@ export class CatalogApi {
     return this.http.get<PublicProduct>(`${this.base}/products/${slug}`);
   }
 
-  stores(query: { category?: string; city?: string; search?: string; page?: number; pageSize?: number }): Observable<Paged<StoreCard>> {
+  stores(query: { category?: string; city?: string; search?: string; sort?: StoreSort; page?: number; pageSize?: number }): Observable<Paged<StoreCard>> {
     return this.http.get<Paged<StoreCard>>(`${this.base}/stores`, { params: params(query) });
   }
 

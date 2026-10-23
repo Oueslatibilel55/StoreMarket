@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ProductCard as ProductCardModel } from '../../core/catalog/catalog-api';
 import { LanguageService } from '../../core/i18n/language.service';
+import { StarRating } from '../reviews/star-rating';
 
 /** Product tile of the shop grids. */
 @Component({
   selector: 'app-product-card',
-  imports: [DecimalPipe, RouterLink, TranslocoPipe],
+  imports: [DecimalPipe, RouterLink, TranslocoPipe, StarRating],
   template: `
     @let p = product();
     <a [routerLink]="['/products', p.slug]" class="group card-interactive flex h-full flex-col overflow-hidden">
@@ -32,6 +33,9 @@ import { LanguageService } from '../../core/i18n/language.service';
           @if (!p.storeOpen) { · <span class="text-danger">{{ 'shop.storeClosed' | transloco }}</span> }
         </p>
         <p class="line-clamp-2 text-sm font-semibold text-ink transition-colors group-hover:text-brand">{{ p.name }}</p>
+        @if (p.rating.count) {
+          <app-star-rating [value]="p.rating.average" [count]="p.rating.count" size="sm" />
+        }
         <p class="mt-auto flex flex-wrap items-baseline gap-x-1.5 pt-2">
           @if (p.minPrice < p.price) { <span class="text-xs text-muted">{{ 'products.from' | transloco }}</span> }
           <span class="text-base font-bold tracking-tight text-ink" dir="ltr">{{ p.minPrice | number: '1.0-3' : language.locale() }} <span class="text-xs font-semibold text-muted">TND</span></span>

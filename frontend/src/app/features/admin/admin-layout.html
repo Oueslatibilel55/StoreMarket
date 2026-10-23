@@ -1,5 +1,5 @@
 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:flex lg:gap-8 lg:px-8 lg:py-8">
-  <aside class="lg:w-60 lg:shrink-0">
+  <aside class="lg:w-60 lg:shrink-0 print:hidden">
     <div class="lg:sticky lg:top-24">
       <p class="eyebrow mb-3 hidden px-3 lg:block">{{ 'admin.title' | transloco }}</p>
       <!-- Phones and tablets: one menu instead of a long scrolling row. -->
@@ -14,7 +14,7 @@
       <nav class="hidden lg:flex lg:flex-col lg:gap-1">
         @for (item of nav; track item.key) {
           @if (item.link) {
-            <a [routerLink]="item.link" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: false }"
+            <a [routerLink]="item.link" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ paths: item.link === '/admin' ? 'exact' : 'subset', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' }"
               class="nav-link whitespace-nowrap py-2">
               {{ 'admin.nav.' + item.key | transloco }}
             </a>

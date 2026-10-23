@@ -7,6 +7,7 @@ import { errorKey } from '../../../core/http/problem';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { PartnershipStatus, partnershipTone } from '../../../core/partnerships/partnership-api';
 import { Modal } from '../../../shared/ui/modal';
+import { FilterChip, FilterChips, shortId } from '../../../shared/ui/filter-chips';
 import { Pagination } from '../../../shared/ui/pagination';
 import { AdminApi } from '../admin-api';
 import { AdminPartnership } from '../admin.models';
@@ -16,7 +17,7 @@ const PAGE_SIZE = 20;
 /** `/admin/partnerships?status=&search=&page=` — every affiliate ↔ store link; end one for fraud (reason required, audited). */
 @Component({
   selector: 'app-partnership-list',
-  imports: [DatePipe, RouterLink, TranslocoPipe, Modal, Pagination],
+  imports: [DatePipe, RouterLink, TranslocoPipe, FilterChips, Modal, Pagination],
   templateUrl: './partnership-list.html',
 })
 export class PartnershipList {
@@ -27,6 +28,9 @@ export class PartnershipList {
   // Router input binding sets missing query params to undefined, so no defaults here.
   readonly status = input<PartnershipStatus | undefined>();
   readonly search = input<string | undefined>();
+  /** Set by a dashboard number (023). */
+  readonly storeId = input<string | undefined>();
+  readonly affiliateId = input<string | undefined>();
   readonly page = input(1, { transform: (v: unknown) => numberAttribute(v, 1) });
 
   protected readonly statuses: PartnershipStatus[] = ['Requested', 'Accepted', 'Refused', 'Ended', 'Cancelled'];
@@ -35,8 +39,17 @@ export class PartnershipList {
   protected readonly hasFilters = computed(() => !!this.status() || !!this.search());
 
   protected readonly partnerships = rxResource({
-    params: () => ({ status: this.status(), search: this.search(), page: this.page(), pageSize: PAGE_SIZE }),
+    params: () => ({
+      status: this.status(), search: this.search(), storeId: this.storeId(), affiliateId: this.affiliateId(), page: this.page(), pageSize: PAGE_SIZE,
+    }),
     stream: ({ params }) => this.api.partnerships(params),
+  });
+
+  protected readonly drillDown = computed(() => {
+    const chips: FilterChip[] = [];
+    if (this.storeId()) chips.push({ label: 'filters.store', value: shortId(this.storeId()!), clear: { storeId: null } });
+    if (this.affiliateId()) chips.push({ label: 'filters.affiliate', value: shortId(this.affiliateId()!), clear: { affiliateId: null } });
+    return chips;
   });
 
   protected readonly ending = signal<AdminPartnership | null>(null);

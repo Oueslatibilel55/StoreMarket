@@ -57,8 +57,13 @@ public static class InfrastructureExtensions
         services.AddScoped<IOrderQueries, OrderQueries>();
         services.AddScoped<ICoinLedger, CoinLedger>();
         services.AddScoped<IPayoutRepository, PayoutRepository>();
+        services.AddScoped<IBillingRepository, BillingRepository>();
+        services.AddScoped<IBillingQueries, BillingQueries>();
         services.AddScoped<IPayoutQueries, PayoutQueries>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        services.AddScoped<IReviewQueries, ReviewQueries>();
         services.AddScoped<ICoinQueries, CoinQueries>();
+        services.AddScoped<IStatsQueries, StatsQueries>();
         services.Configure<StorageOptions>(config.GetSection(StorageOptions.SectionName));
         // Disk locally; the database where the disk does not survive a restart (Render free tier, ADR 0006).
         if (config.GetSection(StorageOptions.SectionName).Get<StorageOptions>()?.UseDatabase == true)

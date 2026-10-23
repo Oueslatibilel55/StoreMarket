@@ -14,8 +14,13 @@ import { Pagination } from '../../shared/ui/pagination';
   imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, Pagination],
   template: `
     <main class="page-narrow animate-fade-in">
-      <h1 class="page-title">{{ 'orders.mine' | transloco }}</h1>
-      <p class="page-subtitle">{{ 'orders.mineHint' | transloco }}</p>
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 class="page-title">{{ 'orders.mine' | transloco }}</h1>
+          <p class="page-subtitle">{{ 'orders.mineHint' | transloco }}</p>
+        </div>
+        <a routerLink="/reviews" class="btn btn-secondary">★ {{ 'reviews.mine' | transloco }}</a>
+      </div>
 
       @if (orders.value(); as result) {
         @if (result.items.length === 0) {

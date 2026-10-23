@@ -98,7 +98,8 @@ internal sealed partial class CatalogQueries
             axes,
             [.. product.Variants.Select(v => new PublicVariantDto(v.Id, ProductMapping.Options(v), v.Price ?? product.Price, v.Stock > 0))],
             new ProductStoreRef(store.Id, store.Name, store.Slug, store.LogoImageId is { } l ? urls.GetValueOrDefault(l) : null,
-                store.Status == StoreStatus.Active));
+                store.Status == StoreStatus.Active),
+            new RatingDto(product.AverageRating, product.RatingCount));
     }
 
     private static PublicAttributeDto Resolve(AttributeDefinition def, AttributeValue value)

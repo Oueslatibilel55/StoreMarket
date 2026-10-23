@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using NpgsqlTypes;
+using WebApp.Application.Common;
 using WebApp.Application.DTOs;
+using WebApp.Domain.Common;
 using WebApp.Domain.Entities;
 using WebApp.Domain.Enums;
+using WebApp.Infrastructure.Persistence;
 
 namespace WebApp.Infrastructure.Queries;
 
@@ -17,6 +21,30 @@ internal sealed partial class CatalogQueries
             .Where(p => p.Status == ProductStatus.Published && p.DeletedAt == null && p.DisabledAt == null)
             .Where(p => db.Stores.Any(s => s.Id == p.StoreId && (s.Status == StoreStatus.Active || s.Status == StoreStatus.Closed)));
 
+    private IQueryable<Store> VisibleStores() =>
+        db.Stores.AsNoTracking().Where(s => s.Status == StoreStatus.Active || s.Status == StoreStatus.Closed);
+
+    /// <summary>
+    /// A filterable choice / yes-no field (018): the product holds one of the wanted values — in its own values
+    /// (a multi-choice is stored <c>a,b</c>) or, for a variant axis, in one of its variants.
+    /// </summary>
+    private static IQueryable<Product> WhereAttribute(IQueryable<Product> products, AttributeDefinition field, AttributeFilter filter)
+    {
+        if (!field.Filterable) return products;
+        var key = field.Key;
+        var wanted = field.Type switch
+        {
+            AttributeType.SingleChoice or AttributeType.MultiChoice => filter.Values.Where(v => field.Options.Any(o => o.Key == v)).ToList(),
+            AttributeType.Boolean => filter.Values.Where(v => v is "true" or "false").ToList(),
+            _ => [],
+        };
+        if (wanted.Count == 0) return products; // nothing valid: the filter is ignored, like an unknown field
+
+        return products.Where(p =>
+            p.Values.Any(v => v.Key == key && wanted.Any(w => ("," + v.Value + ",").Contains("," + w + ",")))
+            || p.Variants.Any(variant => variant.Selection.Any(s => s.Key == key && wanted.Contains(s.Value))));
+    }
+
     public Task<ProductStoreInfo?> GetVisibleProductStoreAsync(Guid productId, CancellationToken ct = default) =>
         VisibleProducts()
             .Where(p => p.Id == productId)
@@ -26,6 +54,9 @@ internal sealed partial class CatalogQueries
 
     public Task<bool> IsStoreVisibleAsync(Guid storeId, CancellationToken ct = default) =>
         db.Stores.AnyAsync(s => s.Id == storeId && (s.Status == StoreStatus.Active || s.Status == StoreStatus.Closed), ct);
+
+    /// <summary>Stores matched by a search whose products are found too (by store name); more would make the query slow.</summary>
+    private const int MaxStoresMatchedBySearch = 100;
 
     public async Task<PagedResult<ProductCardDto>?> ListShopProductsAsync(ShopProductQuery query, CancellationToken ct = default)
     {
@@ -41,6 +72,11 @@ internal sealed partial class CatalogQueries
             if (category is null || !tree.IsVisible(category)) return null;
             var ids = tree.Descendants(category).Prepend(category).Select(c => c.Id).ToList();
             products = products.Where(p => ids.Contains(p.CategoryId));
+
+            // Fields of the category and its ancestors are shared by every product below it.
+            var fields = tree.PathTo(category).SelectMany(c => c.Attributes).ToDictionary(a => a.Key, StringComparer.Ordinal);
+            foreach (var filter in AttributeFilter.Parse(query.Attributes))
+                if (fields.TryGetValue(filter.Key, out var field)) products = WhereAttribute(products, field, filter);
         }
         if (!string.IsNullOrWhiteSpace(query.Store))
         {
@@ -49,21 +85,45 @@ internal sealed partial class CatalogQueries
             if (storeId is null) return null;
             products = products.Where(p => p.StoreId == storeId);
         }
-        if (!string.IsNullOrWhiteSpace(query.Search))
+        if (!string.IsNullOrWhiteSpace(query.StoreCategory))
         {
-            var term = $"%{EscapeLike(query.Search.Trim())}%";
-            products = products.Where(p => EF.Functions.ILike(p.Name, term, "\\"));
+            var categoryId = await db.StoreCategories.AsNoTracking().Where(c => c.Slug == query.StoreCategory && c.IsActive)
+                .Select(c => (Guid?)c.Id).FirstOrDefaultAsync(ct).ConfigureAwait(false);
+            if (categoryId is null) return null;
+            products = products.Where(p => db.Stores.Any(s => s.Id == p.StoreId && s.CategoryId == categoryId));
+        }
+        if (query.MinPrice is { } min) products = products.Where(p => p.FromPrice >= min);
+        if (query.MaxPrice is { } max) products = products.Where(p => p.FromPrice <= max);
+        if (query.MinRating is { } stars)
+        {
+            var atLeast = (decimal)Math.Clamp(stars, Ranking.MinStars, Ranking.MaxStars);
+            products = products.Where(p => p.AverageRating >= atLeast);
+        }
+
+        var search = SearchText.ToTsQuery(query.Search);
+        if (search is not null)
+        {
+            // Products of a store whose name matches are found too, with a relevance of 0 on their own text.
+            var matchingStores = await VisibleStores().Where(FullTextSearch.Matches<Store>(search))
+                .Select(s => s.Id).Take(MaxStoresMatchedBySearch).ToListAsync(ct).ConfigureAwait(false);
+            products = products.Where(p => matchingStores.Contains(p.StoreId)
+                || EF.Property<NpgsqlTsVector>(p, FullTextSearch.Vector).Matches(EF.Functions.ToTsQuery(FullTextSearch.Config, FullTextSearch.Unaccent(search))));
         }
 
         var total = await products.CountAsync(ct).ConfigureAwait(false);
-        // "From" price: the cheapest variant when there are variants.
-        var ordered = query.Sort switch
+        // Searching sorts by rating first unless another order is asked for; relevance then breaks the ties.
+        var sort = query.Sort ?? (search is null ? ProductSort.Newest : ProductSort.TopRated);
+        var ordered = sort switch
         {
-            ProductSort.PriceAsc => products.OrderBy(p => p.Variants.Any() ? p.Variants.Min(v => v.Price ?? p.Price) : p.Price),
-            ProductSort.PriceDesc => products.OrderByDescending(p => p.Variants.Any() ? p.Variants.Min(v => v.Price ?? p.Price) : p.Price),
+            ProductSort.PriceAsc => products.OrderBy(p => p.FromPrice),
+            ProductSort.PriceDesc => products.OrderByDescending(p => p.FromPrice),
+            // Unrated products (null score) after every rated one.
+            ProductSort.TopRated => products.OrderBy(p => p.RankingScore == null).ThenByDescending(p => p.RankingScore),
             _ => products.OrderByDescending(p => p.CreatedAt),
         };
-        var page = await ordered.ThenBy(p => p.Id).Include(p => p.Variants)
+        if (search is not null)
+            ordered = ordered.ThenByDescending(FullTextSearch.Rank<Product>(search));
+        var page = await ordered.ThenByDescending(p => p.CreatedAt).ThenBy(p => p.Id).Include(p => p.Variants)
             .Skip(paging.Skip).Take(paging.PageSize)
             .ToListAsync(ct).ConfigureAwait(false);
 
@@ -74,7 +134,7 @@ internal sealed partial class CatalogQueries
         var items = page.Select(p => new ProductCardDto(
             p.Id, p.Slug, p.Name, p.ImageIds.Count > 0 ? urls.GetValueOrDefault(p.ImageIds[0]) : null, p.Price, ProductMapping.MinPrice(p),
             p.CompareAtPrice, p.HasVariants, p.TotalStock > 0, stores[p.StoreId].Name, stores[p.StoreId].Slug,
-            stores[p.StoreId].Status == StoreStatus.Active)).ToList();
+            stores[p.StoreId].Status == StoreStatus.Active, new RatingDto(p.AverageRating, p.RatingCount))).ToList();
         return new PagedResult<ProductCardDto>(items, paging.Page, paging.PageSize, total);
     }
 
@@ -82,20 +142,26 @@ internal sealed partial class CatalogQueries
     {
         ArgumentNullException.ThrowIfNull(query);
         var paging = Paging.From(query.Page, query.PageSize);
-        var stores = db.Stores.AsNoTracking().Where(s => s.Status == StoreStatus.Active || s.Status == StoreStatus.Closed);
+        var stores = VisibleStores();
 
         if (!string.IsNullOrWhiteSpace(query.Category))
             stores = stores.Where(s => db.StoreCategories.Any(c => c.Id == s.CategoryId && c.Slug == query.Category));
         if (!string.IsNullOrWhiteSpace(query.City)) stores = stores.Where(s => s.City == query.City);
-        if (!string.IsNullOrWhiteSpace(query.Search))
-        {
-            var term = $"%{EscapeLike(query.Search.Trim())}%";
-            stores = stores.Where(s => EF.Functions.ILike(s.Name, term, "\\"));
-        }
+        var search = SearchText.ToTsQuery(query.Search);
+        if (search is not null)
+            stores = stores.Where(FullTextSearch.Matches<Store>(search));
 
         var total = await stores.CountAsync(ct).ConfigureAwait(false);
-        var page = await stores
-            .OrderBy(s => s.Status == StoreStatus.Active ? 0 : 1).ThenBy(s => s.Name).ThenBy(s => s.Id) // open stores first
+        // Open stores first; then the best rated when asked — the default when searching — then the most relevant.
+        var topRated = (query.Sort ?? (search is null ? StoreSort.Name : StoreSort.TopRated)) == StoreSort.TopRated;
+        var ordered = stores
+            .OrderBy(s => s.Status == StoreStatus.Active ? 0 : 1)
+            .ThenBy(s => topRated && s.RankingScore == null)
+            .ThenByDescending(s => topRated ? s.RankingScore : null);
+        if (search is not null)
+            ordered = ordered.ThenByDescending(FullTextSearch.Rank<Store>(search));
+        var page = await ordered
+            .ThenBy(s => s.Name).ThenBy(s => s.Id)
             .Skip(paging.Skip).Take(paging.PageSize)
             .Select(s => new
             {
@@ -113,7 +179,8 @@ internal sealed partial class CatalogQueries
             x.Store.LogoImageId is { } logo ? urls.GetValueOrDefault(logo) : null,
             x.Store.BannerImageId is { } banner ? urls.GetValueOrDefault(banner) : null,
             new StoreCategoryRef(x.Category.Id, x.Category.Slug, new LocalizedName(x.Category.NameFr, x.Category.NameAr, x.Category.NameEn)),
-            x.Store.City, x.Store.Status == StoreStatus.Active, x.Products, x.Store.DeliveryFee)).ToList();
+            x.Store.City, x.Store.Status == StoreStatus.Active, x.Products, x.Store.DeliveryFee,
+            new RatingDto(x.Store.AverageRating, x.Store.RatingCount))).ToList();
         return new PagedResult<StoreCardDto>(items, paging.Page, paging.PageSize, total);
     }
 }

@@ -43,6 +43,13 @@ internal sealed class StoreConfiguration : IEntityTypeConfiguration<Store>
         builder.HasOne<StoredImage>().WithMany().HasForeignKey(s => s.BannerImageId).OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(s => new { s.Status, s.CategoryId });
+
+        // Ratings (017), recomputed from the visible reviews.
+        builder.Property(s => s.AverageRating).HasPrecision(3, 2);
+        builder.Property(s => s.RankingScore).HasPrecision(6, 4);
+
+        // Shop search (018): name + description.
+        builder.HasSearchVector();
         builder.Ignore(s => s.DomainEvents);
     }
 }

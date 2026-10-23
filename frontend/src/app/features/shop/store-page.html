@@ -30,6 +30,12 @@
         <p class="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-muted">
           <a routerLink="/stores" [queryParams]="{ category: s.category.slug }" class="pill pill-brand transition-colors hover:bg-brand hover:text-white">{{ s.category.name | localized: language.lang() }}</a>
           <span class="pill pill-neutral">{{ 'cities.' + s.city | transloco }}</span>
+          @if (s.rating.count) {
+            <button type="button" (click)="scrollToReviews()" class="inline-flex cursor-pointer rounded-md transition-opacity hover:opacity-80"
+              [attr.aria-label]="'reviews.seeAll' | transloco">
+              <app-star-rating [value]="s.rating.average" [count]="s.rating.count" [showValue]="true" size="sm" />
+            </button>
+          }
         </p>
       </div>
     </header>
@@ -57,6 +63,10 @@
             <div class="card mt-5"><p class="empty-state">{{ 'shop.noProducts' | transloco }}</p></div>
           }
         }
+
+        <div class="mt-12 border-t border-line pt-10">
+          <app-review-section kind="store" [slug]="s.slug" />
+        </div>
       </section>
 
       <aside class="space-y-4 lg:sticky lg:top-20 lg:self-start">

@@ -18,7 +18,8 @@ public sealed class StoreService(
     ImageService images,
     ICatalogQueries catalog,
     IPlatformSettings settings,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    TimeProvider clock)
 {
     public async Task<Result<MyStoreDto>> GetMineAsync(Guid ownerId, CancellationToken ct = default) =>
         await catalog.GetStoreOfOwnerAsync(ownerId, ct).ConfigureAwait(false) is { } store
@@ -41,7 +42,10 @@ public sealed class StoreService(
 
         var (min, max) = await PercentRangeAsync(ct).ConfigureAwait(false);
         var price = await settings.GetDecimalAsync(SettingKeys.SubscriptionDefaultMonthlyPrice, ct).ConfigureAwait(false);
-        var created = Store.Create(ownerId, request.ToDetails(), min, max, price);
+        // A new store starts with the trial days paid (025).
+        var trialDays = await settings.GetIntAsync(SettingKeys.SubscriptionTrialDays, ct).ConfigureAwait(false);
+        var today = DateOnly.FromDateTime(clock.GetUtcNow().UtcDateTime);
+        var created = Store.Create(ownerId, request.ToDetails(), min, max, price, today.AddDays(trialDays));
         if (!created.IsSuccess) return Result.Fail<MyStoreDto>(created.Error!);
 
         if (await stores.SlugExistsAsync(created.Value.Slug, exceptId: null, ct).ConfigureAwait(false))

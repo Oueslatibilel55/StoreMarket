@@ -33,6 +33,8 @@ public static class ApplicationExtensions
         services.AddScoped<OrderLifecycleService>();
         services.AddScoped<CoinLedgerService>();
         services.AddScoped<PayoutService>();
+        services.AddScoped<BillingService>();
+        services.AddScoped<ReviewService>();
         services.AddSingleton<IPaymentMethod, CashOnDelivery>();
         return services;
     }

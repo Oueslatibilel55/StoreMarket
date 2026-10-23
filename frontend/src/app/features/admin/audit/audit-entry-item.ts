@@ -29,6 +29,8 @@ import { changedFields, displayValue } from './audit-diff';
               <a [routerLink]="['/admin/stores', entry().targetId]" class="link text-sm">{{ entry().targetLabel }}</a>
             } @else if (entry().targetType === 'Product') {
               <a routerLink="/admin/products" [queryParams]="{ search: entry().targetLabel }" class="link text-sm">{{ entry().targetLabel }}</a>
+            } @else if (entry().targetType === 'Review') {
+              <a routerLink="/admin/reviews" class="link text-sm">{{ entry().targetLabel }}</a>
             } @else if (entry().targetType === 'Setting') {
               <a routerLink="/admin/settings" class="link text-sm">{{ 'settings.' + entry().targetLabel + '.label' | transloco }}</a>
             } @else {

@@ -9,6 +9,7 @@ import { LanguageService } from '../../../core/i18n/language.service';
 import { OrderApi, orderStatusTone } from '../../../core/orders/order-api';
 import { PartnershipApi } from '../../../core/partnerships/partnership-api';
 import { Seo } from '../../../core/seo/seo';
+import { downloadCsv, toCsv } from '../../../shared/csv';
 import { Pagination } from '../../../shared/ui/pagination';
 import { WalletPayouts } from './wallet-payouts';
 
@@ -140,7 +141,7 @@ export class Wallet {
       next: (rows) => {
         this.exporting.set(false);
         this.exportCapped.set(rows.length >= MAX_EXPORT_ROWS);
-        this.save(this.csv(rows), `coins-${new Date().toISOString().slice(0, 10)}.csv`);
+        downloadCsv(this.csv(rows), `coins-${new Date().toISOString().slice(0, 10)}.csv`);
       },
       error: (err: unknown) => {
         this.exporting.set(false);
@@ -153,27 +154,9 @@ export class Wallet {
     const t = (key: string) => this.transloco.translate(key);
     const headers = ['date', 'type', 'coins', 'reference', 'store', 'product', 'quantity', 'lineTotal', 'percent', 'client', 'phone', 'reason']
       .map((h) => t(`wallet.csv.${h}`));
-    const lines = rows.map((e) => [
+    return toCsv(headers, rows.map((e) => [
       e.createdAt, t(`coins.type.${e.type}`), e.coins, e.orderReference, e.storeName, e.productName,
       e.quantity, e.lineTotal, e.affiliatePercent, e.clientName, e.clientPhone, e.reason,
-    ].map(cell).join(';'));
-    return '﻿' + [headers.map(cell).join(';'), ...lines].join('\r\n');
+    ]));
   }
-
-  private save(content: string, name: string): void {
-    const url = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8' }));
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-}
-
-/** One CSV cell: numbers as is (dot decimals), text quoted, and formula-looking text neutralised. */
-function cell(value: string | number | null): string {
-  if (value === null || value === undefined) return '';
-  if (typeof value === 'number') return String(value);
-  const text = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
-  return `"${text.replace(/"/g, '""')}"`;
 }

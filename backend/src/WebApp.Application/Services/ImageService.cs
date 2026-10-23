@@ -94,6 +94,7 @@ public sealed class ImageService(
     {
         ImagePurpose.CategoryImage => uploader.IsAdmin,
         ImagePurpose.StoreLogo or ImagePurpose.StoreBanner or ImagePurpose.ProductPhoto => uploader.IsStoreOwner || uploader.IsAdmin,
+        ImagePurpose.PaymentReceipt => uploader.IsStoreOwner,
         _ => false,
     };
 }

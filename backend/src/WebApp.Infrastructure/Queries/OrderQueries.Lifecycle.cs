@@ -89,6 +89,20 @@ internal sealed partial class OrderQueries
 
         if (query.Status is { } status) orders = orders.Where(o => o.StoreOrders.Any(s => s.Status == status));
         if (query.StoreId is { } storeId) orders = orders.Where(o => o.StoreOrders.Any(s => s.StoreId == storeId));
+        if (query.ClientId is { } clientId) orders = orders.Where(o => o.ClientId == clientId);
+        if (query.AffiliateId is { } affiliateId)
+            orders = orders.Where(o => o.PlacedByAffiliateId == affiliateId || o.StoreOrders.Any(s => s.Lines.Any(l => l.AffiliateId == affiliateId)));
+        if (query.ProductId is { } productId) orders = orders.Where(o => o.StoreOrders.Any(s => s.Lines.Any(l => l.ProductId == productId)));
+        if (query.From is not null || query.To is not null)
+        {
+            DateTime? start = query.From?.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+            DateTime? end = query.To?.AddDays(1).ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+            orders = query.DateField == OrderDateField.Delivered
+                ? orders.Where(o => o.StoreOrders.Any(s => s.DeliveredAt != null
+                    && (start == null || s.DeliveredAt >= start) && (end == null || s.DeliveredAt < end)
+                    && (query.StoreId == null || s.StoreId == query.StoreId)))
+                : orders.Where(o => (start == null || o.CreatedAt >= start) && (end == null || o.CreatedAt < end));
+        }
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
             var term = $"%{EscapeLike(query.Search.Trim())}%";

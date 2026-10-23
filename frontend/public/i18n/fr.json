@@ -24,7 +24,8 @@
         "title": "Pour les affiliés",
         "text": "Partagez votre code, gagnez des coins à chaque vente livrée, puis encaissez."
       }
-    }
+    },
+    "topRatedProducts": "Les mieux notés"
   },
   "auth": {
     "login": "Se connecter",
@@ -303,6 +304,49 @@
       "paidReferenceRequired": "Indiquez la référence du virement ou qui a remis l’argent.",
       "paidReferenceTooLong": "La référence est trop longue (120 caractères max).",
       "paidInFuture": "La date de paiement ne peut pas être dans le futur."
+    },
+    "review": {
+      "starsInvalid": "Choisissez une note de 1 à 5 étoiles.",
+      "commentTooLong": "Le commentaire est trop long (1000 caractères maximum).",
+      "editWindowClosed": "Le délai pour modifier cet avis est passé.",
+      "hidden": "Cet avis a été masqué par la modération.",
+      "replyRequired": "Écrivez votre réponse.",
+      "replyTooLong": "La réponse est trop longue (1000 caractères maximum).",
+      "reasonRequired": "Indiquez le motif.",
+      "reasonTooLong": "Le motif est trop long (500 caractères maximum).",
+      "alreadyHidden": "Cet avis est déjà masqué.",
+      "notHidden": "Cet avis n'est pas masqué.",
+      "notFound": "Avis introuvable.",
+      "orderNotFound": "Commande introuvable.",
+      "notDelivered": "Vous pourrez noter après la livraison.",
+      "alreadyReviewed": "Vous avez déjà noté cet achat.",
+      "ownStore": "Vous ne pouvez pas noter votre propre boutique."
+    },
+    "billing": {
+      "priceInvalid": "Prix invalide.",
+      "monthsInvalid": "Nombre de mois invalide (1 à 36).",
+      "amountInvalid": "Montant invalide.",
+      "amountTooHigh": "Le montant dépasse ce qui reste à payer.",
+      "methodInvalid": "Mode de paiement invalide.",
+      "referenceTooLong": "Référence trop longue.",
+      "noteTooLong": "Note trop longue.",
+      "reasonRequired": "Indiquez un motif.",
+      "reasonTooLong": "Motif trop long.",
+      "notDeclared": "Ce paiement a déjà été traité.",
+      "invoicePaid": "Cette facture est déjà payée.",
+      "offerNameRequired": "Le nom de l’offre en français est obligatoire.",
+      "offerNameTooLong": "Nom trop long.",
+      "offerDiscountInvalid": "Choisissez une remise : un % (1 à 100) ou un montant en TND.",
+      "offerMonthsInvalid": "Nombre de mois invalide (1 à 36).",
+      "offerDatesInvalid": "La date de fin est avant la date de début.",
+      "offerTargetInvalid": "Choisissez au moins une catégorie ou une boutique.",
+      "offerNotApplicable": "Cette offre ne s’applique pas à ce paiement.",
+      "nothingToInvoice": "Rien à facturer.",
+      "offerNotFound": "Offre introuvable.",
+      "invoiceNotFound": "Facture introuvable.",
+      "paymentNotFound": "Paiement introuvable.",
+      "alreadyDeclared": "Un paiement attend déjà la vérification.",
+      "changed": "Modifié entre-temps : rechargez la page."
     }
   },
   "affiliate": {
@@ -328,7 +372,9 @@
     "saving": "Enregistrement…",
     "yes": "Oui",
     "no": "Non",
-    "choose": "Choisir…"
+    "choose": "Choisir…",
+    "save": "Enregistrer",
+    "edit": "Modifier"
   },
   "admin": {
     "title": "Admin",
@@ -347,7 +393,8 @@
       "coins": "Coins",
       "payouts": "Retraits affiliés",
       "billing": "Facturation",
-      "partnerships": "Partenariats"
+      "partnerships": "Partenariats",
+      "dashboard": "Tableau de bord"
     },
     "status": {
       "Active": "Actif",
@@ -577,6 +624,22 @@
         "reject": "Retrait refusé",
         "schedule": "Retrait planifié",
         "paid": "Retrait payé"
+      },
+      "review": {
+        "hide": "Avis masqué",
+        "unhide": "Avis réaffiché"
+      },
+      "billing": {
+        "price": "Prix d’abonnement modifié",
+        "offer": {
+          "create": "Offre créée",
+          "update": "Offre modifiée"
+        },
+        "payment": {
+          "record": "Paiement enregistré",
+          "approve": "Paiement approuvé",
+          "reject": "Paiement refusé"
+        }
       }
     },
     "fields": {
@@ -690,6 +753,10 @@
       "defaultMonthlyPriceTnd": {
         "label": "Abonnement boutique par défaut",
         "hint": "Prix mensuel d'une nouvelle boutique. Chaque boutique peut avoir son propre prix."
+      },
+      "trialDays": {
+        "label": "Jours offerts à une nouvelle boutique",
+        "hint": "Une nouvelle boutique ne paie son abonnement qu’après ces jours."
       }
     },
     "commissionInvoice": {
@@ -714,6 +781,12 @@
       "maxImageSizeMb": {
         "label": "Taille maximale d'une image",
         "hint": "Plus grande photo, logo ou bannière qu'un utilisateur peut envoyer."
+      }
+    },
+    "reviews": {
+      "editWindowDays": {
+        "label": "Délai pour modifier un avis",
+        "hint": "Nombre de jours pendant lesquels un client peut modifier son avis. Fixé à la publication de l'avis."
       }
     }
   },
@@ -781,7 +854,10 @@
       "store": "Ma boutique",
       "products": "Mes produits",
       "affiliates": "Mes affiliés",
-      "orders": "Commandes"
+      "orders": "Commandes",
+      "reviews": "Avis",
+      "stats": "Statistiques",
+      "billing": "Facturation"
     },
     "moderation": {
       "disabled": "Votre boutique a été désactivée par l'administrateur.",
@@ -878,11 +954,31 @@
     "breadcrumb": "Vous êtes ici",
     "searchProducts": "Rechercher un produit",
     "searchStores": "Rechercher une boutique",
+    "search": "Rechercher",
+    "searchPlaceholder": "Produits, boutiques…",
+    "searchTitle": "Recherche",
+    "searchResults": "Résultats pour « {{q}} »",
+    "seeAllStores": "Voir les {{count}} boutiques",
+    "noResults": "Aucun produit ne correspond. Essayez d'autres mots ou retirez des filtres.",
+    "filters": "Filtres",
+    "clearFilters": "Effacer les filtres",
+    "price": "Prix (TND)",
+    "priceMin": "Min",
+    "priceMax": "Max",
+    "minRating": "Note minimale",
+    "anyRating": "Toutes les notes",
+    "ratingAtLeast": "{{n}} ★ et plus",
+    "storeCategory": "Type de boutique",
+    "allStoreCategories": "Tous les types",
+    "fieldFiltersHint": "Choisissez une catégorie pour filtrer aussi par taille, couleur…",
+    "yes": "Oui",
+    "no": "Non",
     "sortBy": "Trier par",
     "sort": {
       "Newest": "Nouveautés",
       "PriceAsc": "Prix croissant",
-      "PriceDesc": "Prix décroissant"
+      "PriceDesc": "Prix décroissant",
+      "TopRated": "Mieux notés"
     },
     "resultCount": "{{count}} produit(s)",
     "noProducts": "Aucun produit ici pour l'instant.",
@@ -962,7 +1058,6 @@
     },
     "productCounts": "{{ total }} produit(s) · {{ live }} en ligne · {{ disabled }} désactivé(s)",
     "seeProducts": "Voir ses produits",
-    "statsSoon": "Statistiques de la boutique : bientôt (023).",
     "actions": "Modération",
     "stores": {
       "title": "Boutiques",
@@ -1469,5 +1564,372 @@
       "bankReference": "Référence du virement"
     },
     "rate": "1 coin = {{value}} TND"
+  },
+  "reviews": {
+    "starsLabel": "Note : {{value}} sur 5",
+    "yourRating": "Votre note",
+    "nStars": "{{n}} ★",
+    "starWords": {
+      "1": "Très décevant",
+      "2": "Décevant",
+      "3": "Correct",
+      "4": "Bien",
+      "5": "Excellent"
+    },
+    "productTitle": "Avis clients",
+    "storeTitle": "Avis sur le service de la boutique",
+    "storeHint": "Préparation, livraison et contact, notés par les clients livrés.",
+    "none": "Pas encore d'avis.",
+    "verifiedHint": "Seuls les clients livrés peuvent laisser un avis.",
+    "count": "{{count}} avis",
+    "allStars": "Toutes les notes",
+    "edited": "modifié",
+    "storeReply": "Réponse de la boutique",
+    "noneWithStars": "Aucun avis ne correspond.",
+    "seeAll": "Voir les avis",
+    "mine": "Mes avis",
+    "mineHint": "Notez les produits et les boutiques qui vous ont livré : vos avis aident les autres clients.",
+    "toWrite": "À noter",
+    "nothingToWrite": "Rien à noter pour le moment. Après chaque livraison, vous pourrez noter les produits et la boutique ici.",
+    "rateStore": "Service de {{name}}",
+    "deliveredOn": "livré le {{date}}",
+    "rate": "Noter",
+    "rateOrder": "Noter",
+    "comment": "Commentaire",
+    "optional": "facultatif",
+    "productPlaceholder": "Qualité, conformité à la description, ce que vous avez aimé…",
+    "storePlaceholder": "Rapidité, emballage, contact avec la boutique…",
+    "publish": "Publier l'avis",
+    "written": "Mes avis publiés",
+    "noneWritten": "Vous n'avez pas encore publié d'avis.",
+    "noComment": "Sans commentaire",
+    "target": {
+      "Product": "Produit",
+      "Store": "Boutique"
+    },
+    "hiddenPill": "Masqué",
+    "hiddenNotice": "Avis masqué par la modération : {{reason}}",
+    "editableUntil": "Modifiable jusqu'au {{date}}",
+    "editClosed": "Ne peut plus être modifié.",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "admin": {
+      "title": "Avis",
+      "subtitle": "Tous les avis des clients. Masquez un avis injurieux ou faux : il sort des pages publiques et des moyennes.",
+      "total": "Avis",
+      "lowStars": "1–2 ★ visibles",
+      "hidden": "Masqués",
+      "visible": "Visibles",
+      "searchPlaceholder": "Commentaire, client, boutique, produit, commande…",
+      "target": "Type",
+      "allTargets": "Produits et boutiques",
+      "stars": "Note",
+      "allStars": "Toutes les notes",
+      "visibility": "Visibilité",
+      "allVisibility": "Visibles et masqués",
+      "empty": "Aucun avis.",
+      "hide": "Masquer",
+      "unhide": "Réafficher",
+      "hideTitle": "Masquer cet avis ?",
+      "hideHint": "Il disparaît de la boutique et des moyennes. Le client et la boutique voient le motif.",
+      "unhideTitle": "Réafficher cet avis ?",
+      "unhideHint": "Il revient sur les pages publiques et dans les moyennes.",
+      "reason": "Motif (journal d’audit)",
+      "hiddenBecause": "Masqué : {{reason}}"
+    },
+    "store": {
+      "title": "Avis clients",
+      "subtitle": "Ce que vos clients livrés disent de vos produits et de votre service. Répondez publiquement.",
+      "serviceRating": "Note du service",
+      "productsRating": "Note des produits",
+      "unanswered": "Sans réponse",
+      "answered": "Avec réponse",
+      "toAnswer": "Sans réponse",
+      "allAnswers": "Avec ou sans réponse",
+      "empty": "Aucun avis pour l'instant. Les clients peuvent noter une commande une fois livrée.",
+      "hiddenNotice": "Masqué par la modération : {{reason}}. Il ne compte plus dans vos notes.",
+      "yourReply": "Votre réponse publique",
+      "replyPlaceholder": "Merci pour votre avis…",
+      "replyHint": "Visible par tous sous l'avis. Restez courtois.",
+      "publishReply": "Publier la réponse",
+      "removeReply": "Retirer",
+      "reply": "Répondre"
+    }
+  },
+  "filters": {
+    "remove": "Retirer ce filtre",
+    "store": "Boutique {{value}}…",
+    "affiliate": "Affilié {{value}}…",
+    "client": "Client {{value}}…",
+    "product": "Produit {{value}}…",
+    "placedBetween": "Passées {{value}}",
+    "deliveredBetween": "Livrées {{value}}"
+  },
+  "stats": {
+    "title": "Tableau de bord",
+    "subtitle": "Commandes, ventes, coins et paiements de la période. Chaque chiffre ouvre la liste qui le compose.",
+    "period": "Période",
+    "lastDays": "{{n}} j",
+    "from": "Du",
+    "to": "Au",
+    "ordersAndSales": "Commandes et ventes",
+    "coinsAndPayouts": "Coins et paiements",
+    "platform": "Plateforme",
+    "csv": "Exporter CSV",
+    "noData": "Rien sur cette période.",
+    "col": {
+      "store": "Boutique",
+      "product": "Produit",
+      "affiliate": "Affilié",
+      "orders": "Commandes livrées",
+      "lines": "Lignes créditées",
+      "quantity": "Quantité",
+      "amount": "Ventes (TND)",
+      "coins": "Coins",
+      "detail": "Détail"
+    },
+    "kpi": {
+      "placed": "Commandes passées",
+      "openHint": "{{n}} en cours",
+      "delivered": "Livrées",
+      "rate": "{{n}} % des commandes passées",
+      "notDelivered": "Non livrées",
+      "cancelled": "Annulées",
+      "sales": "Ventes livrées",
+      "salesHint": "{{orders}} commande(s) · {{quantity}} article(s)",
+      "viaAffiliates": "Ventes via affiliés",
+      "viaHint": "{{orders}} commande(s) · {{n}} % des ventes",
+      "coinsGenerated": "Coins donnés aux affiliés",
+      "rating": "Note",
+      "ratingCount": "{{n}} avis",
+      "partners": "Affiliés partenaires",
+      "pendingRequests": "{{n}} demande(s) en attente",
+      "coinsEarned": "Coins gagnés",
+      "adjusted": "Corrections : {{n}}",
+      "coinsExpected": "Coins attendus",
+      "expectedHint": "Colis en route, maintenant",
+      "payoutsPending": "Paiements à traiter",
+      "payoutsPendingHint": "{{coins}} coins · {{tnd}} TND",
+      "paidOut": "Payé aux affiliés",
+      "paidOutHint": "{{n}} paiement(s) · {{coins}} coins",
+      "activeStores": "Boutiques actives",
+      "closedStores": "{{n}} fermée(s) pour l’instant",
+      "suspendedStores": "Boutiques suspendues",
+      "disabledStores": "{{n}} désactivée(s)",
+      "activeAffiliates": "Affiliés actifs",
+      "activeAffiliatesHint": "Ont gagné des coins sur la période",
+      "newUsers": "Nouveaux comptes",
+      "coinsEarnedHere": "Coins gagnés sur ce produit",
+      "expectedNow": "{{n}} attendus maintenant",
+      "partnerStores": "Boutiques partenaires",
+      "partnersHint": "{{requested}} en attente · {{refused}} refusée(s) · {{ended}} terminée(s)",
+      "subscriptionsCollected": "Abonnements encaissés",
+      "commissionsBilled": "Commissions facturées",
+      "commissionsCollected": "{{n}} TND encaissés",
+      "commissionsDue": "Commissions dues",
+      "declaredPayments": "Paiements à vérifier"
+    },
+    "daily": {
+      "sales": "Ventes livrées par jour",
+      "placed": "Commandes passées par jour",
+      "delivered": "Commandes livrées par jour",
+      "measure": "Mesure affichée",
+      "short": {
+        "sales": "Ventes",
+        "placed": "Passées",
+        "delivered": "Livrées"
+      },
+      "total": "Total de la période",
+      "table": "Voir le tableau",
+      "date": "Date"
+    },
+    "topStores": "Meilleures boutiques",
+    "topProducts": "Meilleurs produits",
+    "topAffiliates": "Meilleurs affiliés",
+    "backToProducts": "Produits",
+    "visible": "En ligne",
+    "hidden": "Masqué",
+    "seeInShop": "Voir dans la boutique",
+    "affiliateTitle": "Résultats d’affilié",
+    "coinsByStore": "Coins par boutique",
+    "coinsByProduct": "Coins par produit",
+    "storeTitle": "Résultats de la boutique",
+    "seeProducts": "Voir ses produits",
+    "seeOrders": "Voir les commandes",
+    "seeCodeOrders": "Commandes avec son code",
+    "ordersAsClient": "Commandes",
+    "affiliatePercent": "Commission affilié",
+    "storeDashboard": "Statistiques",
+    "storeDashboardHint": "Vos ventes, celles apportées par les affiliés et les coins qu’ils ont gagnés sur vos produits.",
+    "billing": "Facturation des boutiques"
+  },
+  "billing": {
+    "title": "Facturation",
+    "monthlyPrice": "Prix mensuel",
+    "paidUntil": "Payé jusqu’au",
+    "commissionsDue": "Commissions à payer",
+    "state": "État",
+    "notInvoicedYet": "+ {{amount}} TND pas encore facturés ({{n}} ligne(s))",
+    "thisMonth": "Ce mois-ci (pas encore facturé)",
+    "thisMonthHint": "{{n}} commission(s) d’affiliés",
+    "stateLabel": {
+      "suspended": "Suspendue",
+      "overdue": "En retard",
+      "countdown": "Fermeture dans {{n}} j",
+      "ok": "À jour",
+      "waiting": "Paiement à vérifier"
+    },
+    "banner": {
+      "suspended": "Votre boutique est suspendue pour impayé : elle n’apparaît plus et ne reçoit plus de commandes. Vous pouvez traiter les commandes déjà passées.",
+      "overdue": "Un paiement est en retard : votre boutique va être suspendue.",
+      "countdown": "Votre boutique sera fermée dans {{n}} jour(s) — payez maintenant.",
+      "waiting": "Paiement envoyé — en attente de vérification.",
+      "rejected": "Votre paiement a été refusé.",
+      "reason": "Motif :",
+      "due": "Vous devez {{amount}} TND de commissions d’affiliés.",
+      "detail": "À payer : {{amount}} TND de commissions — prochaine échéance le {{date}}.",
+      "open": "Voir et payer"
+    },
+    "method": {
+      "Cash": "Espèces",
+      "BankTransfer": "Virement bancaire"
+    },
+    "fields": {
+      "method": "Mode de paiement",
+      "paidOn": "Date du paiement",
+      "reference": "Référence",
+      "referenceTransfer": "Référence du virement",
+      "referenceCash": "N° de reçu (facultatif)",
+      "note": "Note (facultatif)",
+      "amount": "Montant (TND)"
+    },
+    "statement": {
+      "title": "Relevé mois par mois",
+      "month": "Mois",
+      "subscription": "Abonnement payé",
+      "commissions": "Commissions",
+      "paid": "Payé",
+      "left": "Reste",
+      "invoice": "Facture",
+      "months": "{{n}} mois",
+      "inProgress": "Mois en cours",
+      "none": "Rien à facturer"
+    },
+    "invoiceStatus": {
+      "Issued": "À payer",
+      "PartiallyPaid": "Payée en partie",
+      "Paid": "Payée"
+    },
+    "paymentStatus": {
+      "Declared": "À vérifier",
+      "Approved": "Approuvé",
+      "Rejected": "Refusé"
+    },
+    "payments": {
+      "title": "Paiements",
+      "none": "Aucun paiement pour l’instant.",
+      "subscription": "Abonnement · {{n}} mois",
+      "commission": "Commissions",
+      "byOwner": "déclaré par la boutique",
+      "byAdmin": "enregistré par un admin",
+      "covers": "du {{from}} au {{to}}",
+      "rejected": "Refusé :",
+      "receipt": "Voir le reçu",
+      "approve": "Approuver",
+      "reject": "Refuser"
+    },
+    "invoice": {
+      "title": "Facture de commissions",
+      "month": "Mois",
+      "issued": "Émise le",
+      "due": "À payer avant le",
+      "lines": "Lignes",
+      "order": "Commande",
+      "product": "Produit",
+      "quantity": "Qté",
+      "lineTotal": "Vente (TND)",
+      "affiliate": "Affilié",
+      "amount": "Commission (TND)",
+      "adjustment": "correction",
+      "total": "Total",
+      "paid": "Déjà payé",
+      "left": "Reste à payer",
+      "print": "Imprimer / PDF"
+    },
+    "reject": {
+      "title": "Refuser le paiement {{number}}",
+      "reason": "Motif (montré à la boutique)",
+      "placeholder": "Ex. : aucun virement reçu sur le compte."
+    },
+    "record": {
+      "subscription": "Enregistrer un abonnement payé",
+      "invoice": "Enregistrer un paiement",
+      "months": "Nombre de mois",
+      "offer": "Offre",
+      "noOffer": "Sans offre",
+      "total": "{{months}} mois × {{price}} TND, remise comprise :",
+      "confirm": "Enregistrer"
+    },
+    "declare": {
+      "title": "Déclarer un paiement",
+      "invoice": "J’ai payé cette facture",
+      "subscription": "Payer l’abonnement",
+      "hint": "Payez en espèces ou par virement, puis déclarez-le ici : un admin vérifie et confirme.",
+      "left": "Reste à payer : {{amount}} TND",
+      "price": "{{months}} × {{price}} TND = {{total}} TND (la meilleure offre s’applique)",
+      "receipt": "Photo du reçu (facultatif)",
+      "send": "Envoyer"
+    },
+    "mine": {
+      "title": "Facturation",
+      "subtitle": "Votre abonnement et les commissions d’affiliés à payer à la plateforme, mois par mois.",
+      "rule": "Les commissions d’un mois sont facturées au début du mois suivant. Sans paiement {{n}} jour(s) après l’échéance, la boutique est suspendue (jamais supprimée).",
+      "offers": "Offres disponibles"
+    },
+    "offers": {
+      "new": "Nouvelle offre",
+      "edit": "Modifier l’offre",
+      "none": "Aucune offre.",
+      "nameFr": "Nom (français)",
+      "nameAr": "Nom (arabe)",
+      "nameEn": "Nom (anglais)",
+      "months": "Mois à payer",
+      "anyMonths": "Toute durée",
+      "forMonths": "{{n}} mois",
+      "discount": "Remise",
+      "startsOn": "Début",
+      "endsOn": "Fin",
+      "target": "Pour",
+      "targets": {
+        "AllStores": "Toutes les boutiques",
+        "StoreCategories": "Des catégories de boutiques",
+        "Stores": "Des boutiques choisies"
+      },
+      "searchStores": "Chercher une boutique",
+      "selected": "{{n}} sélectionnée(s)",
+      "firstPaymentOnly": "Premier paiement seulement",
+      "active": "Active",
+      "on": "Active",
+      "off": "Inactive",
+      "used": "Utilisée {{n}} fois · −{{amount}} TND"
+    },
+    "admin": {
+      "title": "Facturation des boutiques",
+      "subtitle": "Paiements à vérifier, boutiques en retard, offres et recettes.",
+      "run": "Lancer les vérifications",
+      "ran": "{{invoices}} facture(s) émise(s), {{suspended}} boutique(s) suspendue(s), {{reactivated}} réactivée(s).",
+      "tabs": {
+        "queue": "À vérifier",
+        "overdue": "En retard",
+        "offers": "Offres",
+        "revenue": "Recettes"
+      },
+      "noOverdue": "Aucune boutique en retard."
+    },
+    "revenue": {
+      "subscriptions": "Abonnements encaissés",
+      "billed": "Commissions facturées",
+      "collected": "Commissions encaissées"
+    }
   }
 }

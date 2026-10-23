@@ -53,6 +53,12 @@ internal static class ResultExtensions
             DomainErrors.Order.TransitionNotAllowed or DomainErrors.Order.DeliveredIsFinal or OrderErrors.Changed => StatusCodes.Status409Conflict,
             CartErrors.ProductUnavailable or CartErrors.StoreClosed or CartErrors.NotEnoughStock
                 or CartErrors.VariantUnavailable or DomainErrors.Cart.TooManyLines => StatusCodes.Status409Conflict,
+            ReviewErrors.NotFound or ReviewErrors.OrderNotFound => StatusCodes.Status404NotFound,
+            ReviewErrors.NotDelivered or ReviewErrors.AlreadyReviewed or ReviewErrors.OwnStore or DomainErrors.Review.EditWindowClosed
+                or DomainErrors.Review.Hidden or DomainErrors.Review.AlreadyHidden or DomainErrors.Review.NotHidden => StatusCodes.Status409Conflict,
+            BillingErrors.OfferNotFound or BillingErrors.InvoiceNotFound or BillingErrors.PaymentNotFound => StatusCodes.Status404NotFound,
+            BillingErrors.AlreadyDeclared or BillingErrors.Changed or DomainErrors.Billing.NotDeclared or DomainErrors.Billing.InvoicePaid
+                or DomainErrors.Billing.AmountTooHigh or DomainErrors.Billing.OfferNotApplicable => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status400BadRequest,
         };
 

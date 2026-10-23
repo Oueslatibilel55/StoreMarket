@@ -19,6 +19,7 @@
       <button type="button" (click)="clear()" class="btn btn-ghost">{{ 'common.clearFilters' | transloco }}</button>
     }
   </div>
+  <app-filter-chips [chips]="drillDown()" (cleared)="apply($event)" />
 
   @if (partnerships.error()) {
     <p class="alert-danger m-5">{{ 'errors.unknown' | transloco }}</p>

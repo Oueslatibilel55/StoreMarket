@@ -25,4 +25,8 @@ public interface ICatalogQueries
     Task<bool> IsStoreVisibleAsync(Guid storeId, CancellationToken ct = default);
     /// <summary>The cart's products — also removed or hidden ones, flagged with <c>Visible = false</c> (013).</summary>
     Task<IReadOnlyList<CartProductInfo>> GetCartProductsAsync(IReadOnlyCollection<Guid> productIds, CancellationToken ct = default);
+    /// <summary>Visible reviews of a shop product (017), with its stats; null when the product is not visible.</summary>
+    Task<PublicReviewsDto?> GetProductReviewsAsync(string productSlug, int? stars, int? page, int? pageSize, CancellationToken ct = default);
+    /// <summary>Visible reviews of a public store (its service, 017), with its stats; null when the store is not public.</summary>
+    Task<PublicReviewsDto?> GetStoreReviewsAsync(string storeSlug, int? stars, int? page, int? pageSize, CancellationToken ct = default);
 }

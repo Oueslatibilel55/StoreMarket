@@ -47,6 +47,12 @@
           {{ p.store.name }}
         </a>
         <h1 class="page-title mt-2 lg:text-4xl">{{ p.name }}</h1>
+        @if (p.rating.count) {
+          <button type="button" (click)="scrollToReviews()" class="mt-2 inline-flex cursor-pointer rounded-md transition-opacity hover:opacity-80"
+            [attr.aria-label]="'reviews.seeAll' | transloco">
+            <app-star-rating [value]="p.rating.average" [count]="p.rating.count" [showValue]="true" />
+          </button>
+        }
 
         <div class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
           @if (showFrom()) { <span class="text-sm text-muted">{{ 'products.from' | transloco }}</span> }
@@ -191,6 +197,10 @@
         }
       </div>
     }
+
+    <div class="mt-12 border-t border-line pt-10">
+      <app-review-section kind="product" [slug]="p.slug" />
+    </div>
   </main>
 } @else {
   <p class="empty-state">{{ 'common.loading' | transloco }}</p>

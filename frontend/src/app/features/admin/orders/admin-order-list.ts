@@ -1,19 +1,20 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, inject, input, numberAttribute } from '@angular/core';
+import { Component, computed, inject, input, numberAttribute } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { orderStatusTone, StoreOrderStatus } from '../../../core/orders/order-api';
+import { FilterChip, FilterChips, shortId } from '../../../shared/ui/filter-chips';
 import { Pagination } from '../../../shared/ui/pagination';
 import { AdminApi } from '../admin-api';
 
 const PAGE_SIZE = 20;
 
-/** `/admin/orders?status=&search=&page=` — every order of the platform (016). */
+/** `/admin/orders?status=&search=&page=` — every order of the platform (016); dashboard numbers (023) add store / affiliate / client / product / dates. */
 @Component({
   selector: 'app-admin-order-list',
-  imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, Pagination],
+  imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, FilterChips, Pagination],
   template: `
     <header>
       <h1 class="page-title">{{ 'adminOrders.title' | transloco }}</h1>
@@ -30,6 +31,7 @@ const PAGE_SIZE = 20;
           @for (s of statuses; track s) { <option [value]="s">{{ 'orders.status.' + s | transloco }}</option> }
         </select>
       </div>
+      <app-filter-chips [chips]="drillDown()" (cleared)="apply($event)" />
       @if (orders.value(); as result) {
         @if (result.items.length === 0) {
           <p class="empty-state">{{ 'adminOrders.none' | transloco }}</p>
@@ -75,14 +77,39 @@ export class AdminOrderList {
   // Router input binding sets missing query params to undefined, so no defaults here.
   readonly status = input<StoreOrderStatus | undefined>();
   readonly search = input<string | undefined>();
+  readonly storeId = input<string | undefined>();
+  readonly affiliateId = input<string | undefined>();
+  readonly clientId = input<string | undefined>();
+  readonly productId = input<string | undefined>();
+  readonly from = input<string | undefined>();
+  readonly to = input<string | undefined>();
+  readonly dateField = input<'Placed' | 'Delivered' | undefined>();
   readonly page = input(1, { transform: (v: unknown) => numberAttribute(v, 1) });
 
   protected readonly statuses: StoreOrderStatus[] = ['Placed', 'Confirmed', 'Shipped', 'Delivered', 'NotDelivered', 'Cancelled'];
   protected readonly pageSize = PAGE_SIZE;
   protected readonly tone = orderStatusTone;
   protected readonly orders = rxResource({
-    params: () => ({ status: this.status(), search: this.search(), page: this.page(), pageSize: PAGE_SIZE }),
+    params: () => ({
+      status: this.status(), search: this.search(), storeId: this.storeId(), affiliateId: this.affiliateId(), clientId: this.clientId(),
+      productId: this.productId(), from: this.from(), to: this.to(), dateField: this.dateField(), page: this.page(), pageSize: PAGE_SIZE,
+    }),
     stream: ({ params }) => this.api.orders(params),
+  });
+  /** Filters that have no control on this page (they come from a dashboard link), each with how to remove it. */
+  protected readonly drillDown = computed(() => {
+    const chips: FilterChip[] = [];
+    if (this.storeId()) chips.push({ label: 'filters.store', value: shortId(this.storeId()!), clear: { storeId: null } });
+    if (this.affiliateId()) chips.push({ label: 'filters.affiliate', value: shortId(this.affiliateId()!), clear: { affiliateId: null } });
+    if (this.clientId()) chips.push({ label: 'filters.client', value: shortId(this.clientId()!), clear: { clientId: null } });
+    if (this.productId()) chips.push({ label: 'filters.product', value: shortId(this.productId()!), clear: { productId: null } });
+    if (this.from() || this.to())
+      chips.push({
+        label: this.dateField() === 'Delivered' ? 'filters.deliveredBetween' : 'filters.placedBetween',
+        value: `${this.from() ?? '…'} → ${this.to() ?? '…'}`,
+        clear: { from: null, to: null, dateField: null },
+      });
+    return chips;
   });
   private searchTimer?: ReturnType<typeof setTimeout>;
 

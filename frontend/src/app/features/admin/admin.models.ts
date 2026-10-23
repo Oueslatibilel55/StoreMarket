@@ -195,6 +195,14 @@ export interface AdminOrderQuery {
   status?: StoreOrderStatus;
   search?: string;
   storeId?: string;
+  /** Drill-down from the dashboard (023). */
+  affiliateId?: string;
+  clientId?: string;
+  productId?: string;
+  /** Inclusive days on `dateField` (placed by default). */
+  from?: string;
+  to?: string;
+  dateField?: 'Placed' | 'Delivered';
   page?: number;
   pageSize?: number;
 }

@@ -50,6 +50,15 @@
             </div>
           }
           <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt class="text-sm text-muted">{{ 'stats.ordersAsClient' | transloco }}</dt>
+            <dd class="text-sm sm:col-span-2">
+              <a routerLink="/admin/orders" [queryParams]="{ clientId: u.id }" class="link">{{ 'stats.seeOrders' | transloco }}</a>
+              @if (u.affiliateCode) {
+                <a routerLink="/admin/orders" [queryParams]="{ affiliateId: u.id }" class="link ms-4">{{ 'stats.seeCodeOrders' | transloco }}</a>
+              }
+            </dd>
+          </div>
+          <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm text-muted">{{ 'account.memberSince' | transloco }}</dt>
             <dd class="text-sm font-medium text-ink sm:col-span-2">{{ u.createdAt | date: 'medium' : undefined : language.locale() }}</dd>
           </div>
@@ -156,6 +165,10 @@
       }
     </div>
   </div>
+
+  @if (u.affiliateCode) {
+    <app-affiliate-stats [affiliateId]="u.id" />
+  }
 
   @if (pending(); as action) {
     <app-modal [label]="'admin.confirm.title' | transloco" (close)="cancel()">

@@ -33,7 +33,7 @@ dotnet run --project src/WebApp.AppHost
 # 3. Apply the database migrations (new terminal, from backend/, while the AppHost runs)
 dotnet ef database update --project src/WebApp.Infrastructure --startup-project src/WebApp.Api
 
-# Optional: demo users + a real-looking catalogue (10 stores, 61 products) — see backend/scripts/dev-users.txt
+# Optional: demo users + a real-looking catalogue (10 stores, 61 products) — see backend/scripts/dev-users.xlsx
 # Catalogue source: backend/scripts/demo-data/catalog.mjs, photos: backend/scripts/demo-data/images (rebuild with --reset-catalog)
 node scripts/seed-dev-users.mjs
 

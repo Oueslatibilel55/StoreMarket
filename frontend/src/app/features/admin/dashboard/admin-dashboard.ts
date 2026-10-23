@@ -1,0 +1,118 @@
+import { DecimalPipe } from '@angular/common';
+import { Component, inject, input } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { PeriodQuery, StatsApi } from '../../../core/stats/stats-api';
+import { ConversionTiles } from '../../../shared/stats/conversion-tiles';
+import { DailyChart } from '../../../shared/stats/daily-chart';
+import { KpiTile } from '../../../shared/stats/kpi-tile';
+import { PeriodPicker } from '../../../shared/stats/period-picker';
+import { StatsTable } from '../../../shared/stats/stats-table';
+
+/**
+ * `/admin?from=&to=` — the platform at a glance (023): orders and sales of the period, coins and payouts, stores,
+ * a daily chart and the best stores / products / affiliates. Every tile opens the list behind its number.
+ */
+@Component({
+  selector: 'app-admin-dashboard',
+  imports: [DecimalPipe, TranslocoPipe, ConversionTiles, DailyChart, KpiTile, PeriodPicker, StatsTable],
+  template: `
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="page-title">{{ 'stats.title' | transloco }}</h1>
+        <p class="page-subtitle">{{ 'stats.subtitle' | transloco }}</p>
+      </div>
+      <app-period-picker [from]="from()" [to]="to()" (changed)="setPeriod($event)" />
+    </header>
+
+    @if (overview.error()) {
+      <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
+    } @else if (overview.value(); as o) {
+      <h2 class="section-title mt-8">{{ 'stats.ordersAndSales' | transloco }}</h2>
+      <div class="mt-3">
+        <app-conversion-tiles [orders]="o.orders" [sales]="o.sales" [period]="o.period" [ordersQuery]="{}" />
+      </div>
+
+      <h2 class="section-title mt-8">{{ 'stats.coinsAndPayouts' | transloco }}</h2>
+      <div class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <app-kpi [label]="'stats.kpi.coinsEarned' | transloco" link="/admin/coins" [query]="{ type: 'Earned', from: o.period.from, to: o.period.to }"
+          [hint]="'stats.kpi.adjusted' | transloco: { n: (o.coins.adjusted | number: '1.0-3' : language.locale()) }">
+          {{ o.coins.earned | number: '1.0-3' : language.locale() }}
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.coinsExpected' | transloco" [hint]="'stats.kpi.expectedHint' | transloco">
+          {{ o.coins.expected | number: '1.0-3' : language.locale() }}
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.payoutsPending' | transloco" link="/admin/payouts"
+          [hint]="'stats.kpi.payoutsPendingHint' | transloco: { coins: (o.payouts.pendingCoins | number: '1.0-3' : language.locale()), tnd: (o.payouts.pendingTnd | number: '1.0-3' : language.locale()) }">
+          {{ o.payouts.pending | number: '1.0-0' : language.locale() }}
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.paidOut' | transloco" link="/admin/payouts" [query]="{ status: 'Paid', from: o.period.from, to: o.period.to }"
+          [hint]="'stats.kpi.paidOutHint' | transloco: { n: o.payouts.paid, coins: (o.coins.paidOut | number: '1.0-3' : language.locale()) }">
+          {{ o.coins.paidOutTnd | number: '1.0-3' : language.locale() }} TND
+        </app-kpi>
+      </div>
+
+      <h2 class="section-title mt-8">{{ 'stats.billing' | transloco }}</h2>
+      <div class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <app-kpi [label]="'stats.kpi.subscriptionsCollected' | transloco" link="/admin/billing" [query]="{ tab: 'revenue', from: o.period.from, to: o.period.to }">
+          {{ o.billing.subscriptionsCollected | number: '1.0-3' : language.locale() }} TND
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.commissionsBilled' | transloco" link="/admin/billing" [query]="{ tab: 'revenue', from: o.period.from, to: o.period.to }"
+          [hint]="'stats.kpi.commissionsCollected' | transloco: { n: (o.billing.commissionsCollected | number: '1.0-3' : language.locale()) }">
+          {{ o.billing.commissionsBilled | number: '1.0-3' : language.locale() }} TND
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.commissionsDue' | transloco" link="/admin/billing" [query]="{ tab: 'overdue' }">
+          {{ o.billing.commissionsDue | number: '1.0-3' : language.locale() }} TND
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.declaredPayments' | transloco" link="/admin/billing">
+          {{ o.billing.declaredPayments | number: '1.0-0' : language.locale() }}
+        </app-kpi>
+      </div>
+
+      <h2 class="section-title mt-8">{{ 'stats.platform' | transloco }}</h2>
+      <div class="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <app-kpi [label]="'stats.kpi.activeStores' | transloco" link="/admin/stores" [query]="{ status: 'Active' }"
+          [hint]="'stats.kpi.closedStores' | transloco: { n: o.stores.closed }">{{ o.stores.active | number: '1.0-0' : language.locale() }}</app-kpi>
+        <app-kpi [label]="'stats.kpi.suspendedStores' | transloco" link="/admin/stores" [query]="{ status: 'Suspended' }"
+          [hint]="'stats.kpi.disabledStores' | transloco: { n: o.stores.disabled }">{{ o.stores.suspended | number: '1.0-0' : language.locale() }}</app-kpi>
+        <app-kpi [label]="'stats.kpi.activeAffiliates' | transloco" [hint]="'stats.kpi.activeAffiliatesHint' | transloco">
+          {{ o.activeAffiliates | number: '1.0-0' : language.locale() }}
+        </app-kpi>
+        <app-kpi [label]="'stats.kpi.newUsers' | transloco" link="/admin/users">{{ o.newUsers | number: '1.0-0' : language.locale() }}</app-kpi>
+      </div>
+
+      <div class="mt-8">
+        <app-daily-chart [daily]="o.daily" />
+      </div>
+
+      <div class="mt-4 grid gap-4">
+        <app-stats-table [title]="'stats.topStores' | transloco" [rows]="o.topStores" nameKey="stats.col.store" linkBase="/admin/stores" csvName="stores" />
+        <app-stats-table [title]="'stats.topProducts' | transloco" [rows]="o.topProducts" nameKey="stats.col.product" linkBase="/admin/products" csvName="products" />
+        <app-stats-table [title]="'stats.topAffiliates' | transloco" [rows]="o.topAffiliates" nameKey="stats.col.affiliate" countKey="stats.col.lines"
+          [detailLtr]="true" linkBase="/admin/users" csvName="affiliates" />
+      </div>
+    } @else {
+      <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+    }
+  `,
+})
+export class AdminDashboard {
+  private readonly api = inject(StatsApi);
+  private readonly router = inject(Router);
+  protected readonly language = inject(LanguageService);
+
+  // Router input binding sets missing query params to undefined, so no defaults here.
+  readonly from = input<string | undefined>();
+  readonly to = input<string | undefined>();
+
+  protected readonly overview = rxResource({
+    params: () => ({ from: this.from(), to: this.to() }),
+    stream: ({ params }) => this.api.overview(params),
+  });
+
+  protected setPeriod(q: PeriodQuery): void {
+    this.router.navigate([], { queryParams: { from: q.from ?? null, to: q.to ?? null }, queryParamsHandling: 'merge' });
+  }
+}

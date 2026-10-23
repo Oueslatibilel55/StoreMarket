@@ -11,9 +11,11 @@ public static class SettingKeys
     public const string AffiliateCodeMinDigits = "affiliateCode.minDigits";
     public const string SubscriptionDefaultMonthlyPrice = "subscription.defaultMonthlyPriceTnd";
     public const string BillingGraceDays = "billing.graceDays";
+    public const string SubscriptionTrialDays = "subscription.trialDays";
     public const string CommissionInvoiceDueDay = "commissionInvoice.dueDayOfMonth";
     public const string PayoutMinimumCoins = "payout.minimumCoins";
     public const string RankingMinReviewsPrior = "ranking.minReviewsPrior";
+    public const string ReviewEditWindowDays = "reviews.editWindowDays";
     public const string UploadMaxImageSizeMb = "upload.maxImageSizeMb";
 }
 
@@ -43,8 +45,10 @@ public static class PlatformSettingCatalog
         new(SettingKeys.SubscriptionDefaultMonthlyPrice, "stores", SettingType.Number, "30", Min: 0m, Max: 100_000m, Unit: "tnd"),
         new(SettingKeys.CommissionInvoiceDueDay, "stores", SettingType.WholeNumber, "10", Min: 1m, Max: 28m, Unit: "dayOfMonth"),
         new(SettingKeys.BillingGraceDays, "stores", SettingType.WholeNumber, "3", Min: 0m, Max: 60m, Unit: "days"),
+        new(SettingKeys.SubscriptionTrialDays, "stores", SettingType.WholeNumber, "30", Min: 0m, Max: 365m, Unit: "days"),
 
         new(SettingKeys.RankingMinReviewsPrior, "search", SettingType.WholeNumber, "10", Min: 0m, Max: 1000m, Unit: "reviews"),
+        new(SettingKeys.ReviewEditWindowDays, "search", SettingType.WholeNumber, "30", Min: 0m, Max: 365m, Unit: "days"),
     ];
 
     private static readonly Dictionary<string, SettingDefinition> ByKey = All.ToDictionary(d => d.Key, StringComparer.Ordinal);

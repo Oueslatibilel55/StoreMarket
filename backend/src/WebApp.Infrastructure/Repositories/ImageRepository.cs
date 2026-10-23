@@ -14,7 +14,8 @@ internal sealed class ImageRepository(AppDbContext db) : IImageRepository
     public async Task<bool> IsInUseAsync(Guid id, CancellationToken ct = default) =>
         await db.StoreCategories.AnyAsync(c => c.ImageId == id, ct).ConfigureAwait(false)
         || await db.Stores.AnyAsync(s => s.LogoImageId == id || s.BannerImageId == id, ct).ConfigureAwait(false)
-        || await db.Products.AnyAsync(p => p.ImageIds.Contains(id), ct).ConfigureAwait(false);
+        || await db.Products.AnyAsync(p => p.ImageIds.Contains(id), ct).ConfigureAwait(false)
+        || await db.StorePayments.AnyAsync(p => p.ReceiptImageId == id, ct).ConfigureAwait(false);
 
     public void Add(StoredImage image) => db.Images.Add(image);
 
