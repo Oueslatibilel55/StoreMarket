@@ -21,20 +21,24 @@ import { OrderView } from './order-view';
   template: `
     <main class="page animate-fade-in">
       @if (placed()) {
-        <div class="card mb-8 flex flex-col items-center gap-3 border-success/30 bg-success/5 p-8 text-center">
-          <span class="flex size-14 items-center justify-center rounded-full bg-success text-2xl text-white shadow-card" aria-hidden="true">✓</span>
+        <div class="card mb-8 flex flex-col items-center gap-3 border-t-4 border-t-success px-5 py-10 text-center sm:px-8">
+          <span class="flex size-12 items-center justify-center rounded-full bg-success/10 text-xl font-bold text-success ring-1 ring-success/20" aria-hidden="true">✓</span>
           <h1 class="page-title">{{ 'orders.thanks' | transloco }}</h1>
           <p class="max-w-xl text-ink-soft">{{ 'orders.thanksHint' | transloco }}</p>
-          <p class="text-sm text-muted">{{ 'orders.reference' | transloco }} <span class="code-chip text-base" dir="ltr">{{ reference() }}</span></p>
+          <p class="flex flex-wrap items-center justify-center gap-2 text-sm text-muted">{{ 'orders.reference' | transloco }} <span class="code-chip text-base" dir="ltr">{{ reference() }}</span></p>
           @if (!auth.isAuthenticated()) {
             <p class="text-xs text-muted">{{ 'orders.keepReference' | transloco }}</p>
           }
         </div>
       } @else {
-        <a [routerLink]="auth.isAuthenticated() ? '/orders' : '/orders/track'" class="btn btn-ghost btn-sm -ms-3">
+        <a [routerLink]="auth.isAuthenticated() ? '/orders' : '/orders/track'" class="back-link">
           <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'orders.back' | transloco }}
         </a>
-        <h1 class="page-title mt-2">{{ 'orders.order' | transloco }} <span dir="ltr">{{ reference() }}</span></h1>
+        <header class="page-header">
+          <div class="min-w-0">
+            <h1 class="page-title flex flex-wrap items-center gap-x-3 gap-y-1">{{ 'orders.order' | transloco }} <span class="code-chip text-lg" dir="ltr">{{ reference() }}</span></h1>
+          </div>
+        </header>
       }
 
       @if (order(); as o) {
@@ -46,12 +50,12 @@ import { OrderView } from './order-view';
           </div>
         }
       } @else if (loaded.error() || (!loaded.isLoading() && !order())) {
-        <div class="card empty-state mt-6">
+        <div class="card empty-state">
           <p>{{ 'errors.order.notFound' | transloco }}</p>
           <a routerLink="/orders/track" class="btn btn-secondary mt-3">{{ 'orders.track.title' | transloco }}</a>
         </div>
       } @else {
-        <p class="card empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+        <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
       }
     </main>
 
@@ -62,7 +66,7 @@ import { OrderView } from './order-view';
         <label for="cancelReason" class="field-label mt-4">{{ 'orders.cancelReason' | transloco }}</label>
         <textarea id="cancelReason" rows="3" maxlength="500" [value]="reason()" (input)="reason.set($any($event.target).value)" class="mt-1.5 field resize-y"></textarea>
         @if (error(); as key) { <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p> }
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-3">
           <button type="button" (click)="closeCancel()" class="btn btn-ghost">{{ 'orders.keep' | transloco }}</button>
           <button type="button" (click)="confirmCancel()" [disabled]="busy()" class="btn btn-danger">{{ 'orders.cancel' | transloco }}</button>
         </div>

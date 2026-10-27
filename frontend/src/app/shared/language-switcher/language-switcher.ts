@@ -5,11 +5,11 @@ import { Lang } from '../../core/i18n/languages';
 @Component({
   selector: 'app-language-switcher',
   template: `
-    <div class="inline-flex rounded-lg bg-subtle p-0.5 text-xs ring-1 ring-line-strong/60 ring-inset">
+    <div class="inline-flex rounded-full bg-subtle p-0.5 text-xs ring-1 ring-line-strong/60 ring-inset">
       @for (l of language.languages; track l.code) {
         <button
           type="button"
-          class="rounded-md px-2 py-1 font-semibold transition-all duration-150 xl:px-2.5"
+          class="rounded-full px-2 py-1 font-semibold transition-colors duration-150 xl:px-2.5"
           [class]="l.code === language.lang() ? 'bg-card text-ink shadow-card' : 'text-muted hover:text-ink'"
           [attr.aria-pressed]="l.code === language.lang()"
           (click)="select(l.code)"

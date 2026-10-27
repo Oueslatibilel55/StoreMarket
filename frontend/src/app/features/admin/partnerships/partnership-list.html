@@ -1,55 +1,57 @@
-<header>
-  <h1 class="page-title">{{ 'partnerships.admin.title' | transloco }}</h1>
-  <p class="page-subtitle">{{ 'partnerships.admin.subtitle' | transloco }}</p>
+<header class="page-header">
+  <div class="min-w-0">
+    <h1 class="page-title">{{ 'partnerships.admin.title' | transloco }}</h1>
+    <p class="page-subtitle">{{ 'partnerships.admin.subtitle' | transloco }}</p>
+  </div>
 </header>
 
-<div class="card mt-6 overflow-hidden">
-  <div class="grid gap-3 border-b border-line p-4 sm:grid-cols-[1fr_auto] md:grid-cols-[1fr_auto_auto]">
+<div class="card overflow-hidden">
+  <div class="panel-toolbar">
     <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
       [placeholder]="'partnerships.admin.searchPlaceholder' | transloco" [attr.aria-label]="'partnerships.admin.searchPlaceholder' | transloco"
-      class="field" />
+      class="field min-w-0 flex-1 basis-56" />
     <select [value]="status() ?? ''" (change)="apply({ status: $any($event.target).value || null, page: null })"
-      [attr.aria-label]="'partnerships.admin.status' | transloco" class="field w-auto">
+      [attr.aria-label]="'partnerships.admin.status' | transloco" class="field w-full sm:w-auto">
       <option value="">{{ 'partnerships.admin.allStatuses' | transloco }}</option>
       @for (s of statuses; track s) {
         <option [value]="s">{{ 'partnerships.status.' + s | transloco }}</option>
       }
     </select>
     @if (hasFilters()) {
-      <button type="button" (click)="clear()" class="btn btn-ghost">{{ 'common.clearFilters' | transloco }}</button>
+      <button type="button" (click)="clear()" class="btn btn-ghost btn-sm">{{ 'common.clearFilters' | transloco }}</button>
     }
   </div>
   <app-filter-chips [chips]="drillDown()" (cleared)="apply($event)" />
 
   @if (partnerships.error()) {
-    <p class="alert-danger m-5">{{ 'errors.unknown' | transloco }}</p>
+    <p class="alert-danger m-4 sm:m-5">{{ 'errors.unknown' | transloco }}</p>
   } @else if (partnerships.value(); as result) {
     @if (result.items.length === 0) {
       <p class="empty-state">{{ 'partnerships.admin.empty' | transloco }}</p>
     } @else {
       <ul class="divide-y divide-line">
         @for (p of result.items; track p.id) {
-          <li class="row-hover grid gap-3 px-5 py-4 md:grid-cols-[1.4fr_1.2fr_17rem] md:items-center">
+          <li class="row-hover grid gap-3 px-4 py-4 sm:px-5 md:grid-cols-[1.4fr_1.2fr_auto] md:items-center md:gap-6">
             <div class="min-w-0">
-              <a [routerLink]="['/admin/users', p.affiliateId]" class="truncate font-semibold text-ink hover:text-brand">{{ p.affiliateName }}</a>
-              <p class="mt-0.5 flex flex-wrap items-center gap-2 text-sm text-muted">
+              <a [routerLink]="['/admin/users', p.affiliateId]" class="block truncate font-semibold text-ink hover:text-brand">{{ p.affiliateName }}</a>
+              <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
                 @if (p.affiliateCode) { <span class="code-chip" dir="ltr">#{{ p.affiliateCode }}</span> }
-                <span class="truncate" dir="ltr">{{ p.affiliateEmail }}</span>
+                <span class="min-w-0 truncate" dir="ltr">{{ p.affiliateEmail }}</span>
               </p>
             </div>
             <div class="min-w-0">
-              <a [routerLink]="['/admin/stores', p.storeId]" class="truncate font-medium text-ink hover:text-brand">🏪 {{ p.storeName }}</a>
-              <p class="mt-0.5 truncate text-xs text-muted">
-                {{ 'partnerships.admin.owner' | transloco }}
-                <a [routerLink]="['/admin/users', p.storeOwnerId]" class="font-medium text-ink-soft hover:text-brand">{{ p.storeOwnerName }}</a>
-                · <span dir="ltr">{{ p.storeOwnerEmail }}</span>
+              <a [routerLink]="['/admin/stores', p.storeId]" class="block truncate font-medium text-ink hover:text-brand">{{ p.storeName }}</a>
+              <p class="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                <span>{{ 'partnerships.admin.owner' | transloco }}
+                  <a [routerLink]="['/admin/users', p.storeOwnerId]" class="font-medium text-ink-soft hover:text-brand">{{ p.storeOwnerName }}</a></span>
+                <span class="min-w-0 truncate" dir="ltr">{{ p.storeOwnerEmail }}</span>
               </p>
               <p class="mt-0.5 text-xs text-muted">{{ (p.decidedAt ?? p.createdAt) | date: 'mediumDate' : undefined : language.locale() }}</p>
               @if (p.endReason || p.decisionReason) {
                 <p class="mt-1 truncate text-xs text-ink-soft">{{ p.endReason || p.decisionReason }}</p>
               }
             </div>
-            <div class="flex items-center gap-3 md:justify-end">
+            <div class="flex flex-wrap items-center gap-3 md:justify-end">
               <span class="pill" [class]="tone(p.status)">{{ 'partnerships.status.' + p.status | transloco }}</span>
               @if (p.status === 'Accepted') {
                 <button type="button" (click)="askEnd(p)" class="btn btn-danger-soft btn-sm">{{ 'partnerships.store.end' | transloco }}</button>
@@ -58,12 +60,12 @@
           </li>
         }
       </ul>
-      <div class="border-t border-line bg-subtle/40 px-5 py-3">
+      <div class="border-t border-line bg-subtle/40 px-4 py-3 sm:px-5">
         <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
       </div>
     }
   } @else {
-    <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+    <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
   }
 </div>
 
@@ -77,7 +79,7 @@
     @if (error(); as key) {
       <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p>
     }
-    <div class="mt-6 flex justify-end gap-3">
+    <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
       <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
       <button type="button" (click)="confirm()" [disabled]="busy() || !reason().trim()" class="btn btn-danger">{{ 'partnerships.store.end' | transloco }}</button>
     </div>

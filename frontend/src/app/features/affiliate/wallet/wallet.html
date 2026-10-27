@@ -1,43 +1,44 @@
 <main class="page space-y-6 animate-fade-in">
-  <header class="flex flex-wrap items-end justify-between gap-4">
+  <header class="page-header">
     <div class="min-w-0">
-      <a routerLink="/affiliate" class="link text-sm"><span class="inline-block rtl:rotate-180" aria-hidden="true">←</span> {{ 'wallet.back' | transloco }}</a>
-      <h1 class="page-title mt-2">{{ 'wallet.title' | transloco }}</h1>
+      <a routerLink="/affiliate" class="back-link"><span class="inline-block rtl:rotate-180" aria-hidden="true">←</span> {{ 'wallet.back' | transloco }}</a>
+      <h1 class="page-title">{{ 'wallet.title' | transloco }}</h1>
       <p class="page-subtitle">{{ 'wallet.subtitle' | transloco }}</p>
     </div>
   </header>
 
   @if (summary.value(); as c) {
-    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
-      <div class="card col-span-2 p-4 ring-1 ring-accent/25 lg:col-span-1">
-        <p class="eyebrow truncate">{{ 'coins.balance' | transloco }}</p>
-        <p class="mt-1 text-3xl font-bold tracking-tight text-accent-ink" dir="ltr">{{ c.balance | number: '1.0-3' : language.locale() }}</p>
-        <p class="text-xs text-muted" dir="ltr">≈ {{ c.balance * c.coinValueInTnd | number: '1.0-3' : language.locale() }} TND</p>
+    <section class="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+      <div class="card p-5 sm:p-6">
+        <p class="stat-label">{{ 'coins.balance' | transloco }}</p>
+        <p class="figure mt-1 text-4xl leading-none break-all text-success sm:text-6xl" dir="ltr">{{ c.balance | number: '1.0-3' : language.locale() }}</p>
+        <p class="mt-2 text-sm text-muted" dir="ltr">≈ {{ c.balance * c.coinValueInTnd | number: '1.0-3' : language.locale() }} TND</p>
         @if (c.locked > 0) {
           <p class="mt-1 text-xs text-ink-soft">{{ 'payouts.lockedHint' | transloco: { coins: (c.locked | number: '1.0-3' : language.locale()) } }}</p>
         }
       </div>
-      <div class="card p-4">
-        <p class="eyebrow truncate">{{ 'coins.earned' | transloco }}</p>
-        <p class="mt-1 text-2xl font-bold" dir="ltr">{{ c.totalEarned | number: '1.0-3' : language.locale() }}</p>
+      <div class="grid grid-cols-2 gap-3 lg:contents">
+        <div class="stat-tile min-w-0">
+          <p class="stat-label truncate">{{ 'coins.earned' | transloco }}</p>
+          <p class="stat-value" dir="ltr">{{ c.totalEarned | number: '1.0-3' : language.locale() }}</p>
+        </div>
+        <div class="stat-tile min-w-0">
+          <p class="stat-label truncate">{{ 'coins.expected' | transloco }}</p>
+          <p class="stat-value text-ink-soft" dir="ltr">≈ {{ c.expected | number: '1.0-3' : language.locale() }}</p>
+        </div>
+        <div class="stat-tile col-span-2 min-w-0 lg:col-span-1">
+          <p class="stat-label truncate">{{ 'payouts.paidOut' | transloco }}</p>
+          <p class="stat-value" dir="ltr">{{ c.paidOut | number: '1.0-3' : language.locale() }}</p>
+          <p class="mt-0.5 text-xs text-muted">{{ 'payouts.rate' | transloco: { value: (c.coinValueInTnd | number: '1.0-3' : language.locale()) } }}</p>
+        </div>
       </div>
-      <div class="card p-4">
-        <p class="eyebrow truncate">{{ 'coins.expected' | transloco }}</p>
-        <p class="mt-1 text-2xl font-bold text-ink-soft" dir="ltr">≈ {{ c.expected | number: '1.0-3' : language.locale() }}</p>
-      </div>
-      <div class="card col-span-2 p-4 lg:col-span-1">
-        <p class="eyebrow truncate">{{ 'payouts.paidOut' | transloco }}</p>
-        <p class="mt-1 text-2xl font-bold" dir="ltr">{{ c.paidOut | number: '1.0-3' : language.locale() }}</p>
-        <p class="text-xs text-muted">{{ 'payouts.rate' | transloco: { value: (c.coinValueInTnd | number: '1.0-3' : language.locale()) } }}</p>
-      </div>
-    </div>
+    </section>
   }
 
-  <nav class="flex gap-1 overflow-x-auto rounded-xl bg-subtle p-1" role="tablist" [attr.aria-label]="'wallet.title' | transloco">
+  <nav class="tabs" role="tablist" [attr.aria-label]="'wallet.title' | transloco">
     @for (t of tabs; track t) {
       <button type="button" role="tab" (click)="go(t)" [attr.aria-selected]="current() === t"
-        class="flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200"
-        [class]="current() === t ? 'bg-card text-ink shadow-sm' : 'text-muted hover:text-ink'">{{ 'wallet.tabs.' + t | transloco }}</button>
+        class="tab cursor-pointer" [class.tab-active]="current() === t">{{ 'wallet.tabs.' + t | transloco }}</button>
     }
   </nav>
 
@@ -46,29 +47,28 @@
   }
 
   @if (current() === 'history' || current() === 'breakdown') {
-    <div class="card grid gap-3 p-4" [class]="current() === 'history' ? 'sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto_auto]' : 'sm:grid-cols-[1fr_auto_auto]'">
+    <div class="panel-toolbar rounded-xl border">
       @if (current() === 'history') {
         <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
-          [placeholder]="'wallet.searchPlaceholder' | transloco" [attr.aria-label]="'wallet.searchPlaceholder' | transloco" class="field sm:col-span-2 lg:col-span-1" />
-        <select [value]="storeId() ?? ''" (change)="apply({ storeId: $any($event.target).value || null, page: null })" [attr.aria-label]="'wallet.store' | transloco" class="field">
+          [placeholder]="'wallet.searchPlaceholder' | transloco" [attr.aria-label]="'wallet.searchPlaceholder' | transloco" class="field min-w-0 flex-[2_1_14rem]" />
+        <select [value]="storeId() ?? ''" (change)="apply({ storeId: $any($event.target).value || null, page: null })" [attr.aria-label]="'wallet.store' | transloco" class="field min-w-0 flex-[1_1_10rem]">
           <option value="">{{ 'wallet.allStores' | transloco }}</option>
           @for (p of stores.value() ?? []; track p.id) { <option [value]="p.store.id">{{ p.store.name }}</option> }
         </select>
-        <select [value]="type() ?? ''" (change)="apply({ type: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.type' | transloco" class="field">
+        <select [value]="type() ?? ''" (change)="apply({ type: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.type' | transloco" class="field min-w-0 flex-[1_1_10rem]">
           <option value="">{{ 'coins.admin.allTypes' | transloco }}</option>
           @for (t of types; track t) { <option [value]="t">{{ 'coins.type.' + t | transloco }}</option> }
         </select>
       } @else {
-        <div class="flex gap-1 self-center rounded-lg bg-subtle p-1">
+        <div class="flex flex-[2_1_14rem] flex-wrap gap-2">
           @for (b of splits; track b) {
             <button type="button" (click)="apply({ by: b === 'Product' ? null : b })" [attr.aria-pressed]="split() === b"
-              class="flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200"
-              [class]="split() === b ? 'bg-card text-ink shadow-sm' : 'text-muted hover:text-ink'">{{ 'wallet.by.' + b | transloco }}</button>
+              class="btn btn-sm" [class]="split() === b ? 'bg-ink text-white' : 'btn-secondary'">{{ 'wallet.by.' + b | transloco }}</button>
           }
         </div>
       }
-      <input type="date" [value]="from() ?? ''" (change)="apply({ from: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.from' | transloco" class="field" dir="ltr" />
-      <input type="date" [value]="to() ?? ''" (change)="apply({ to: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.to' | transloco" class="field" dir="ltr" />
+      <input type="date" [value]="from() ?? ''" (change)="apply({ from: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.from' | transloco" class="field min-w-0 flex-[1_1_9rem]" dir="ltr" />
+      <input type="date" [value]="to() ?? ''" (change)="apply({ to: $any($event.target).value || null, page: null })" [attr.aria-label]="'coins.admin.to' | transloco" class="field min-w-0 flex-[1_1_9rem]" dir="ltr" />
     </div>
   }
 
@@ -78,14 +78,16 @@
     }
     @case ('history') {
       <section class="card overflow-hidden">
-        <div class="card-header flex-wrap gap-3">
+        <div class="card-header">
           <div class="flex min-w-0 flex-wrap items-center gap-2">
             @if (productId()) {
-              <span class="pill pill-brand">{{ productName() ?? ('wallet.oneProduct' | transloco) }}
-                <button type="button" (click)="apply({ productId: null, page: null })" class="ms-1" [attr.aria-label]="'common.clearFilters' | transloco">✕</button></span>
+              <span class="pill pill-brand gap-1.5">{{ productName() ?? ('wallet.oneProduct' | transloco) }}
+                <button type="button" (click)="apply({ productId: null, page: null })"
+                  class="-me-1 flex size-4 cursor-pointer items-center justify-center rounded-full hover:bg-brand hover:text-white"
+                  [attr.aria-label]="'common.clearFilters' | transloco"><span aria-hidden="true">×</span></button></span>
             }
             @if (entries.value(); as r) { <span class="text-sm text-muted">{{ 'wallet.count' | transloco: { count: r.total } }}</span> }
-            @if (filtered()) { <button type="button" (click)="clear()" class="link text-sm">{{ 'common.clearFilters' | transloco }}</button> }
+            @if (filtered()) { <button type="button" (click)="clear()" class="link cursor-pointer text-sm">{{ 'common.clearFilters' | transloco }}</button> }
           </div>
           <button type="button" (click)="download()" [disabled]="exporting() || !entries.value()?.total" class="btn btn-secondary btn-sm">
             {{ (exporting() ? 'wallet.exporting' : 'wallet.export') | transloco }}
@@ -99,27 +101,32 @@
           } @else {
             <ul class="divide-y divide-line">
               @for (e of result.items; track e.id) {
-                <li class="row-hover grid gap-2 px-5 py-4 sm:grid-cols-[1fr_auto] sm:items-center sm:px-6">
+                <li class="list-row row-hover">
                   <div class="min-w-0 text-sm">
-                    <p class="flex flex-wrap items-center gap-2">
+                    <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <span class="pill" [class]="e.type === 'Adjustment' ? 'pill-warning' : e.type === 'Earned' ? 'pill-success' : 'pill-neutral'">{{ 'coins.type.' + e.type | transloco }}</span>
                       @if (e.orderReference) { <span class="font-mono text-xs text-ink-soft" dir="ltr">{{ e.orderReference }}</span> }
                       <span class="text-xs text-muted">{{ e.createdAt | date: 'medium' : undefined : language.locale() }}</span>
                     </p>
                     @if (e.productName) {
-                      <p class="mt-1 truncate font-medium text-ink">{{ e.productName }} <span class="font-normal text-muted">· {{ e.storeName }}</span></p>
-                      <p class="text-xs text-muted">
-                        <span dir="ltr">{{ e.quantity }} × · {{ e.lineTotal | number: '1.0-3' : language.locale() }} TND · {{ e.affiliatePercent }} %</span>
-                        @if (e.clientName) { · {{ e.clientName }} <span dir="ltr">{{ e.clientPhone }}</span> }
+                      <p class="mt-1.5 flex min-w-0 flex-wrap items-baseline gap-x-2">
+                        <span class="truncate font-medium text-ink">{{ e.productName }}</span>
+                        <span class="text-muted">{{ e.storeName }}</span>
+                      </p>
+                      <p class="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                        <span dir="ltr">{{ e.quantity }} ×</span>
+                        <span dir="ltr">{{ e.lineTotal | number: '1.0-3' : language.locale() }} TND</span>
+                        <span dir="ltr">{{ e.affiliatePercent }} %</span>
+                        @if (e.clientName) { <span>{{ e.clientName }} <span dir="ltr">{{ e.clientPhone }}</span></span> }
                       </p>
                     }
-                    @if (e.reason) { <p class="mt-1 rounded-lg bg-subtle px-2.5 py-1 text-xs text-ink-soft">{{ e.reason }}</p> }
+                    @if (e.reason) { <p class="mt-1.5 text-xs text-ink-soft">{{ e.reason }}</p> }
                   </div>
-                  <p class="text-base font-bold sm:text-end" [class]="e.coins < 0 ? 'text-danger' : 'text-success'" dir="ltr">{{ e.coins > 0 ? '+' : '' }}{{ e.coins | number: '1.0-3' : language.locale() }}</p>
+                  <p class="figure shrink-0 text-lg sm:text-end" [class]="e.coins < 0 ? 'text-danger' : 'text-success'" dir="ltr">{{ e.coins > 0 ? '+' : '' }}{{ e.coins | number: '1.0-3' : language.locale() }}</p>
                 </li>
               }
             </ul>
-            <div class="border-t border-line bg-subtle/40 px-5 py-3">
+            <div class="border-t border-line px-4 py-3 sm:px-5">
               <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
             </div>
           }
@@ -134,11 +141,11 @@
     @case ('breakdown') {
       <section class="card overflow-hidden">
         <div class="card-header">
-          <div>
+          <div class="min-w-0">
             <h2 class="section-title">{{ 'wallet.by.' + split() | transloco }}</h2>
             <p class="mt-0.5 text-sm text-muted">{{ 'wallet.breakdownHint' | transloco }}</p>
           </div>
-          <p class="shrink-0 text-lg font-bold text-success" dir="ltr">{{ breakdownTotal() | number: '1.0-3' : language.locale() }}</p>
+          <p class="figure shrink-0 text-2xl text-success" dir="ltr">{{ breakdownTotal() | number: '1.0-3' : language.locale() }}</p>
         </div>
         @if (breakdown.value(); as rows) {
           @if (rows.length === 0) {
@@ -146,18 +153,23 @@
           } @else {
             <ul class="divide-y divide-line">
               @for (r of rows; track r.id) {
-                <li class="row-hover grid gap-2 px-5 py-4 sm:grid-cols-[1fr_auto] sm:items-center sm:px-6">
-                  <div class="min-w-0 text-sm">
-                    <p class="truncate font-semibold text-ink">{{ r.name }} @if (r.storeName) { <span class="font-normal text-muted">· {{ r.storeName }}</span> }</p>
-                    <p class="text-xs text-muted">{{ 'wallet.rowStats' | transloco: { lines: r.lines, quantity: r.quantity } }} ·
-                      <span dir="ltr">{{ r.sales | number: '1.0-3' : language.locale() }} TND</span></p>
+                <li class="list-row row-hover">
+                  <div class="min-w-0 flex-1 text-sm">
+                    <p class="flex min-w-0 flex-wrap items-baseline gap-x-2">
+                      <span class="truncate font-semibold text-ink">{{ r.name }}</span>
+                      @if (r.storeName) { <span class="text-muted">{{ r.storeName }}</span> }
+                    </p>
+                    <p class="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                      <span>{{ 'wallet.rowStats' | transloco: { lines: r.lines, quantity: r.quantity } }}</span>
+                      <span dir="ltr">{{ r.sales | number: '1.0-3' : language.locale() }} TND</span>
+                    </p>
                     <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
-                      <div class="h-full rounded-full bg-accent" [style.width.%]="share(r)"></div>
+                      <div class="h-full rounded-full bg-success" [style.width.%]="share(r)"></div>
                     </div>
                   </div>
-                  <div class="flex items-center gap-3 sm:justify-end">
+                  <div class="flex flex-wrap items-center gap-3 sm:justify-end">
                     <span class="pill pill-neutral" dir="ltr">{{ share(r) }} %</span>
-                    <span class="text-base font-bold text-success" dir="ltr">+{{ r.coins | number: '1.0-3' : language.locale() }}</span>
+                    <span class="figure text-lg text-success" dir="ltr">+{{ r.coins | number: '1.0-3' : language.locale() }}</span>
                     <button type="button" (click)="history(r)" class="btn btn-ghost btn-sm">{{ 'wallet.viewHistory' | transloco }}</button>
                   </div>
                 </li>
@@ -175,42 +187,58 @@
     @case ('orders') {
       <section class="card overflow-hidden">
         <div class="card-header">
-          <div>
+          <div class="min-w-0">
             <h2 class="section-title">{{ 'orders.sales.title' | transloco }}</h2>
             <p class="mt-0.5 text-sm text-muted">{{ 'orders.sales.hint' | transloco }}</p>
           </div>
         </div>
         @if (orders.value(); as s) {
-          <div class="grid grid-cols-2 gap-2 border-b border-line p-4 sm:grid-cols-4 sm:gap-4 sm:p-5">
-            <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'orders.sales.lines' | transloco }}</p><p class="mt-1 text-xl font-bold" dir="ltr">{{ s.summary.lines }}</p></div>
-            <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'orders.sales.sales' | transloco }}</p><p class="mt-1 text-xl font-bold" dir="ltr">{{ s.summary.sales | number: '1.0-3' : language.locale() }} <span class="text-xs text-muted">TND</span></p></div>
-            <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'coins.expected' | transloco }}</p><p class="mt-1 text-xl font-bold text-ink-soft" dir="ltr">≈ {{ s.summary.expectedCoins | number: '1.0-3' : language.locale() }}</p></div>
-            <div><p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'coins.earned' | transloco }}</p><p class="mt-1 text-xl font-bold text-success" dir="ltr">{{ s.summary.earnedCoins | number: '1.0-3' : language.locale() }}</p></div>
-          </div>
+          <dl class="grid grid-cols-2 gap-x-4 gap-y-4 border-b border-line px-4 py-4 sm:grid-cols-4 sm:px-5">
+            <div class="min-w-0">
+              <dt class="stat-label truncate">{{ 'orders.sales.lines' | transloco }}</dt>
+              <dd class="figure mt-1 text-xl" dir="ltr">{{ s.summary.lines }}</dd>
+            </div>
+            <div class="min-w-0">
+              <dt class="stat-label truncate">{{ 'orders.sales.sales' | transloco }}</dt>
+              <dd class="figure mt-1 text-xl" dir="ltr">{{ s.summary.sales | number: '1.0-3' : language.locale() }} <span class="font-sans text-xs font-normal text-muted">TND</span></dd>
+            </div>
+            <div class="min-w-0">
+              <dt class="stat-label truncate">{{ 'coins.expected' | transloco }}</dt>
+              <dd class="figure mt-1 text-xl text-ink-soft" dir="ltr">≈ {{ s.summary.expectedCoins | number: '1.0-3' : language.locale() }}</dd>
+            </div>
+            <div class="min-w-0">
+              <dt class="stat-label truncate">{{ 'coins.earned' | transloco }}</dt>
+              <dd class="figure mt-1 text-xl text-success" dir="ltr">{{ s.summary.earnedCoins | number: '1.0-3' : language.locale() }}</dd>
+            </div>
+          </dl>
           @if (s.lines.items.length === 0) {
-            <p class="empty-state py-8">{{ 'orders.sales.none' | transloco }}</p>
+            <p class="empty-state">{{ 'orders.sales.none' | transloco }}</p>
           } @else {
             <ul class="divide-y divide-line">
               @for (l of s.lines.items; track l.lineId) {
-                <li class="row-hover grid gap-2 px-5 py-4 text-sm sm:grid-cols-[1fr_auto] sm:items-center sm:px-6">
+                <li class="list-row row-hover text-sm">
                   <div class="min-w-0">
                     <p class="truncate font-semibold text-ink">{{ l.productName }} <span class="font-normal text-muted" dir="ltr">× {{ l.quantity }}</span></p>
-                    <p class="text-xs text-muted">
-                      <span dir="ltr">{{ l.reference }}</span> · {{ l.storeName }} · {{ l.createdAt | date: 'mediumDate' : undefined : language.locale() }}
+                    <p class="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                      <span class="font-mono" dir="ltr">{{ l.reference }}</span>
+                      <span>{{ l.storeName }}</span>
+                      <span>{{ l.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span>
                     </p>
-                    <p class="mt-0.5 text-xs text-ink-soft">{{ 'wallet.clientName' | transloco: { name: l.clientName } }}
-                      @if (l.placedByMe) { · <span class="text-brand">{{ 'orders.sales.placedByMe' | transloco }}</span> }</p>
+                    <p class="mt-0.5 flex flex-wrap gap-x-3 text-xs text-ink-soft">
+                      <span>{{ 'wallet.clientName' | transloco: { name: l.clientName } }}</span>
+                      @if (l.placedByMe) { <span class="text-brand">{{ 'orders.sales.placedByMe' | transloco }}</span> }
+                    </p>
                   </div>
-                  <p class="flex flex-wrap items-center gap-2 sm:justify-end">
+                  <p class="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
                     <span class="pill" [class]="statusTone(l.status)">{{ 'orders.status.' + l.status | transloco }}</span>
                     <span class="pill pill-brand" dir="ltr">{{ l.affiliatePercent }} %</span>
-                    <span class="font-semibold text-accent-ink" dir="ltr">
+                    <span class="figure" [class]="l.status === 'Delivered' ? 'text-success' : 'text-accent-ink'" dir="ltr">
                       {{ l.status === 'Delivered' ? '+' : '≈ ' }}{{ l.expectedCoins | number: '1.0-3' : language.locale() }} {{ 'settings.units.coins' | transloco }}</span>
                   </p>
                 </li>
               }
             </ul>
-            <div class="border-t border-line bg-subtle/40 px-5 py-3">
+            <div class="border-t border-line px-4 py-3 sm:px-5">
               <app-pagination [page]="s.lines.page" [pageSize]="s.lines.pageSize" [total]="s.lines.total" (pageChange)="apply({ page: $event })" />
             </div>
           }

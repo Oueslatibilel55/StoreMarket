@@ -18,7 +18,7 @@ import { LanguageService } from '../../core/i18n/language.service';
   template: `
     @if (kind(); as k) {
       @let s = status.value()!;
-      <div role="alert" class="mb-6 flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between print:hidden" [class]="tone()">
+      <div role="alert" class="mb-6 flex flex-col gap-3 rounded-xl border border-s-4 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between print:hidden" [class]="tone()">
         <div class="min-w-0 text-sm">
           <p class="font-semibold">
             @switch (k) {
@@ -54,8 +54,8 @@ export class BillingBanner {
   protected readonly kind = computed(() => bannerOf(this.status.value()));
   protected readonly tone = computed(() => {
     const k = this.kind();
-    if (k === 'waiting' || k === 'due') return 'border-line bg-subtle text-ink';
-    if (k === 'countdown' || k === 'rejected') return 'border-accent/40 bg-accent/10 text-ink';
-    return 'border-danger/30 bg-danger/8 text-danger';
+    if (k === 'waiting' || k === 'due') return 'border-line border-s-brand bg-card text-ink';
+    if (k === 'countdown' || k === 'rejected') return 'border-accent/40 border-s-accent bg-accent/10 text-ink';
+    return 'border-danger/25 border-s-danger bg-danger/6 text-danger';
   });
 }

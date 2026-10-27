@@ -22,82 +22,83 @@ const PAGE_SIZE = 20;
   template: `
     <main class="page max-w-4xl animate-fade-in">
       <app-my-store-tabs />
-      <h1 class="page-title">{{ 'reviews.store.title' | transloco }}</h1>
-      <p class="page-subtitle">{{ 'reviews.store.subtitle' | transloco }}</p>
+      <header class="page-header">
+        <div class="min-w-0">
+          <h1 class="page-title">{{ 'reviews.store.title' | transloco }}</h1>
+          <p class="page-subtitle">{{ 'reviews.store.subtitle' | transloco }}</p>
+        </div>
+      </header>
 
       @if (data.error(); as err) {
-        <p class="alert-danger mt-6">{{ errorOf(err) | transloco }}</p>
+        <p role="alert" class="alert-danger">{{ errorOf(err) | transloco }}</p>
       } @else if (data.value(); as d) {
-        <div class="mt-6 grid gap-3 sm:grid-cols-3">
-          <div class="card p-4">
-            <p class="eyebrow">{{ 'reviews.store.serviceRating' | transloco }}</p>
+        <div class="grid gap-3 sm:grid-cols-3 sm:gap-4">
+          <div class="stat-tile">
+            <p class="stat-label">{{ 'reviews.store.serviceRating' | transloco }}</p>
             @if (d.store.count) {
-              <p class="mt-1 flex items-center gap-2">
-                <span class="text-2xl font-bold text-ink" dir="ltr">{{ d.store.average | number: '1.1-1' : language.locale() }}</span>
+              <p class="flex flex-wrap items-center gap-2">
+                <span class="stat-value" dir="ltr">{{ d.store.average | number: '1.1-1' : language.locale() }}</span>
                 <app-star-rating [value]="d.store.average" [count]="d.store.count" size="sm" />
               </p>
             } @else { <p class="mt-1 text-sm text-muted">{{ 'reviews.none' | transloco }}</p> }
           </div>
-          <div class="card p-4">
-            <p class="eyebrow">{{ 'reviews.store.productsRating' | transloco }}</p>
+          <div class="stat-tile">
+            <p class="stat-label">{{ 'reviews.store.productsRating' | transloco }}</p>
             @if (d.products.count) {
-              <p class="mt-1 flex items-center gap-2">
-                <span class="text-2xl font-bold text-ink" dir="ltr">{{ d.products.average | number: '1.1-1' : language.locale() }}</span>
+              <p class="flex flex-wrap items-center gap-2">
+                <span class="stat-value" dir="ltr">{{ d.products.average | number: '1.1-1' : language.locale() }}</span>
                 <app-star-rating [value]="d.products.average" [count]="d.products.count" size="sm" />
               </p>
             } @else { <p class="mt-1 text-sm text-muted">{{ 'reviews.none' | transloco }}</p> }
           </div>
-          <button type="button" (click)="apply({ replied: 'false', page: null })" class="card cursor-pointer p-4 text-start transition-shadow hover:shadow-card-hover">
-            <p class="eyebrow">{{ 'reviews.store.unanswered' | transloco }}</p>
-            <p class="mt-1 text-2xl font-bold" [class]="d.unanswered ? 'text-accent-ink' : 'text-ink'">{{ d.unanswered }}</p>
+          <button type="button" (click)="apply({ replied: 'false', page: null })"
+            class="stat-tile cursor-pointer text-start transition-[box-shadow,border-color] hover:border-brand/25 hover:shadow-card-hover">
+            <p class="stat-label">{{ 'reviews.store.unanswered' | transloco }}</p>
+            <p class="stat-value" [class]="d.unanswered ? 'text-accent-ink' : 'text-ink'" dir="ltr">{{ d.unanswered }}</p>
           </button>
         </div>
 
         <div class="card mt-6 overflow-hidden">
-          <div class="flex flex-wrap gap-3 border-b border-line p-4">
+          <div class="panel-toolbar">
             <select [value]="target() ?? ''" (change)="apply({ target: $any($event.target).value || null, page: null })"
-              [attr.aria-label]="'reviews.admin.target' | transloco" class="field w-auto">
+              [attr.aria-label]="'reviews.admin.target' | transloco" class="field w-full sm:w-auto">
               <option value="">{{ 'reviews.admin.allTargets' | transloco }}</option>
               @for (t of targets; track t) { <option [value]="t">{{ 'reviews.target.' + t | transloco }}</option> }
             </select>
             <select [value]="stars() ?? ''" (change)="apply({ stars: $any($event.target).value || null, page: null })"
-              [attr.aria-label]="'reviews.admin.stars' | transloco" class="field w-auto">
+              [attr.aria-label]="'reviews.admin.stars' | transloco" class="field w-full sm:w-auto">
               <option value="">{{ 'reviews.admin.allStars' | transloco }}</option>
               @for (n of [5, 4, 3, 2, 1]; track n) { <option [value]="n">{{ 'reviews.nStars' | transloco: { n } }}</option> }
             </select>
             <select [value]="replied() ?? ''" (change)="apply({ replied: $any($event.target).value || null, page: null })"
-              [attr.aria-label]="'reviews.store.answered' | transloco" class="field w-auto">
+              [attr.aria-label]="'reviews.store.answered' | transloco" class="field w-full sm:w-auto">
               <option value="">{{ 'reviews.store.allAnswers' | transloco }}</option>
               <option value="false">{{ 'reviews.store.toAnswer' | transloco }}</option>
               <option value="true">{{ 'reviews.store.answered' | transloco }}</option>
             </select>
             @if (hasFilters()) {
-              <button type="button" (click)="clear()" class="btn btn-ghost">{{ 'common.clearFilters' | transloco }}</button>
+              <button type="button" (click)="clear()" class="btn btn-ghost btn-sm">{{ 'common.clearFilters' | transloco }}</button>
             }
           </div>
 
           @if (d.reviews.items.length === 0) {
-            <div class="empty-state">
-              <span class="text-3xl" aria-hidden="true">⭐</span>
-              <p>{{ (hasFilters() ? 'reviews.noneWithStars' : 'reviews.store.empty') | transloco }}</p>
-            </div>
+            <p class="empty-state">{{ (hasFilters() ? 'reviews.noneWithStars' : 'reviews.store.empty') | transloco }}</p>
           } @else {
             <ul class="divide-y divide-line">
               @for (r of d.reviews.items; track r.id) {
-                <li class="px-5 py-4">
+                <li class="px-4 py-4 sm:px-5">
                   <div class="flex flex-wrap items-center gap-2">
                     <app-star-rating [value]="r.stars" size="sm" />
                     <span class="pill pill-neutral">{{ 'reviews.target.' + r.target | transloco }}</span>
                     @if (r.hidden) { <span class="pill pill-danger">{{ 'reviews.hiddenPill' | transloco }}</span> }
                     <span class="ms-auto text-xs text-muted">{{ r.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span>
                   </div>
-                  <p class="mt-1.5 text-sm text-muted">
+                  <p class="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-sm text-muted">
                     <bdi class="font-medium text-ink">{{ r.authorName }}</bdi>
                     @if (r.productName) {
-                      ·
                       @if (r.productSlug) { <a [routerLink]="['/products', r.productSlug]" class="hover:text-brand"><bdi>{{ r.productName }}</bdi></a> } @else { <bdi>{{ r.productName }}</bdi> }
                     }
-                    · <a [routerLink]="['/my-store/orders', r.storeOrderId]" class="hover:text-brand" dir="ltr">{{ r.orderReference }}</a>
+                    <a [routerLink]="['/my-store/orders', r.storeOrderId]" class="font-mono hover:text-brand" dir="ltr">{{ r.orderReference }}</a>
                   </p>
                   @if (r.comment) { <p class="mt-2 text-sm whitespace-pre-line text-ink-soft" dir="auto">{{ r.comment }}</p> }
                   @if (r.hidden) {
@@ -131,13 +132,13 @@ const PAGE_SIZE = 20;
                 </li>
               }
             </ul>
-            <div class="border-t border-line bg-subtle/40 px-5 py-3">
+            <div class="border-t border-line bg-subtle/40 px-4 py-3 sm:px-5">
               <app-pagination [page]="d.reviews.page" [pageSize]="pageSize" [total]="d.reviews.total" (pageChange)="apply({ page: $event })" />
             </div>
           }
         </div>
       } @else {
-        <p class="card empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+        <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
       }
     </main>
   `,

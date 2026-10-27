@@ -71,6 +71,7 @@ Statuses: `Draft` → `Ready` → `In progress` → `Review` → `Done`
 | 022 | [Notifications (email + in-app)](022-notifications/SPEC.md) | 016 | Draft |
 | 023 | [Admin dashboard & stats (affiliates, stores, products, users)](023-admin-dashboard-reports/SPEC.md) | 019, 021 | **Done** |
 | 024 | [Affiliate anti-fraud rules](024-affiliate-fraud-checks/SPEC.md) | 019 | Draft |
+| 028 | [Visual refresh "Souk moderne" (design system, ADR 0005)](028-visual-refresh/SPEC.md) | — | **Done** (manual 320 px pass pending) |
 
 ## How the money trail works
 

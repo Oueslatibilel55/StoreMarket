@@ -44,11 +44,11 @@ export function toBars(daily: DailyStats[], maxDays = 92): Bar[] {
     <section class="card">
       <div class="card-header">
         <h2 class="section-title">{{ 'stats.daily.' + metric() | transloco }}</h2>
-        <div class="flex rounded-lg border border-line p-0.5" role="group" [attr.aria-label]="'stats.daily.measure' | transloco">
+        <div class="flex max-w-full overflow-x-auto rounded-full border border-line p-0.5 [scrollbar-width:none]" role="group" [attr.aria-label]="'stats.daily.measure' | transloco">
           @for (m of metrics; track m) {
             <button type="button" (click)="metric.set(m)" [attr.aria-pressed]="metric() === m"
-              class="cursor-pointer rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
-              [class]="metric() === m ? 'bg-brand-soft text-brand' : 'text-muted hover:text-ink'">
+              class="shrink-0 cursor-pointer rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors"
+              [class]="metric() === m ? 'bg-brand-soft font-semibold text-brand' : 'text-muted hover:bg-subtle hover:text-ink'">
               {{ 'stats.daily.short.' + m | transloco }}
             </button>
           }
@@ -56,25 +56,26 @@ export function toBars(daily: DailyStats[], maxDays = 92): Bar[] {
       </div>
       <div class="card-body">
         <!-- Value of the hovered bar, else the period total. -->
-        <p class="text-sm text-muted" aria-live="polite">
+        <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm text-muted" aria-live="polite">
           @if (hovered(); as b) {
-            <span>{{ b.from | date: 'mediumDate' : undefined : language.locale() }}@if (b.to !== b.from) { – {{ b.to | date: 'mediumDate' : undefined : language.locale() }} }</span> ·
+            <span>{{ b.from | date: 'mediumDate' : undefined : language.locale() }}@if (b.to !== b.from) { – {{ b.to | date: 'mediumDate' : undefined : language.locale() }} }</span>
           } @else {
-            <span>{{ 'stats.daily.total' | transloco }}</span> ·
+            <span>{{ 'stats.daily.total' | transloco }}</span>
           }
-          <strong class="font-semibold text-ink" dir="ltr">{{ value(hovered() ?? total()) | number: metric() === 'sales' ? '1.0-3' : '1.0-0' : language.locale() }}@if (metric() === 'sales') { TND }</strong>
+          <strong class="figure text-xl" [class]="metric() === 'sales' ? 'text-success' : 'text-ink'" dir="ltr">{{ value(hovered() ?? total()) | number: metric() === 'sales' ? '1.0-3' : '1.0-0' : language.locale() }}@if (metric() === 'sales') { TND }</strong>
         </p>
 
-        <div class="relative mt-4 h-40" aria-hidden="true">
-          <!-- Recessive grid: top (max) and middle. -->
-          <div class="absolute inset-x-0 top-0 border-t border-dashed border-line"></div>
-          <div class="absolute inset-x-0 top-1/2 border-t border-dashed border-line"></div>
-          <span class="absolute -top-2.5 end-0 bg-card ps-1 text-[10px] text-muted" dir="ltr">{{ max() | number: '1.0-0' : language.locale() }}</span>
+        <div class="relative mt-5 h-40" aria-hidden="true">
+          <!-- Recessive grid: top (max) and middle, thin hairlines. -->
+          <div class="absolute inset-x-0 top-0 border-t border-line"></div>
+          <div class="absolute inset-x-0 top-1/2 border-t border-line"></div>
+          <span class="absolute -top-2.5 end-0 bg-card ps-1 text-[10px] text-muted tabular-nums" dir="ltr">{{ max() | number: '1.0-0' : language.locale() }}</span>
           <div class="absolute inset-0 flex items-end gap-0.5 border-b border-line-strong" dir="ltr" (mouseleave)="hover.set(null)">
             @for (b of bars(); track b.from; let i = $index) {
               <div class="flex h-full min-w-0 flex-1 cursor-default items-end" (mouseenter)="hover.set(i)">
-                <div class="w-full rounded-t-[4px] transition-colors"
-                  [class]="hover() === i ? 'bg-brand-hover' : 'bg-brand'"
+                <!-- Money (sales TND) in olive, order counts in Sidi Bou Said blue. -->
+                <div class="w-full rounded-t-[3px] transition-opacity"
+                  [class]="(metric() === 'sales' ? 'bg-success' : 'bg-brand') + (hover() !== null && hover() !== i ? ' opacity-55' : '')"
                   [style.height.%]="height(b)" [style.min-height.px]="value(b) > 0 ? 2 : 0"></div>
               </div>
             }
@@ -87,21 +88,21 @@ export function toBars(daily: DailyStats[], maxDays = 92): Bar[] {
 
         <details class="mt-4 text-sm">
           <summary class="cursor-pointer text-muted hover:text-ink">{{ 'stats.daily.table' | transloco }}</summary>
-          <div class="mt-2 max-h-64 overflow-auto">
-            <table class="w-full">
-              <thead class="text-xs text-muted">
+          <div class="mt-3 max-h-64 overflow-auto rounded-lg border border-line">
+            <table class="data-table">
+              <thead>
                 <tr>
-                  <th scope="col" class="py-1 text-start font-medium">{{ 'stats.daily.date' | transloco }}</th>
-                  @for (m of metrics; track m) { <th scope="col" class="py-1 text-end font-medium">{{ 'stats.daily.short.' + m | transloco }}</th> }
+                  <th scope="col">{{ 'stats.daily.date' | transloco }}</th>
+                  @for (m of metrics; track m) { <th scope="col" class="text-end">{{ 'stats.daily.short.' + m | transloco }}</th> }
                 </tr>
               </thead>
-              <tbody class="divide-y divide-line">
+              <tbody>
                 @for (b of bars(); track b.from) {
                   <tr>
-                    <td class="py-1">{{ b.from | date: 'mediumDate' : undefined : language.locale() }}</td>
-                    <td class="py-1 text-end tabular-nums" dir="ltr">{{ b.sales | number: '1.0-3' : language.locale() }}</td>
-                    <td class="py-1 text-end tabular-nums" dir="ltr">{{ b.placed }}</td>
-                    <td class="py-1 text-end tabular-nums" dir="ltr">{{ b.delivered }}</td>
+                    <td class="whitespace-nowrap">{{ b.from | date: 'mediumDate' : undefined : language.locale() }}</td>
+                    <td class="text-end tabular-nums" dir="ltr">{{ b.sales | number: '1.0-3' : language.locale() }}</td>
+                    <td class="text-end tabular-nums" dir="ltr">{{ b.placed }}</td>
+                    <td class="text-end tabular-nums" dir="ltr">{{ b.delivered }}</td>
                   </tr>
                 }
               </tbody>

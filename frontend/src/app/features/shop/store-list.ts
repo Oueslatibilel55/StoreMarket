@@ -18,30 +18,34 @@ const PAGE_SIZE = 24;
   imports: [TranslocoPipe, LocalizedPipe, StoreCard, Pagination],
   template: `
     <main class="page">
-      <h1 class="page-title">{{ 'shop.stores' | transloco }}</h1>
+      <header class="page-header">
+        <div class="min-w-0">
+          <h1 class="page-title">{{ 'shop.stores' | transloco }}</h1>
+        </div>
+      </header>
 
-      <div class="-mx-4 mt-5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
+      <div class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
         <button type="button" (click)="apply({ category: null, page: null })"
-          class="cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-medium shadow-card transition-all duration-200 hover:-translate-y-px"
-          [class]="!category() ? 'border-brand bg-brand-soft text-brand' : 'border-line bg-card text-ink-soft hover:border-brand hover:text-brand'">
+          class="cursor-pointer rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors duration-200"
+          [class]="!category() ? 'border-brand bg-brand text-white' : 'border-line-strong bg-card text-ink-soft hover:border-brand hover:text-brand'">
           {{ 'shop.allCategories' | transloco }}
         </button>
         @for (c of categories.value() ?? []; track c.id) {
           <button type="button" (click)="apply({ category: c.slug, page: null })"
-            class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium shadow-card transition-all duration-200 hover:-translate-y-px"
-            [class]="category() === c.slug ? 'border-brand bg-brand-soft text-brand' : 'border-line bg-card text-ink-soft hover:border-brand hover:text-brand'">
+            class="flex cursor-pointer items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors duration-200"
+            [class]="category() === c.slug ? 'border-brand bg-brand text-white' : 'border-line-strong bg-card text-ink-soft hover:border-brand hover:text-brand'">
             @if (c.imageUrl) { <img [src]="c.imageUrl" alt="" class="size-4 rounded object-cover" /> } @else if (c.icon) { <span aria-hidden="true">{{ c.icon }}</span> }
             {{ c.name | localized: language.lang() }}
           </button>
         }
       </div>
 
-      <div class="card mt-5 grid gap-3 p-3 sm:grid-cols-[1fr_auto] sm:p-4">
+      <div class="card mt-5 flex flex-wrap items-center gap-3 p-3 sm:p-4">
         <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
           [placeholder]="'shop.searchStores' | transloco" [attr.aria-label]="'shop.searchStores' | transloco"
-          class="field" />
+          class="field min-w-0 flex-1 basis-56" />
         <select [value]="city() ?? ''" (change)="apply({ city: $any($event.target).value || null, page: null })"
-          [attr.aria-label]="'myStore.fields.city' | transloco" class="field sm:w-auto">
+          [attr.aria-label]="'myStore.fields.city' | transloco" class="field w-auto max-w-full">
           <option value="">{{ 'shop.allCities' | transloco }}</option>
           @for (c of cities; track c) { <option [value]="c">{{ 'cities.' + c | transloco }}</option> }
         </select>
@@ -54,7 +58,7 @@ const PAGE_SIZE = 24;
           <ul class="mt-6 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             @for (s of result.items; track s.id) { <li><app-store-card [store]="s" /></li> }
           </ul>
-          <div class="mt-8">
+          <div class="mt-10">
             <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
           </div>
         } @else {

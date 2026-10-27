@@ -19,10 +19,10 @@ import { OPEN_STATUSES, PartnershipApi, shareLink } from '../../core/partnership
         @if (p.status === 'Accepted') {
           <div class="space-y-3">
             <p class="flex flex-wrap items-center gap-2 text-sm">
-              <span class="pill pill-success"><span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span>{{ 'partnerships.status.Accepted' | transloco }}</span>
+              <span class="pill pill-success"><span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>{{ 'partnerships.status.Accepted' | transloco }}</span>
               <span class="text-ink-soft">{{ 'partnerships.cta.partner' | transloco }}</span>
             </p>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2 sm:flex-nowrap">
               <input type="text" readonly [value]="link()" dir="ltr" [attr.aria-label]="'partnerships.cta.shareLink' | transloco"
                 class="field min-w-0 flex-1 font-mono text-xs" (focus)="$any($event.target).select()" />
               <button type="button" (click)="copy()" class="btn btn-sm" [class]="copied() ? 'btn-success' : 'btn-secondary'">
@@ -43,10 +43,10 @@ import { OPEN_STATUSES, PartnershipApi, shareLink } from '../../core/partnership
       } @else if (mine.value()) {
         @if (last(); as l) {
           @if (l.status === 'Refused' || l.status === 'Ended') {
-            <p class="mb-3 rounded-lg bg-subtle px-3 py-2 text-xs text-muted">
-              {{ 'partnerships.cta.last.' + l.status | transloco }}
-              @if (l.decisionReason || l.endReason) { — <span class="italic">{{ l.decisionReason || l.endReason }}</span> }
-            </p>
+            <div class="mb-3 rounded-lg border-s-2 border-line-strong bg-subtle px-3 py-2 text-xs text-muted">
+              <p>{{ 'partnerships.cta.last.' + l.status | transloco }}</p>
+              @if (l.decisionReason || l.endReason) { <p class="mt-1 text-ink-soft">{{ l.decisionReason || l.endReason }}</p> }
+            </div>
           }
         }
         @if (open()) {
@@ -54,7 +54,7 @@ import { OPEN_STATUSES, PartnershipApi, shareLink } from '../../core/partnership
             <label for="partnershipMessage" class="field-label">{{ 'partnerships.cta.message' | transloco }}</label>
             <textarea id="partnershipMessage" rows="3" maxlength="500" [value]="message()" (input)="message.set($any($event.target).value)"
               [placeholder]="'partnerships.cta.messagePlaceholder' | transloco" class="field resize-y"></textarea>
-            <div class="flex justify-end gap-2">
+            <div class="flex flex-wrap justify-end gap-2">
               <button type="button" (click)="open.set(false)" class="btn btn-ghost btn-sm">{{ 'common.cancel' | transloco }}</button>
               <button type="button" (click)="send()" [disabled]="busy()" class="btn btn-primary btn-sm">{{ 'partnerships.cta.send' | transloco }}</button>
             </div>

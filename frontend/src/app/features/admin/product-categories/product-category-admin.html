@@ -1,4 +1,4 @@
-<header class="flex flex-wrap items-end justify-between gap-4">
+<header class="page-header">
   <div class="min-w-0">
     <h1 class="page-title">{{ 'admin.productCategories.title' | transloco }}</h1>
     <p class="page-subtitle">{{ 'admin.productCategories.subtitle' | transloco }}</p>
@@ -9,13 +9,13 @@
 </header>
 
 @if (error() && !pending()) {
-  <p role="alert" class="mt-6 alert-danger">{{ error()! | transloco }}</p>
+  <p role="alert" class="mb-6 alert-danger">{{ error()! | transloco }}</p>
 }
 
 @if (categories.error()) {
-  <p class="mt-6 alert-danger">{{ 'errors.unknown' | transloco }}</p>
+  <p class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
 } @else if (categories.value(); as all) {
-  <div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+  <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
     <!-- Tree -->
     <section class="card overflow-hidden lg:sticky lg:top-24">
       @if (all.length === 0) {
@@ -58,11 +58,15 @@
     <section id="category-detail" class="scroll-mt-20 space-y-6">
       @if (selected(); as s) {
         <div class="card">
-          <div class="card-header items-start">
+          <div class="card-body flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div class="min-w-0 flex-1">
-              <span class="code-chip" dir="ltr">/{{ s.slug }}</span>
-              <h2 class="mt-2 section-title text-xl">{{ s.name | localized: language.lang() }}</h2>
-              <p class="mt-0.5 text-xs text-muted">{{ s.name.fr }} @if (s.name.ar) { · <span dir="rtl">{{ s.name.ar }}</span> } @if (s.name.en) { · {{ s.name.en }} }</p>
+              <span class="code-chip max-w-full truncate" dir="ltr">/{{ s.slug }}</span>
+              <h2 class="mt-2 section-title text-xl break-words">{{ s.name | localized: language.lang() }}</h2>
+              <p class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted">
+                <span>{{ s.name.fr }}</span>
+                @if (s.name.ar) { <span dir="rtl">{{ s.name.ar }}</span> }
+                @if (s.name.en) { <span>{{ s.name.en }}</span> }
+              </p>
             </div>
             <div class="flex flex-wrap items-center gap-1">
               <button type="button" (click)="openCategory(s)" class="btn btn-secondary btn-sm">{{ 'admin.storeCategories.edit' | transloco }}</button>
@@ -77,7 +81,7 @@
         <div class="card overflow-hidden">
           <div class="card-header">
             <div class="min-w-0">
-              <h3 class="font-semibold text-ink">{{ 'admin.productCategories.attributes' | transloco }}</h3>
+              <h3 class="section-title">{{ 'admin.productCategories.attributes' | transloco }}</h3>
               <p class="mt-0.5 text-xs text-muted">{{ 'admin.productCategories.inheritHint' | transloco }}</p>
             </div>
             <button type="button" (click)="openAttribute(null)" class="btn btn-secondary btn-sm">
@@ -87,14 +91,14 @@
 
           <ul class="divide-y divide-line">
             @for (i of inherited(); track i.attribute.id) {
-              <li class="flex flex-wrap items-center gap-2 bg-subtle/50 px-5 py-3 text-sm sm:px-6">
+              <li class="flex flex-wrap items-center gap-2 bg-subtle/50 px-4 py-3 text-sm sm:px-6">
                 <span class="font-medium text-ink-soft">{{ i.attribute.name | localized: language.lang() }}</span>
                 <span class="pill pill-neutral">{{ 'admin.productCategories.types.' + i.attribute.type | transloco }}</span>
                 <span class="ms-auto text-xs text-muted">{{ 'admin.productCategories.inheritedFrom' | transloco: { name: (i.from.name | localized: language.lang()) } }}</span>
               </li>
             }
             @for (a of s.attributes; track a.id; let first = $first, last = $last) {
-              <li class="row-hover flex flex-wrap items-center gap-3 px-5 py-3 text-sm sm:px-6">
+              <li class="row-hover flex flex-wrap items-center gap-3 px-4 py-3 text-sm sm:px-6">
                 <div class="flex flex-col">
                   <button type="button" (click)="moveAttribute(a, 'up')" [disabled]="first" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"
                     class="flex size-4 items-center justify-center rounded text-[9px] text-muted transition-colors hover:text-brand disabled:pointer-events-none disabled:opacity-30">▲</button>
@@ -134,7 +138,7 @@
     </section>
   </div>
 } @else {
-  <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+  <p class="empty-state">{{ 'common.loading' | transloco }}</p>
 }
 
 @if (pending(); as p) {
@@ -172,7 +176,7 @@
               class="mt-1.5 field font-mono" />
           </div>
           @if (error(); as key) { <p role="alert" class="alert-danger">{{ key | transloco }}</p> }
-          <div class="mt-6 flex justify-end gap-3">
+          <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
             <button type="submit" [disabled]="busy()" class="btn btn-primary">
               {{ (busy() ? 'common.saving' : 'admin.settings.save') | transloco }}
@@ -228,7 +232,7 @@
             <label class="flex cursor-pointer items-center gap-2"><input type="checkbox" formControlName="filterable" class="checkbox" /> {{ 'admin.productCategories.filterable' | transloco }}</label>
           </div>
           @if (isChoice(attributeType())) {
-            <div class="rounded-xl border border-line bg-subtle/50 p-4">
+            <div class="rounded-xl border border-line bg-subtle/50 p-3 sm:p-4">
               <p class="field-label">{{ 'admin.productCategories.options' | transloco }}</p>
               <ul class="mt-2 space-y-2">
                 @for (o of options(); track $index; let i = $index) {
@@ -249,7 +253,7 @@
             </div>
           }
           @if (error(); as key) { <p role="alert" class="alert-danger">{{ key | transloco }}</p> }
-          <div class="mt-6 flex justify-end gap-3">
+          <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
             <button type="submit" [disabled]="busy()" class="btn btn-primary">
               {{ (busy() ? 'common.saving' : 'admin.settings.save') | transloco }}
@@ -273,7 +277,7 @@
           @else if (p.kind === 'deleteAttribute') { {{ 'admin.productCategories.deleteAttributeHint' | transloco }} }
         </p>
         @if (error(); as key) { <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p> }
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="button" (click)="confirm()" [disabled]="busy()" class="btn"
             [class]="p.kind === 'toggle' ? 'btn-primary' : 'btn-danger'">

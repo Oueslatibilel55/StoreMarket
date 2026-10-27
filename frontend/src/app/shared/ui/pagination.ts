@@ -6,15 +6,16 @@ import { TranslocoPipe } from '@jsverse/transloco';
   imports: [TranslocoPipe],
   template: `
     @if (totalPages() > 1) {
-      <nav class="flex items-center justify-between gap-3 text-sm" [attr.aria-label]="'common.pagination' | transloco">
+      <nav class="flex flex-wrap items-center justify-between gap-3 text-sm" [attr.aria-label]="'common.pagination' | transloco">
         <span class="text-muted">{{ 'common.pageOf' | transloco: { page: page(), total: totalPages() } }}</span>
-        <div class="flex gap-2">
-          <button type="button" (click)="go(page() - 1)" [disabled]="page() <= 1" class="btn btn-secondary btn-sm">
+        <div class="flex items-center gap-1.5">
+          <button type="button" (click)="go(page() - 1)" [disabled]="page() <= 1" [attr.aria-label]="'common.previous' | transloco" [title]="'common.previous' | transloco"
+            class="flex size-9 cursor-pointer items-center justify-center rounded-full border border-line-strong bg-card text-ink transition-colors hover:border-ink/40 hover:bg-subtle disabled:pointer-events-none disabled:opacity-40">
             <span class="inline-block rtl:rotate-180" aria-hidden="true">←</span>
-            {{ 'common.previous' | transloco }}
           </button>
-          <button type="button" (click)="go(page() + 1)" [disabled]="page() >= totalPages()" class="btn btn-secondary btn-sm">
-            {{ 'common.next' | transloco }}
+          <span class="flex size-9 items-center justify-center rounded-full bg-ink font-display text-sm font-bold text-white tabular-nums" aria-current="page" dir="ltr">{{ page() }}</span>
+          <button type="button" (click)="go(page() + 1)" [disabled]="page() >= totalPages()" [attr.aria-label]="'common.next' | transloco" [title]="'common.next' | transloco"
+            class="flex size-9 cursor-pointer items-center justify-center rounded-full border border-line-strong bg-card text-ink transition-colors hover:border-ink/40 hover:bg-subtle disabled:pointer-events-none disabled:opacity-40">
             <span class="inline-block rtl:rotate-180" aria-hidden="true">→</span>
           </button>
         </div>

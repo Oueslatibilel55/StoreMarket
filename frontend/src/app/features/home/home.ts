@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -20,11 +20,11 @@ export class Home {
   private readonly catalog = inject(CatalogApi);
   protected readonly language = inject(LanguageService);
 
-  /** What the platform offers each audience (`home.roles.<key>.*`). */
+  /** What the platform offers each audience (`home.roles.<key>.*`); the tone colors its rule. */
   protected readonly roles = [
-    { key: 'buyer', icon: '🛍️', tone: 'bg-brand-soft' },
-    { key: 'owner', icon: '🏪', tone: 'bg-success/10' },
-    { key: 'affiliate', icon: '🪙', tone: 'bg-accent/15' },
+    { key: 'buyer', tone: 'border-brand' },
+    { key: 'owner', tone: 'border-success' },
+    { key: 'affiliate', tone: 'border-accent' },
   ];
 
   protected readonly categories = rxResource({ stream: () => this.catalog.storeCategories() });
@@ -34,6 +34,12 @@ export class Home {
   });
   protected readonly products = rxResource({ stream: () => this.catalog.products({ pageSize: 8 }) });
   protected readonly stores = rxResource({ stream: () => this.catalog.stores({ sort: 'TopRated', pageSize: 4 }) });
+
+  /** The hero doorway: four tiles, the newest product photos first, plain blue panes for the rest. */
+  protected readonly doorway = computed(() => {
+    const photos = (this.products.value()?.items ?? []).flatMap((p) => (p.imageUrl ? [p.imageUrl] : []));
+    return Array.from({ length: 4 }, (_, i) => photos[i] ?? null);
+  });
 
   constructor() {
     const seo = inject(Seo);

@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { AuthShell } from '../../../shared/layout/auth-shell';
 import { AccountType } from '../../../core/auth/auth.models';
 import { AuthService } from '../../../core/auth/auth.service';
 import { errorKey } from '../../../core/http/problem';
@@ -14,7 +15,7 @@ const PHONE_PATTERN = /^(\+216|00216)?[\s.-]*(\d[\s.-]*){8}$/;
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, AuthShell],
   templateUrl: './register.html',
 })
 export class Register {

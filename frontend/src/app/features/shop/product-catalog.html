@@ -1,39 +1,45 @@
 <main class="page">
-  <header>
-    <nav class="flex flex-wrap items-center gap-1.5 text-sm text-muted" [attr.aria-label]="'shop.breadcrumb' | transloco">
-      <a routerLink="/products" [queryParams]="{}" class="transition-colors hover:text-brand">{{ 'shop.allProducts' | transloco }}</a>
-      @for (c of breadcrumb(); track c.id) {
-        <span aria-hidden="true" class="inline-block text-muted/60 rtl:rotate-180">›</span>
-        <a routerLink="/products" [queryParams]="categoryParams(c.slug)" queryParamsHandling="merge" class="transition-colors hover:text-brand">{{ c.name | localized: language.lang() }}</a>
+  <header class="page-header">
+    <div class="min-w-0">
+      <nav class="mb-2 flex flex-wrap items-center gap-1.5 text-sm text-muted" [attr.aria-label]="'shop.breadcrumb' | transloco">
+        <a routerLink="/products" [queryParams]="{}" class="transition-colors hover:text-brand">{{ 'shop.allProducts' | transloco }}</a>
+        @for (c of breadcrumb(); track c.id) {
+          <span aria-hidden="true" class="inline-block text-muted/60 rtl:rotate-180">›</span>
+          <a routerLink="/products" [queryParams]="categoryParams(c.slug)" queryParamsHandling="merge" class="transition-colors hover:text-brand">{{ c.name | localized: language.lang() }}</a>
+        }
+      </nav>
+      <h1 class="page-title break-words">
+        @if (current()) {
+          {{ current()!.name | localized: language.lang() }}
+        } @else if (searching()) {
+          {{ 'shop.searchResults' | transloco: { q: search()!.trim() } }}
+        } @else {
+          {{ 'shop.allProducts' | transloco }}
+        }
+      </h1>
+      @if (products.value(); as result) {
+        <p class="page-subtitle">{{ 'shop.resultCount' | transloco: { count: result.total } }}</p>
       }
-    </nav>
-    <h1 class="page-title mt-3 break-words">
-      @if (current()) {
-        {{ current()!.name | localized: language.lang() }}
-      } @else if (searching()) {
-        {{ 'shop.searchResults' | transloco: { q: search()!.trim() } }}
-      } @else {
-        {{ 'shop.allProducts' | transloco }}
-      }
-    </h1>
+    </div>
   </header>
 
   @if (children().length) {
-    <div class="-mx-4 mt-5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
+    <div class="-mx-4 mb-5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&>*]:shrink-0">
       @for (c of children(); track c.id) {
         <a routerLink="/products" [queryParams]="categoryParams(c.slug)" queryParamsHandling="merge"
-          class="rounded-full border border-line bg-card px-3.5 py-1.5 text-sm font-medium text-ink-soft shadow-card transition-all duration-200 hover:-translate-y-px hover:border-brand hover:text-brand">{{ c.name | localized: language.lang() }}</a>
+          class="rounded-full border border-line-strong bg-card px-3.5 py-1.5 text-sm font-medium text-ink-soft transition-colors duration-200 hover:border-brand hover:text-brand">{{ c.name | localized: language.lang() }}</a>
       }
     </div>
   }
 
-  <div class="card mt-6 p-3 sm:p-4">
-    <div class="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+  <div class="card overflow-hidden">
+    <!-- panel-toolbar without its bottom rule: the filters panel below draws its own. -->
+    <div class="flex flex-wrap items-center gap-3 bg-subtle/50 px-4 py-3 sm:px-5">
       <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
         [placeholder]="'shop.searchProducts' | transloco" [attr.aria-label]="'shop.searchProducts' | transloco"
-        class="field" />
+        class="field min-w-0 flex-1 basis-56" />
       <select [value]="sort() ?? defaultSort()" (change)="onSort($any($event.target).value)"
-        [attr.aria-label]="'shop.sortBy' | transloco" class="field sm:w-auto">
+        [attr.aria-label]="'shop.sortBy' | transloco" class="field w-auto max-w-full">
         @for (s of sorts; track s) { <option [value]="s">{{ 'shop.sort.' + s | transloco }}</option> }
       </select>
       <button type="button" class="btn btn-secondary" (click)="filtersOpen.set(!filtersOpen())" [attr.aria-expanded]="filtersOpen()" aria-controls="catalog-filters">
@@ -46,9 +52,9 @@
     </div>
 
     @if (filtersOpen()) {
-      <div id="catalog-filters" class="mt-4 grid gap-4 border-t border-line pt-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div id="catalog-filters" class="grid gap-5 border-t border-line px-4 py-5 sm:grid-cols-2 sm:px-5 lg:grid-cols-3">
         <fieldset>
-          <legend class="field-label">{{ 'shop.price' | transloco }}</legend>
+          <legend class="field-label mb-1.5">{{ 'shop.price' | transloco }}</legend>
           <div class="flex items-center gap-2">
             <input type="number" min="0" inputmode="decimal" [value]="priceFrom() ?? ''" (change)="onPrice('minPrice', $any($event.target).value)"
               [placeholder]="'shop.priceMin' | transloco" [attr.aria-label]="'shop.priceMin' | transloco" class="field min-w-0" dir="ltr" />
@@ -59,7 +65,7 @@
         </fieldset>
 
         <label class="block">
-          <span class="field-label">{{ 'shop.minRating' | transloco }}</span>
+          <span class="field-label mb-1.5">{{ 'shop.minRating' | transloco }}</span>
           <select [value]="stars() ?? ''" (change)="apply({ minRating: $any($event.target).value || null, page: null })" class="field">
             <option value="">{{ 'shop.anyRating' | transloco }}</option>
             @for (n of minRatings; track n) { <option [value]="n">{{ 'shop.ratingAtLeast' | transloco: { n } }}</option> }
@@ -67,7 +73,7 @@
         </label>
 
         <label class="block">
-          <span class="field-label">{{ 'shop.storeCategory' | transloco }}</span>
+          <span class="field-label mb-1.5">{{ 'shop.storeCategory' | transloco }}</span>
           <select [value]="storeCategory() ?? ''" (change)="apply({ storeCategory: $any($event.target).value || null, page: null })" class="field">
             <option value="">{{ 'shop.allStoreCategories' | transloco }}</option>
             @for (c of storeCategories.value() ?? []; track c.id) { <option [value]="c.slug">{{ c.name | localized: language.lang() }}</option> }
@@ -76,13 +82,13 @@
 
         @for (f of fields(); track f.attribute.key) {
           <fieldset>
-            <legend class="field-label">{{ f.attribute.name | localized: language.lang() }}</legend>
+            <legend class="field-label mb-1.5">{{ f.attribute.name | localized: language.lang() }}</legend>
             <div class="flex flex-wrap gap-2">
               @if (f.attribute.type === 'Boolean') {
                 @for (v of ['true', 'false']; track v) {
                   <button type="button" (click)="toggle(f, v)" [attr.aria-pressed]="isChosen(f, v)"
                     class="cursor-pointer rounded-full border px-3 py-1 text-sm font-medium transition-colors"
-                    [class]="isChosen(f, v) ? 'border-brand bg-brand-soft text-brand' : 'border-line bg-card text-ink-soft hover:border-brand hover:text-brand'">
+                    [class]="isChosen(f, v) ? 'border-brand bg-brand text-white' : 'border-line-strong bg-card text-ink-soft hover:border-brand hover:text-brand'">
                     {{ (v === 'true' ? 'shop.yes' : 'shop.no') | transloco }}
                   </button>
                 }
@@ -90,7 +96,7 @@
                 @for (o of f.attribute.options; track o.key) {
                   <button type="button" (click)="toggle(f, o.key)" [attr.aria-pressed]="isChosen(f, o.key)"
                     class="cursor-pointer rounded-full border px-3 py-1 text-sm font-medium transition-colors"
-                    [class]="isChosen(f, o.key) ? 'border-brand bg-brand-soft text-brand' : 'border-line bg-card text-ink-soft hover:border-brand hover:text-brand'">
+                    [class]="isChosen(f, o.key) ? 'border-brand bg-brand text-white' : 'border-line-strong bg-card text-ink-soft hover:border-brand hover:text-brand'">
                     {{ o.name | localized: language.lang() }}
                   </button>
                 }
@@ -100,7 +106,7 @@
         }
 
         @if (!category()) {
-          <p class="text-sm text-muted sm:col-span-2 lg:col-span-3">{{ 'shop.fieldFiltersHint' | transloco }}</p>
+          <p class="text-xs text-muted sm:col-span-2 lg:col-span-3">{{ 'shop.fieldFiltersHint' | transloco }}</p>
         }
         @if (activeFilters()) {
           <div class="sm:col-span-2 lg:col-span-3">
@@ -113,11 +119,11 @@
 
   @if (stores.value(); as found) {
     @if (found.items.length) {
-      <section class="mt-8" aria-labelledby="search-stores">
+      <section class="mt-10" aria-labelledby="search-stores">
         <div class="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="search-stores" class="text-lg font-semibold text-ink">{{ 'shop.stores' | transloco }}</h2>
+          <h2 id="search-stores" class="section-title text-xl">{{ 'shop.stores' | transloco }}</h2>
           @if (found.total > found.items.length) {
-            <a routerLink="/stores" [queryParams]="{ search: search()!.trim() }" class="text-sm font-medium text-brand hover:underline">
+            <a routerLink="/stores" [queryParams]="{ search: search()!.trim() }" class="link text-sm">
               {{ 'shop.seeAllStores' | transloco: { count: found.total } }}
             </a>
           }
@@ -126,7 +132,7 @@
           @for (s of found.items; track s.id) { <li><app-store-card [store]="s" /></li> }
         </ul>
       </section>
-      <h2 class="mt-10 text-lg font-semibold text-ink">{{ 'shop.products' | transloco }}</h2>
+      <h2 class="section-title mt-12 text-xl">{{ 'shop.products' | transloco }}</h2>
     }
   }
 
@@ -135,16 +141,15 @@
   } @else if (products.error()) {
     <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
   } @else if (products.value(); as result) {
-    <p class="mt-4 text-sm text-muted">{{ 'shop.resultCount' | transloco: { count: result.total } }}</p>
     @if (result.items.length) {
-      <ul class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+      <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
         @for (p of result.items; track p.id) { <li><app-product-card [product]="p" /></li> }
       </ul>
-      <div class="mt-8">
+      <div class="mt-10">
         <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
       </div>
     } @else {
-      <div class="card mt-4">
+      <div class="card mt-6">
         <p class="empty-state">{{ (searching() || activeFilters() ? 'shop.noResults' : 'shop.noProducts') | transloco }}</p>
       </div>
     }

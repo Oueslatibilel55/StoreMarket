@@ -16,23 +16,26 @@ import { StarRating } from './star-rating';
   imports: [DatePipe, DecimalPipe, TranslocoPipe, Pagination, StarRating],
   template: `
     <section id="reviews" class="scroll-mt-24">
-      <h2 class="section-title text-xl">{{ (kind() === 'product' ? 'reviews.productTitle' : 'reviews.storeTitle') | transloco }}</h2>
-      @if (kind() === 'store') { <p class="mt-1 text-sm text-muted">{{ 'reviews.storeHint' | transloco }}</p> }
+      <div class="flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
+        <div class="min-w-0">
+          <h2 class="section-title text-2xl">{{ (kind() === 'product' ? 'reviews.productTitle' : 'reviews.storeTitle') | transloco }}</h2>
+          @if (kind() === 'store') { <p class="mt-1 text-sm text-muted">{{ 'reviews.storeHint' | transloco }}</p> }
+        </div>
+      </div>
 
       @if (reviews.error()) {
-        <p class="alert-danger mt-4">{{ 'errors.unknown' | transloco }}</p>
+        <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
       } @else if (reviews.value(); as r) {
         @if (r.stats.count === 0) {
-          <div class="card empty-state mt-4">
-            <p class="text-2xl" aria-hidden="true">☆</p>
-            <p>{{ 'reviews.none' | transloco }}</p>
+          <div class="card empty-state mt-6">
+            <p class="font-medium text-ink-soft">{{ 'reviews.none' | transloco }}</p>
             <p class="text-xs">{{ 'reviews.verifiedHint' | transloco }}</p>
           </div>
         } @else {
-          <div class="mt-4 grid gap-6 lg:grid-cols-[16rem_1fr] lg:gap-10">
-            <div class="card self-start p-5">
+          <div class="mt-6 grid gap-6 lg:grid-cols-[16rem_1fr] lg:gap-10">
+            <div class="card self-start p-5 lg:sticky lg:top-24">
               <p class="flex items-baseline gap-2">
-                <span class="text-4xl font-bold tracking-tight text-ink" dir="ltr">{{ r.stats.average | number: '1.1-1' : language.locale() }}</span>
+                <span class="figure text-5xl text-ink" dir="ltr">{{ r.stats.average | number: '1.1-1' : language.locale() }}</span>
                 <span class="text-sm text-muted">/ 5</span>
               </p>
               <app-star-rating class="mt-1 block" [value]="r.stats.average" />
@@ -54,43 +57,43 @@ import { StarRating } from './star-rating';
                 }
               </ul>
               @if (stars()) {
-                <button type="button" (click)="filter(null)" class="link mt-3 text-xs">{{ 'reviews.allStars' | transloco }}</button>
+                <button type="button" (click)="filter(null)" class="link mt-3 cursor-pointer text-xs">{{ 'reviews.allStars' | transloco }}</button>
               }
-              <p class="mt-4 border-t border-line pt-3 text-xs text-muted">✓ {{ 'reviews.verifiedHint' | transloco }}</p>
+              <p class="mt-4 border-t border-line pt-3 text-xs text-muted">{{ 'reviews.verifiedHint' | transloco }}</p>
             </div>
 
             <div class="min-w-0">
-              <ul class="space-y-4">
+              <ul class="card divide-y divide-line overflow-hidden">
                 @for (review of r.reviews.items; track review.id) {
-                  <li class="card p-5">
+                  <li class="px-5 py-5 sm:px-6">
                     <div class="flex flex-wrap items-center justify-between gap-2">
-                      <div class="flex items-center gap-2.5">
-                        <span class="flex size-8 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand" aria-hidden="true">{{ review.authorName.charAt(0) }}</span>
-                        <div>
-                          <p class="text-sm font-semibold text-ink">{{ review.authorName }}</p>
-                          <p class="text-xs text-muted">
-                            {{ review.createdAt | date: 'longDate' : undefined : language.locale() }}
-                            @if (review.editedAt) { · {{ 'reviews.edited' | transloco }} }
+                      <div class="flex min-w-0 items-center gap-3">
+                        <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft font-display text-sm font-bold text-brand" aria-hidden="true">{{ review.authorName.charAt(0) }}</span>
+                        <div class="min-w-0">
+                          <p class="truncate text-sm font-semibold text-ink">{{ review.authorName }}</p>
+                          <p class="flex flex-wrap gap-x-3 text-xs text-muted">
+                            <span>{{ review.createdAt | date: 'longDate' : undefined : language.locale() }}</span>
+                            @if (review.editedAt) { <span>{{ 'reviews.edited' | transloco }}</span> }
                           </p>
                         </div>
                       </div>
                       <app-star-rating [value]="review.stars" size="sm" />
                     </div>
                     @if (review.comment) {
-                      <p class="mt-3 text-sm leading-relaxed whitespace-pre-line text-ink-soft" dir="auto">{{ review.comment }}</p>
+                      <p class="mt-3 leading-relaxed break-words whitespace-pre-line text-ink-soft" dir="auto">{{ review.comment }}</p>
                     }
                     @if (review.reply) {
-                      <div class="mt-4 rounded-lg border-s-2 border-brand bg-subtle px-4 py-3 text-sm">
-                        <p class="text-xs font-semibold text-ink">{{ 'reviews.storeReply' | transloco }}</p>
+                      <div class="mt-4 rounded-e-lg border-s-2 border-brand bg-brand-soft/60 px-4 py-3 text-sm">
+                        <p class="text-xs font-semibold text-brand">{{ 'reviews.storeReply' | transloco }}</p>
                         <p class="mt-1 whitespace-pre-line text-ink-soft" dir="auto">{{ review.reply }}</p>
                       </div>
                     }
                   </li>
                 } @empty {
-                  <li class="card empty-state">{{ 'reviews.noneWithStars' | transloco }}</li>
+                  <li class="empty-state">{{ 'reviews.noneWithStars' | transloco }}</li>
                 }
               </ul>
-              <div class="mt-4">
+              <div class="mt-6">
                 <app-pagination [page]="r.reviews.page" [pageSize]="r.reviews.pageSize" [total]="r.reviews.total" (pageChange)="page.set($event)" />
               </div>
             </div>

@@ -16,26 +16,36 @@ import { AdminApi } from '../admin-api';
   selector: 'app-admin-order-detail',
   imports: [RouterLink, TranslocoPipe, Modal, OrderView],
   template: `
-    <a routerLink="/admin/orders" class="btn btn-ghost btn-sm -ms-3"><span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'adminOrders.title' | transloco }}</a>
-    <h1 class="page-title mt-2">{{ 'orders.order' | transloco }} <span dir="ltr">{{ reference() }}</span></h1>
+    <header class="page-header">
+      <div class="min-w-0">
+        <a routerLink="/admin/orders" class="back-link"><span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'adminOrders.title' | transloco }}</a>
+        <h1 class="page-title">{{ 'orders.order' | transloco }} <span dir="ltr">{{ reference() }}</span></h1>
+      </div>
+    </header>
 
     @if (order.value(); as o) {
-      <section class="card card-body mt-6">
-        <h2 class="section-title">{{ 'adminOrders.force' | transloco }}</h2>
-        <p class="mt-1 text-sm text-muted">{{ 'adminOrders.forceHint' | transloco }}</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          @for (s of o.storeOrders; track s.id) {
-            <button type="button" (click)="ask(s)" [disabled]="s.status === 'Delivered'" class="btn btn-secondary btn-sm">
-              {{ s.storeName }}…
-            </button>
-          }
-        </div>
-      </section>
-      <div class="mt-6"><app-order-view [order]="o" /></div>
+      <div class="space-y-6">
+        <section class="card overflow-hidden">
+          <div class="card-header">
+            <div class="min-w-0">
+              <h2 class="section-title">{{ 'adminOrders.force' | transloco }}</h2>
+              <p class="mt-1 text-sm text-muted">{{ 'adminOrders.forceHint' | transloco }}</p>
+            </div>
+          </div>
+          <div class="card-body flex flex-wrap gap-2">
+            @for (s of o.storeOrders; track s.id) {
+              <button type="button" (click)="ask(s)" [disabled]="s.status === 'Delivered'" class="btn btn-secondary btn-sm">
+                {{ s.storeName }}…
+              </button>
+            }
+          </div>
+        </section>
+        <app-order-view [order]="o" />
+      </div>
     } @else if (order.error()) {
-      <div class="card empty-state mt-6"><p>{{ 'errors.order.notFound' | transloco }}</p></div>
+      <div class="card"><p class="empty-state">{{ 'errors.order.notFound' | transloco }}</p></div>
     } @else {
-      <p class="card empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+      <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
     }
 
     @if (target(); as s) {
@@ -59,7 +69,7 @@ import { AdminApi } from '../admin-api';
         <label for="forceReason" class="field-label mt-4">{{ 'adminOrders.reason' | transloco }}</label>
         <textarea id="forceReason" rows="3" maxlength="500" [value]="reason()" (input)="reason.set($any($event.target).value)" class="mt-1.5 field resize-y"></textarea>
         @if (error(); as key) { <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p> }
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
           <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="button" (click)="confirm()" [disabled]="busy() || !ready()" class="btn btn-danger">{{ 'adminOrders.apply' | transloco }}</button>
         </div>

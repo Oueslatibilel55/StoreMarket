@@ -13,11 +13,11 @@ const DEFAULT_DAYS = 30;
   imports: [TranslocoPipe],
   template: `
     <div class="flex flex-wrap items-center gap-2">
-      <div class="flex rounded-lg border border-line bg-card p-0.5 shadow-card" role="group" [attr.aria-label]="'stats.period' | transloco">
+      <div class="flex max-w-full overflow-x-auto rounded-full border border-line bg-card p-0.5 shadow-card [scrollbar-width:none]" role="group" [attr.aria-label]="'stats.period' | transloco">
         @for (n of presets; track n) {
           <button type="button" (click)="pick(n)" [attr.aria-pressed]="preset() === n"
-            class="cursor-pointer rounded-md px-2.5 py-1 text-sm font-medium transition-colors"
-            [class]="preset() === n ? 'bg-brand text-white' : 'text-ink-soft hover:bg-subtle hover:text-ink'">
+            class="shrink-0 cursor-pointer rounded-full px-3 py-1 text-sm font-medium whitespace-nowrap transition-colors"
+            [class]="preset() === n ? 'bg-brand-soft font-semibold text-brand' : 'text-ink-soft hover:bg-subtle hover:text-ink'">
             {{ 'stats.lastDays' | transloco: { n } }}
           </button>
         }
@@ -25,7 +25,7 @@ const DEFAULT_DAYS = 30;
       <div class="flex items-center gap-1.5" dir="ltr">
         <input type="date" [value]="start()" [max]="end()" (change)="custom($any($event.target).value, end())"
           [attr.aria-label]="'stats.from' | transloco" class="field w-auto py-1 text-sm" />
-        <span class="text-muted" aria-hidden="true">→</span>
+        <span class="text-muted" aria-hidden="true">–</span>
         <input type="date" [value]="end()" [min]="start()" [max]="today" (change)="custom(start(), $any($event.target).value)"
           [attr.aria-label]="'stats.to' | transloco" class="field w-auto py-1 text-sm" />
       </div>

@@ -20,110 +20,114 @@ const PAGE_SIZE = 20;
   selector: 'app-admin-review-list',
   imports: [DatePipe, RouterLink, TranslocoPipe, Modal, Pagination, StarRating],
   template: `
-    <header>
-      <h1 class="page-title">{{ 'reviews.admin.title' | transloco }}</h1>
-      <p class="page-subtitle">{{ 'reviews.admin.subtitle' | transloco }}</p>
+    <header class="page-header">
+      <div class="min-w-0">
+        <h1 class="page-title">{{ 'reviews.admin.title' | transloco }}</h1>
+        <p class="page-subtitle">{{ 'reviews.admin.subtitle' | transloco }}</p>
+      </div>
     </header>
 
-    @if (counts.value(); as c) {
-      <div class="mt-6 grid grid-cols-3 gap-3">
-        <button type="button" (click)="clear()" class="card cursor-pointer p-4 text-start transition-shadow hover:shadow-card-hover">
-          <p class="eyebrow">{{ 'reviews.admin.total' | transloco }}</p>
-          <p class="mt-1 text-2xl font-bold text-ink">{{ c.total }}</p>
-        </button>
-        <div class="card p-4">
-          <p class="eyebrow">{{ 'reviews.admin.lowStars' | transloco }}</p>
-          <p class="mt-1 text-2xl font-bold text-ink">{{ c.lowStars }}</p>
-        </div>
-        <button type="button" (click)="apply({ hidden: 'true', stars: null, page: null })" class="card cursor-pointer p-4 text-start transition-shadow hover:shadow-card-hover">
-          <p class="eyebrow">{{ 'reviews.admin.hidden' | transloco }}</p>
-          <p class="mt-1 text-2xl font-bold text-danger">{{ c.hidden }}</p>
-        </button>
-      </div>
-    }
-
-    <div class="card mt-6 overflow-hidden">
-      <div class="grid gap-3 border-b border-line p-4 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto_auto]">
-        <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
-          [placeholder]="'reviews.admin.searchPlaceholder' | transloco" [attr.aria-label]="'reviews.admin.searchPlaceholder' | transloco"
-          class="field sm:col-span-2 lg:col-span-1" />
-        <select [value]="target() ?? ''" (change)="apply({ target: $any($event.target).value || null, page: null })"
-          [attr.aria-label]="'reviews.admin.target' | transloco" class="field lg:w-auto">
-          <option value="">{{ 'reviews.admin.allTargets' | transloco }}</option>
-          @for (t of targets; track t) { <option [value]="t">{{ 'reviews.target.' + t | transloco }}</option> }
-        </select>
-        <select [value]="stars() ?? ''" (change)="apply({ stars: $any($event.target).value || null, page: null })"
-          [attr.aria-label]="'reviews.admin.stars' | transloco" class="field lg:w-auto">
-          <option value="">{{ 'reviews.admin.allStars' | transloco }}</option>
-          @for (n of [1, 2, 3, 4, 5]; track n) { <option [value]="n">{{ 'reviews.nStars' | transloco: { n } }}</option> }
-        </select>
-        <select [value]="hidden() ?? ''" (change)="apply({ hidden: $any($event.target).value || null, page: null })"
-          [attr.aria-label]="'reviews.admin.visibility' | transloco" class="field lg:w-auto">
-          <option value="">{{ 'reviews.admin.allVisibility' | transloco }}</option>
-          <option value="false">{{ 'reviews.admin.visible' | transloco }}</option>
-          <option value="true">{{ 'reviews.admin.hidden' | transloco }}</option>
-        </select>
-        @if (hasFilters()) {
-          <button type="button" (click)="clear()" class="btn btn-ghost">{{ 'common.clearFilters' | transloco }}</button>
-        }
-      </div>
-
-      @if (reviews.error()) {
-        <p class="alert-danger m-5">{{ 'errors.unknown' | transloco }}</p>
-      } @else if (reviews.value(); as result) {
-        @if (result.items.length === 0) {
-          <p class="empty-state">{{ 'reviews.admin.empty' | transloco }}</p>
-        } @else {
-          <ul class="divide-y divide-line">
-            @for (r of result.items; track r.id) {
-              <li class="row-hover grid gap-3 px-5 py-4 md:grid-cols-[1fr_12rem] md:items-start">
-                <div class="min-w-0">
-                  <p class="flex flex-wrap items-center gap-2">
-                    <app-star-rating [value]="r.stars" size="sm" />
-                    <span class="pill pill-neutral">{{ 'reviews.target.' + r.target | transloco }}</span>
-                    @if (r.hiddenAt) { <span class="pill pill-danger">{{ 'reviews.hiddenPill' | transloco }}</span> }
-                  </p>
-                  <p class="mt-1.5 text-sm font-medium text-ink">
-                    @if (r.target === 'Product') {
-                      @if (r.productSlug) { <a [routerLink]="['/products', r.productSlug]" class="hover:text-brand">{{ r.productName }}</a> } @else { {{ r.productName }} }
-                      ·
-                    }
-                    <a [routerLink]="['/admin/stores', r.storeId]" class="hover:text-brand">🏪 {{ r.storeName }}</a>
-                  </p>
-                  @if (r.comment) {
-                    <p class="mt-1.5 text-sm whitespace-pre-line text-ink-soft" dir="auto">{{ r.comment }}</p>
-                  } @else {
-                    <p class="mt-1.5 text-sm text-muted italic">{{ 'reviews.noComment' | transloco }}</p>
-                  }
-                  @if (r.reply) {
-                    <p class="mt-2 border-s-2 border-brand ps-3 text-xs text-ink-soft" dir="auto"><span class="font-semibold">{{ 'reviews.storeReply' | transloco }} :</span> {{ r.reply }}</p>
-                  }
-                  @if (r.hiddenReason) {
-                    <p class="mt-2 text-xs text-danger">{{ 'reviews.admin.hiddenBecause' | transloco: { reason: r.hiddenReason } }}</p>
-                  }
-                  <p class="mt-2 text-xs text-muted">
-                    <a [routerLink]="['/admin/users', r.authorId]" class="font-medium text-ink-soft hover:text-brand">{{ r.authorFullName }}</a>
-                    · <span dir="ltr">{{ r.authorEmail }}</span> · <span dir="ltr">{{ r.orderReference }}</span>
-                    · {{ r.createdAt | date: 'medium' : undefined : language.locale() }}
-                  </p>
-                </div>
-                <div class="flex md:justify-end">
-                  @if (r.hiddenAt) {
-                    <button type="button" (click)="ask(r, 'unhide')" class="btn btn-secondary btn-sm">{{ 'reviews.admin.unhide' | transloco }}</button>
-                  } @else {
-                    <button type="button" (click)="ask(r, 'hide')" class="btn btn-danger-soft btn-sm">{{ 'reviews.admin.hide' | transloco }}</button>
-                  }
-                </div>
-              </li>
-            }
-          </ul>
-          <div class="border-t border-line bg-subtle/40 px-5 py-3">
-            <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
+    <div class="space-y-6">
+      @if (counts.value(); as c) {
+        <div class="grid grid-cols-3 gap-3">
+          <button type="button" (click)="clear()" class="stat-tile min-w-0 cursor-pointer text-start transition-[translate,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-brand/25 hover:shadow-card-hover">
+            <p class="stat-label truncate">{{ 'reviews.admin.total' | transloco }}</p>
+            <p class="stat-value" dir="ltr">{{ c.total }}</p>
+          </button>
+          <div class="stat-tile min-w-0">
+            <p class="stat-label truncate">{{ 'reviews.admin.lowStars' | transloco }}</p>
+            <p class="stat-value" [class.text-accent-ink]="c.lowStars > 0" dir="ltr">{{ c.lowStars }}</p>
           </div>
-        }
-      } @else {
-        <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+          <button type="button" (click)="apply({ hidden: 'true', stars: null, page: null })" class="stat-tile min-w-0 cursor-pointer text-start transition-[translate,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-brand/25 hover:shadow-card-hover">
+            <p class="stat-label truncate">{{ 'reviews.admin.hidden' | transloco }}</p>
+            <p class="stat-value text-danger" dir="ltr">{{ c.hidden }}</p>
+          </button>
+        </div>
       }
+
+      <div class="card overflow-hidden">
+        <div class="panel-toolbar">
+          <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
+            [placeholder]="'reviews.admin.searchPlaceholder' | transloco" [attr.aria-label]="'reviews.admin.searchPlaceholder' | transloco"
+            class="field min-w-0 flex-1 basis-56" />
+          <select [value]="target() ?? ''" (change)="apply({ target: $any($event.target).value || null, page: null })"
+            [attr.aria-label]="'reviews.admin.target' | transloco" class="field w-full sm:w-auto">
+            <option value="">{{ 'reviews.admin.allTargets' | transloco }}</option>
+            @for (t of targets; track t) { <option [value]="t">{{ 'reviews.target.' + t | transloco }}</option> }
+          </select>
+          <select [value]="stars() ?? ''" (change)="apply({ stars: $any($event.target).value || null, page: null })"
+            [attr.aria-label]="'reviews.admin.stars' | transloco" class="field w-full sm:w-auto">
+            <option value="">{{ 'reviews.admin.allStars' | transloco }}</option>
+            @for (n of [1, 2, 3, 4, 5]; track n) { <option [value]="n">{{ 'reviews.nStars' | transloco: { n } }}</option> }
+          </select>
+          <select [value]="hidden() ?? ''" (change)="apply({ hidden: $any($event.target).value || null, page: null })"
+            [attr.aria-label]="'reviews.admin.visibility' | transloco" class="field w-full sm:w-auto">
+            <option value="">{{ 'reviews.admin.allVisibility' | transloco }}</option>
+            <option value="false">{{ 'reviews.admin.visible' | transloco }}</option>
+            <option value="true">{{ 'reviews.admin.hidden' | transloco }}</option>
+          </select>
+          @if (hasFilters()) {
+            <button type="button" (click)="clear()" class="btn btn-ghost btn-sm">{{ 'common.clearFilters' | transloco }}</button>
+          }
+        </div>
+
+        @if (reviews.error()) {
+          <p class="alert-danger m-4 sm:m-5">{{ 'errors.unknown' | transloco }}</p>
+        } @else if (reviews.value(); as result) {
+          @if (result.items.length === 0) {
+            <p class="empty-state">{{ 'reviews.admin.empty' | transloco }}</p>
+          } @else {
+            <ul class="divide-y divide-line">
+              @for (r of result.items; track r.id) {
+                <li class="list-row row-hover sm:items-start">
+                  <div class="min-w-0">
+                    <p class="flex flex-wrap items-center gap-2">
+                      <app-star-rating [value]="r.stars" size="sm" />
+                      <span class="pill pill-neutral">{{ 'reviews.target.' + r.target | transloco }}</span>
+                      @if (r.hiddenAt) { <span class="pill pill-danger">{{ 'reviews.hiddenPill' | transloco }}</span> }
+                    </p>
+                    <p class="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-sm font-medium text-ink">
+                      @if (r.target === 'Product') {
+                        @if (r.productSlug) { <a [routerLink]="['/products', r.productSlug]" class="hover:text-brand">{{ r.productName }}</a> } @else { <span>{{ r.productName }}</span> }
+                      }
+                      <a [routerLink]="['/admin/stores', r.storeId]" class="text-ink-soft hover:text-brand">{{ r.storeName }}</a>
+                    </p>
+                    @if (r.comment) {
+                      <p class="mt-1.5 text-sm whitespace-pre-line text-ink-soft" dir="auto">{{ r.comment }}</p>
+                    } @else {
+                      <p class="mt-1.5 text-sm text-muted italic">{{ 'reviews.noComment' | transloco }}</p>
+                    }
+                    @if (r.reply) {
+                      <p class="mt-2 border-s-2 border-brand ps-3 text-xs text-ink-soft" dir="auto"><span class="font-semibold">{{ 'reviews.storeReply' | transloco }} :</span> {{ r.reply }}</p>
+                    }
+                    @if (r.hiddenReason) {
+                      <p class="mt-2 text-xs text-danger">{{ 'reviews.admin.hiddenBecause' | transloco: { reason: r.hiddenReason } }}</p>
+                    }
+                    <p class="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                      <a [routerLink]="['/admin/users', r.authorId]" class="font-medium text-ink-soft hover:text-brand">{{ r.authorFullName }}</a>
+                      <span class="min-w-0 truncate" dir="ltr">{{ r.authorEmail }}</span>
+                      <span class="font-mono" dir="ltr">{{ r.orderReference }}</span>
+                      <span>{{ r.createdAt | date: 'medium' : undefined : language.locale() }}</span>
+                    </p>
+                  </div>
+                  <div class="flex shrink-0 sm:justify-end">
+                    @if (r.hiddenAt) {
+                      <button type="button" (click)="ask(r, 'unhide')" class="btn btn-secondary btn-sm">{{ 'reviews.admin.unhide' | transloco }}</button>
+                    } @else {
+                      <button type="button" (click)="ask(r, 'hide')" class="btn btn-danger-soft btn-sm">{{ 'reviews.admin.hide' | transloco }}</button>
+                    }
+                  </div>
+                </li>
+              }
+            </ul>
+            <div class="border-t border-line bg-subtle/40 px-4 py-3 sm:px-5">
+              <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
+            </div>
+          }
+        } @else {
+          <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
+        }
+      </div>
     </div>
 
     @if (acting(); as a) {
@@ -137,7 +141,7 @@ const PAGE_SIZE = 20;
         <textarea id="moderationReason" rows="3" [attr.maxlength]="maxReason" [value]="reason()" (input)="reason.set($any($event.target).value)"
           class="mt-1.5 field resize-y"></textarea>
         @if (error(); as key) { <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p> }
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
           <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="button" (click)="confirm()" [disabled]="busy() || !reason().trim()" class="btn"
             [class]="a.action === 'hide' ? 'btn-danger' : 'btn-primary'">{{ 'reviews.admin.' + a.action | transloco }}</button>

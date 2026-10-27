@@ -16,7 +16,7 @@ import { Modal } from '../ui/modal';
           [placeholder]="'billing.reject.placeholder' | transloco"></textarea>
       </label>
       @if (error()) { <p class="alert-danger mt-3">{{ error()! | transloco }}</p> }
-      <div class="mt-5 flex justify-end gap-2">
+      <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
         <button type="button" class="btn btn-ghost" (click)="cancelled.emit()">{{ 'common.cancel' | transloco }}</button>
         <button type="button" class="btn btn-danger" [disabled]="busy() || !reason().trim()" (click)="confirmed.emit(reason().trim())">
           {{ 'billing.payments.reject' | transloco }}

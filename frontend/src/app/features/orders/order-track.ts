@@ -13,26 +13,28 @@ import { OrderView } from './order-view';
   imports: [ReactiveFormsModule, TranslocoPipe, OrderView],
   template: `
     <main class="page animate-fade-in">
-      <div class="mx-auto max-w-xl text-center">
-        <h1 class="page-title">{{ 'orders.track.title' | transloco }}</h1>
-        <p class="page-subtitle">{{ 'orders.track.hint' | transloco }}</p>
-      </div>
-      <form [formGroup]="form" (ngSubmit)="find()" novalidate class="card card-body mx-auto mt-6 grid max-w-xl gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-        <div>
+      <header class="page-header">
+        <div class="min-w-0">
+          <h1 class="page-title">{{ 'orders.track.title' | transloco }}</h1>
+          <p class="page-subtitle">{{ 'orders.track.hint' | transloco }}</p>
+        </div>
+      </header>
+      <form [formGroup]="form" (ngSubmit)="find()" novalidate class="card card-body grid max-w-3xl gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+        <div class="min-w-0">
           <label for="reference" class="field-label">{{ 'orders.reference' | transloco }}</label>
           <input id="reference" formControlName="reference" placeholder="CMD-2026-000123" dir="ltr" class="mt-1.5 field font-mono uppercase" />
         </div>
-        <div>
+        <div class="min-w-0">
           <label for="trackPhone" class="field-label">{{ 'auth.phone' | transloco }}</label>
           <input id="trackPhone" type="tel" formControlName="phone" placeholder="22 123 456" dir="ltr" class="mt-1.5 field" />
         </div>
         <button type="submit" [disabled]="busy()" class="btn btn-primary">{{ 'orders.track.find' | transloco }}</button>
       </form>
       @if (error(); as key) {
-        <p role="alert" class="alert-danger mx-auto mt-4 max-w-xl">{{ key | transloco }}</p>
+        <p role="alert" class="alert-danger mt-4 max-w-3xl">{{ key | transloco }}</p>
       }
       @if (order(); as o) {
-        <div class="mt-8"><app-order-view [order]="o" /></div>
+        <div class="mt-10"><app-order-view [order]="o" /></div>
       }
     </main>
   `,

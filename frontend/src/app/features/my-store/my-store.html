@@ -7,14 +7,26 @@
     @let s = store.value();
     @if (s) { <app-my-store-tabs /> }
 
-    <header class="flex flex-wrap items-end justify-between gap-4">
-      <div class="min-w-0 flex-1 basis-72">
-        <h1 class="page-title">{{ (s ? 'myStore.title' : 'myStore.createTitle') | transloco }}</h1>
-        <p class="page-subtitle">{{ (s ? 'myStore.subtitle' : 'myStore.createSubtitle') | transloco }}</p>
+    <header class="page-header">
+      <div class="flex min-w-0 flex-1 basis-72 items-end gap-4">
+        @if (s) {
+          <!-- The store's logo in an arch: its door (ADR 0005 motif). -->
+          <div class="arch h-18 w-15 shrink-0 overflow-hidden bg-card shadow-card ring-1 ring-line">
+            @if (logo(); as l) {
+              <img [src]="l.url" [alt]="s.name" class="size-full object-cover" />
+            } @else {
+              <span class="flex size-full items-center justify-center bg-brand pt-3 font-display text-xl font-extrabold text-white">{{ s.name.charAt(0).toUpperCase() }}</span>
+            }
+          </div>
+        }
+        <div class="min-w-0">
+          <h1 class="page-title">{{ (s ? 'myStore.title' : 'myStore.createTitle') | transloco }}</h1>
+          <p class="page-subtitle">{{ (s ? 'myStore.subtitle' : 'myStore.createSubtitle') | transloco }}</p>
+        </div>
       </div>
       @if (s) {
-        <div class="flex items-center gap-3">
-          <span class="pill px-2.5 py-1"
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="pill"
             [class]="s.isDeleted ? 'pill-danger' : s.status === 'Active' ? 'pill-success' : s.status === 'Closed' ? 'pill-warning' : 'pill-danger'">
             <span class="size-1.5 rounded-full bg-current" aria-hidden="true"></span>
             {{ 'myStore.status.' + (s.isDeleted ? 'Deleted' : s.status) | transloco }}
@@ -29,7 +41,7 @@
     </header>
 
     @if (s && (s.isDeleted || s.status === 'Disabled')) {
-      <div role="alert" class="mt-6 rounded-xl border border-danger/20 bg-danger/6 p-5">
+      <div role="alert" class="mb-6 rounded-xl border border-danger/20 bg-danger/6 p-5">
         <p class="font-semibold text-danger">{{ (s.isDeleted ? 'myStore.moderation.deleted' : 'myStore.moderation.disabled') | transloco }}</p>
         @if (s.moderationReason) {
           <p class="eyebrow mt-3">{{ 'audit.reason' | transloco }}</p>
@@ -40,23 +52,28 @@
     }
 
     @if (s) {
-      <dl class="card mt-6 grid divide-y divide-line text-sm md:grid-cols-3 md:divide-x md:divide-y-0 rtl:md:divide-x-reverse">
-        <div class="px-5 py-4 sm:px-6">
-          <dt class="eyebrow">{{ 'myStore.link' | transloco }}</dt>
-          <dd class="mt-1.5"><span class="code-chip" dir="ltr">/stores/{{ s.slug }}</span></dd>
-        </div>
-        <div class="px-5 py-4 sm:px-6">
-          <dt class="eyebrow">{{ 'myStore.subscription' | transloco }}</dt>
-          <dd class="mt-1.5 font-semibold text-ink"><span dir="ltr">{{ s.subscriptionMonthlyPrice | number: '1.0-3' : language.locale() }}</span> <span class="font-normal text-muted">{{ 'myStore.tndPerMonth' | transloco }}</span></dd>
-        </div>
-        <div class="px-5 py-4 sm:px-6">
-          <dt class="eyebrow">{{ 'myStore.since' | transloco }}</dt>
-          <dd class="mt-1.5 font-medium text-ink">{{ s.createdAt | date: 'longDate' : undefined : language.locale() }}</dd>
-        </div>
-      </dl>
+      <section class="card card-body">
+        <dl class="detail-grid md:grid-cols-3">
+          <div>
+            <dt>{{ 'myStore.link' | transloco }}</dt>
+            <dd><span class="code-chip break-all" dir="ltr">/stores/{{ s.slug }}</span></dd>
+          </div>
+          <div>
+            <dt>{{ 'myStore.subscription' | transloco }}</dt>
+            <dd class="flex flex-wrap items-baseline gap-x-1.5">
+              <span class="figure text-base" dir="ltr">{{ s.subscriptionMonthlyPrice | number: '1.0-3' : language.locale() }}</span>
+              <span class="font-normal text-muted">{{ 'myStore.tndPerMonth' | transloco }}</span>
+            </dd>
+          </div>
+          <div>
+            <dt>{{ 'myStore.since' | transloco }}</dt>
+            <dd>{{ s.createdAt | date: 'longDate' : undefined : language.locale() }}</dd>
+          </div>
+        </dl>
+      </section>
     }
 
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 space-y-6">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-6 space-y-6">
       <!-- Identity -->
       <section class="card">
         <div class="card-header">
@@ -81,9 +98,9 @@
           <div class="sm:col-span-2">
             <label for="slug" class="field-label">{{ 'myStore.fields.slug' | transloco }}</label>
             <div class="mt-1.5 flex" dir="ltr">
-              <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">/stores/</span>
+              <span class="inline-flex shrink-0 items-center rounded-s-lg border border-e-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">/stores/</span>
               <input id="slug" formControlName="slug" [placeholder]="'admin.storeCategories.slugAuto' | transloco"
-                class="field rounded-s-none font-mono" />
+                class="field min-w-0 rounded-s-none font-mono" />
             </div>
             <p [class]="invalid('slug') ? 'field-error' : 'field-hint'">{{ 'admin.storeCategories.slugHint' | transloco }}</p>
           </div>
@@ -112,9 +129,9 @@
           <div>
             <label for="phone" class="field-label">{{ 'auth.phone' | transloco }}</label>
             <div class="mt-1.5 flex" dir="ltr">
-              <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">+216</span>
+              <span class="inline-flex shrink-0 items-center rounded-s-lg border border-e-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">+216</span>
               <input id="phone" type="tel" formControlName="phone" placeholder="22 123 456"
-                class="field rounded-s-none" />
+                class="field min-w-0 rounded-s-none" />
             </div>
             @if (invalid('phone')) { <p class="field-error">{{ 'auth.validation.phone' | transloco }}</p> }
           </div>
@@ -150,13 +167,13 @@
           <h2 class="section-title">{{ 'myStore.sections.selling' | transloco }}</h2>
         </div>
         <div class="card-body space-y-6">
-          <div class="grid gap-6 sm:grid-cols-3">
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <label for="percent" class="field-label">{{ 'myStore.fields.defaultAffiliatePercent' | transloco }}</label>
               <div class="mt-1.5 flex" dir="ltr">
                 <input id="percent" type="number" step="1" [min]="percentMin()" [max]="percentMax()" formControlName="defaultAffiliatePercent"
-                  class="field rounded-e-none" />
-                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">%</span>
+                  class="field min-w-0 rounded-e-none" />
+                <span class="inline-flex shrink-0 items-center rounded-e-lg border border-s-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">%</span>
               </div>
               <p [class]="percentInvalid() ? 'field-error' : 'field-hint'">
                 {{ 'myStore.percentHint' | transloco: { min: percentMin(), max: percentMax() } }}
@@ -166,8 +183,8 @@
               <label for="fee" class="field-label">{{ 'myStore.fields.deliveryFee' | transloco }}</label>
               <div class="mt-1.5 flex" dir="ltr">
                 <input id="fee" type="number" step="0.5" min="0" max="1000" formControlName="deliveryFee"
-                  class="field rounded-e-none" />
-                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">TND</span>
+                  class="field min-w-0 rounded-e-none" />
+                <span class="inline-flex shrink-0 items-center rounded-e-lg border border-s-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">TND</span>
               </div>
             </div>
             <div>
@@ -193,10 +210,10 @@
             </div>
             <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
               @for (c of cities; track c) {
-                <label class="flex cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors"
+                <label class="flex min-w-0 cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2 text-sm transition-colors"
                   [class]="deliveryCities().includes(c) ? 'border-brand/30 bg-brand-soft text-ink' : 'border-line text-ink-soft hover:bg-subtle'">
-                  <input type="checkbox" class="checkbox" [checked]="deliveryCities().includes(c)" (change)="toggleCity(c, $any($event.target).checked)" />
-                  {{ 'cities.' + c | transloco }}
+                  <input type="checkbox" class="checkbox shrink-0" [checked]="deliveryCities().includes(c)" (change)="toggleCity(c, $any($event.target).checked)" />
+                  <span class="min-w-0 truncate">{{ 'cities.' + c | transloco }}</span>
                 </label>
               }
             </div>
@@ -207,7 +224,7 @@
       @if (error(); as key) {
         <p role="alert" class="alert-danger">{{ key | transloco }}</p>
       }
-      <div class="sticky bottom-4 z-10 flex flex-wrap items-center justify-end gap-3 rounded-xl border border-line bg-card/90 px-5 py-3 shadow-pop backdrop-blur">
+      <div class="flex flex-wrap items-center justify-end gap-3 border-t border-line pt-5">
         @if (saved()) { <p class="me-auto text-sm font-medium text-success" role="status">{{ 'admin.settings.saved' | transloco }}</p> }
         <button type="submit" [disabled]="saving()" class="btn btn-primary">
           {{ (saving() ? 'common.saving' : s ? 'admin.settings.save' : 'myStore.create') | transloco }}
@@ -219,7 +236,7 @@
       <app-modal [label]="'admin.confirm.title' | transloco" (close)="confirmStatus.set(false)">
         <h2 class="section-title">{{ (s.status === 'Active' ? 'myStore.confirmClose' : 'myStore.confirmReopen') | transloco }}</h2>
         <p class="mt-2 text-sm text-muted">{{ (s.status === 'Active' ? 'myStore.closeHint' : 'myStore.reopenHint') | transloco }}</p>
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-3">
           <button type="button" (click)="confirmStatus.set(false)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="button" (click)="toggleStatus()" [disabled]="saving()" class="btn btn-primary">
             {{ (saving() ? 'common.saving' : 'common.confirm') | transloco }}

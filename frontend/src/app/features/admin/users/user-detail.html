@@ -1,78 +1,82 @@
-<a routerLink="/admin/users" class="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand">
-  <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'admin.users.back' | transloco }}
-</a>
-
 @if (user.error()) {
-  <p class="mt-6 alert-danger">{{ 'errors.auth.userNotFound' | transloco }}</p>
+  <a routerLink="/admin/users" class="back-link">
+    <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'admin.users.back' | transloco }}
+  </a>
+  <p class="alert-danger">{{ 'errors.auth.userNotFound' | transloco }}</p>
 } @else if (user.value(); as u) {
-  <header class="mt-4 flex flex-wrap items-center gap-4">
-    <span class="flex size-14 shrink-0 items-center justify-center rounded-full bg-brand-soft text-xl font-bold text-brand ring-4 ring-card shadow-card" aria-hidden="true">{{ u.fullName.charAt(0).toUpperCase() }}</span>
-    <div class="min-w-0 flex-1">
-      <div class="flex flex-wrap items-center gap-2">
-        <h1 class="page-title truncate">{{ u.fullName }}</h1>
-        @if (u.status === 'Blocked') {
-          <span class="pill pill-danger">{{ 'admin.status.Blocked' | transloco }}</span>
-        } @else {
-          <span class="pill pill-success">{{ 'admin.status.Active' | transloco }}</span>
-        }
+  <header class="page-header">
+    <div class="flex min-w-0 flex-1 items-end gap-4">
+      <span class="flex size-14 shrink-0 items-center justify-center rounded-full bg-brand-soft font-display text-xl font-bold text-brand" aria-hidden="true">{{ u.fullName.charAt(0).toUpperCase() }}</span>
+      <div class="min-w-0">
+        <a routerLink="/admin/users" class="back-link">
+          <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'admin.users.back' | transloco }}
+        </a>
+        <h1 class="page-title break-words">{{ u.fullName }}</h1>
+        <p class="page-subtitle truncate" dir="ltr">{{ u.email }}</p>
       </div>
-      <p class="page-subtitle truncate" dir="ltr">{{ u.email }}</p>
     </div>
+    @if (u.status === 'Blocked') {
+      <span class="pill pill-danger">{{ 'admin.status.Blocked' | transloco }}</span>
+    } @else {
+      <span class="pill pill-success">{{ 'admin.status.Active' | transloco }}</span>
+    }
   </header>
 
   @if (isSelf()) {
-    <p class="mt-6 alert-info">{{ 'admin.users.selfNotice' | transloco }}</p>
+    <p class="mb-6 alert-info">{{ 'admin.users.selfNotice' | transloco }}</p>
   }
 
-  <div class="mt-6 grid gap-6 lg:grid-cols-3">
-    <div class="space-y-6 lg:col-span-2">
-      <section class="card overflow-hidden">
-        <dl class="divide-y divide-line">
-          <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm text-muted">{{ 'auth.phone' | transloco }}</dt>
-            <dd class="text-sm font-medium text-ink sm:col-span-2"><span dir="ltr">{{ u.phone }}</span></dd>
-          </div>
-          <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm text-muted">{{ 'admin.users.affiliateCode' | transloco }}</dt>
-            <dd class="text-sm text-ink sm:col-span-2">@if (u.affiliateCode) {<span class="code-chip" dir="ltr">#{{ u.affiliateCode }}</span>} @else {<span class="text-muted">—</span>}</dd>
-          </div>
-          @if (u.roles.includes('StoreOwner') || u.store) {
-            <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm text-muted">{{ 'admin.users.store' | transloco }}</dt>
-              <dd class="text-sm sm:col-span-2">
-                @if (u.store; as s) {
-                  <a [routerLink]="['/admin/stores', s.id]" class="link">🏪 {{ s.name }}</a>
-                  <a [routerLink]="['/stores', s.slug]" target="_blank" class="ms-3 text-xs text-muted hover:text-ink">{{ 'admin.users.storePublic' | transloco }} ↗</a>
-                } @else {
-                  <span class="text-muted">{{ 'admin.users.noStoreYet' | transloco }}</span>
+  <div class="grid gap-6 lg:grid-cols-3">
+    <div class="min-w-0 space-y-6 lg:col-span-2">
+      <section class="card">
+        <div class="card-body">
+          <dl class="detail-grid">
+            <div>
+              <dt>{{ 'auth.phone' | transloco }}</dt>
+              <dd><span class="tabular-nums" dir="ltr">{{ u.phone }}</span></dd>
+            </div>
+            <div>
+              <dt>{{ 'admin.users.affiliateCode' | transloco }}</dt>
+              <dd>@if (u.affiliateCode) {<span class="code-chip" dir="ltr">#{{ u.affiliateCode }}</span>} @else {<span class="text-muted">—</span>}</dd>
+            </div>
+            @if (u.roles.includes('StoreOwner') || u.store) {
+              <div>
+                <dt>{{ 'admin.users.store' | transloco }}</dt>
+                <dd class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  @if (u.store; as s) {
+                    <a [routerLink]="['/admin/stores', s.id]" class="link">{{ s.name }}</a>
+                    <a [routerLink]="['/stores', s.slug]" target="_blank" class="text-xs font-normal text-muted hover:text-ink">{{ 'admin.users.storePublic' | transloco }} ↗</a>
+                  } @else {
+                    <span class="font-normal text-muted">{{ 'admin.users.noStoreYet' | transloco }}</span>
+                  }
+                </dd>
+              </div>
+            }
+            <div>
+              <dt>{{ 'stats.ordersAsClient' | transloco }}</dt>
+              <dd class="flex flex-wrap gap-x-4 gap-y-1">
+                <a routerLink="/admin/orders" [queryParams]="{ clientId: u.id }" class="link">{{ 'stats.seeOrders' | transloco }}</a>
+                @if (u.affiliateCode) {
+                  <a routerLink="/admin/orders" [queryParams]="{ affiliateId: u.id }" class="link">{{ 'stats.seeCodeOrders' | transloco }}</a>
                 }
               </dd>
             </div>
-          }
-          <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm text-muted">{{ 'stats.ordersAsClient' | transloco }}</dt>
-            <dd class="text-sm sm:col-span-2">
-              <a routerLink="/admin/orders" [queryParams]="{ clientId: u.id }" class="link">{{ 'stats.seeOrders' | transloco }}</a>
-              @if (u.affiliateCode) {
-                <a routerLink="/admin/orders" [queryParams]="{ affiliateId: u.id }" class="link ms-4">{{ 'stats.seeCodeOrders' | transloco }}</a>
-              }
-            </dd>
-          </div>
-          <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm text-muted">{{ 'account.memberSince' | transloco }}</dt>
-            <dd class="text-sm font-medium text-ink sm:col-span-2">{{ u.createdAt | date: 'medium' : undefined : language.locale() }}</dd>
-          </div>
-          <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm text-muted">{{ 'admin.users.lastLogin' | transloco }}</dt>
-            <dd class="text-sm font-medium text-ink sm:col-span-2">{{ u.lastLoginAt ? (u.lastLoginAt | date: 'medium' : undefined : language.locale()) : '—' }}</dd>
-          </div>
-          @if (u.status === 'Blocked') {
-            <div class="grid gap-1 px-5 py-3.5 sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm text-muted">{{ 'admin.users.blockedReason' | transloco }}</dt>
-              <dd class="text-sm font-medium text-danger sm:col-span-2">{{ u.blockedReason }}</dd>
+            <div>
+              <dt>{{ 'account.memberSince' | transloco }}</dt>
+              <dd>{{ u.createdAt | date: 'medium' : undefined : language.locale() }}</dd>
             </div>
-          }
-        </dl>
+            <div>
+              <dt>{{ 'admin.users.lastLogin' | transloco }}</dt>
+              <dd>{{ u.lastLoginAt ? (u.lastLoginAt | date: 'medium' : undefined : language.locale()) : '—' }}</dd>
+            </div>
+            @if (u.status === 'Blocked') {
+              <div class="sm:col-span-2">
+                <dt>{{ 'admin.users.blockedReason' | transloco }}</dt>
+                <dd class="text-danger">{{ u.blockedReason }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
       </section>
 
       <section class="card overflow-hidden">
@@ -81,7 +85,7 @@
         </div>
         @if (history.value(); as h) {
           @if (h.items.length) {
-            <ul class="divide-y divide-line">
+            <ul class="divide-y divide-line *:block">
               @for (e of h.items; track e.id) {
                 <app-audit-entry-item [entry]="e" [showTarget]="false" />
               }
@@ -93,32 +97,30 @@
       </section>
     </div>
 
-    <div class="space-y-6">
+    <div class="min-w-0 space-y-6">
       <section class="card overflow-hidden">
         <div class="card-header">
           <h2 class="section-title">{{ 'account.roles' | transloco }}</h2>
-        </div>
-        <div class="card-body">
           <div class="flex flex-wrap gap-1.5">
             @for (r of u.roles; track r) {
               <app-role-badge [role]="r" />
             }
           </div>
-          @if (!isSelf()) {
-            <ul class="mt-4 divide-y divide-line border-t border-line">
-              @for (row of manageable(u); track row.role) {
-                <li class="flex items-center justify-between gap-3 py-2.5 text-sm">
-                  <span class="font-medium text-ink-soft">{{ 'roles.' + row.role | transloco }}</span>
-                  @if (row.has) {
-                    <button type="button" (click)="ask({ kind: 'revoke', role: row.role })" class="btn btn-sm btn-danger-soft">{{ 'admin.users.revoke' | transloco }}</button>
-                  } @else {
-                    <button type="button" (click)="ask({ kind: 'grant', role: row.role })" class="btn btn-sm btn-secondary">{{ 'admin.users.grant' | transloco }}</button>
-                  }
-                </li>
-              }
-            </ul>
-          }
         </div>
+        @if (!isSelf()) {
+          <ul class="divide-y divide-line">
+            @for (row of manageable(u); track row.role) {
+              <li class="flex items-center justify-between gap-3 px-5 py-3 text-sm sm:px-6">
+                <span class="font-medium text-ink-soft">{{ 'roles.' + row.role | transloco }}</span>
+                @if (row.has) {
+                  <button type="button" (click)="ask({ kind: 'revoke', role: row.role })" class="btn btn-sm btn-danger-soft">{{ 'admin.users.revoke' | transloco }}</button>
+                } @else {
+                  <button type="button" (click)="ask({ kind: 'grant', role: row.role })" class="btn btn-sm btn-secondary">{{ 'admin.users.grant' | transloco }}</button>
+                }
+              </li>
+            }
+          </ul>
+        }
       </section>
 
       @if (!isSelf()) {
@@ -167,7 +169,9 @@
   </div>
 
   @if (u.affiliateCode) {
-    <app-affiliate-stats [affiliateId]="u.id" />
+    <div class="mt-6">
+      <app-affiliate-stats [affiliateId]="u.id" />
+    </div>
   }
 
   @if (pending(); as action) {
@@ -191,7 +195,7 @@
       @if (error(); as key) {
         <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
       }
-      <div class="mt-6 flex justify-end gap-3">
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button type="button" (click)="cancel()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
         <button type="button" (click)="confirm()" [disabled]="busy() || (needsReason(action) && !reason().trim())"
           class="btn"
@@ -202,5 +206,5 @@
     </app-modal>
   }
 } @else {
-  <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+  <p class="empty-state">{{ 'common.loading' | transloco }}</p>
 }

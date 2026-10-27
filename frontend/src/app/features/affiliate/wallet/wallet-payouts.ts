@@ -20,16 +20,16 @@ import { Modal } from '../../../shared/ui/modal';
   template: `
     @if (data.value(); as d) {
       <section class="card overflow-hidden">
-        <div class="card-header flex-wrap gap-3">
+        <div class="card-header">
           <div class="min-w-0">
             <h2 class="section-title">{{ 'payouts.mine.title' | transloco }}</h2>
             <p class="mt-0.5 text-sm text-muted">{{ 'payouts.mine.hint' | transloco }}</p>
           </div>
           <button type="button" (click)="openForm()" [disabled]="!canAsk()" class="btn btn-primary shrink-0">{{ 'payouts.mine.ask' | transloco }}</button>
         </div>
-        <div class="p-5 sm:p-6">
-          <div class="flex flex-wrap items-baseline justify-between gap-2 text-sm">
-            <span class="font-semibold text-ink" dir="ltr">{{ d.available | number: '1.0-3' : language.locale() }} / {{ d.minimum | number: '1.0-3' : language.locale() }} {{ 'settings.units.coins' | transloco }}</span>
+        <div class="card-body">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm">
+            <span class="figure text-xl text-ink" dir="ltr">{{ d.available | number: '1.0-3' : language.locale() }} <span class="font-sans text-sm font-normal text-muted">/ {{ d.minimum | number: '1.0-3' : language.locale() }} {{ 'settings.units.coins' | transloco }}</span></span>
             @if (open()) {
               <span class="text-muted">{{ 'payouts.mine.oneOpen' | transloco }}</span>
             } @else if (missing() > 0) {
@@ -38,7 +38,7 @@ import { Modal } from '../../../shared/ui/modal';
               <span class="font-medium text-success">{{ 'payouts.mine.ready' | transloco }}</span>
             }
           </div>
-          <div class="mt-2 h-2 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
+          <div class="mt-3 h-2 overflow-hidden rounded-full bg-subtle" aria-hidden="true">
             <div class="h-full rounded-full transition-all duration-500" [class]="missing() > 0 ? 'bg-accent' : 'bg-success'" [style.width.%]="progress()"></div>
           </div>
           <p class="mt-2 text-xs text-muted">{{ 'payouts.rate' | transloco: { value: (d.coinValueInTnd | number: '1.0-3' : language.locale()) } }}</p>
@@ -49,30 +49,37 @@ import { Modal } from '../../../shared/ui/modal';
 
       @if (open(); as p) {
         <section class="card overflow-hidden ring-1 ring-brand/20">
-          <div class="card-header flex-wrap gap-3">
+          <div class="card-header">
             <div class="min-w-0">
-              <p class="flex flex-wrap items-center gap-2">
+              <p class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <span class="pill" [class]="tone(p.status)">{{ 'payouts.status.' + p.status | transloco }}</span>
                 <span class="font-mono text-xs text-ink-soft" dir="ltr">{{ p.reference }}</span>
               </p>
-              <p class="mt-1 text-2xl font-bold text-ink" dir="ltr">{{ p.amountTnd | number: '1.0-3' : language.locale() }} <span class="text-sm text-muted">TND</span></p>
-              <p class="text-xs text-muted">{{ 'payouts.method.' + p.method | transloco }} · <span dir="ltr">{{ p.coins | number: '1.0-3' : language.locale() }}</span> {{ 'settings.units.coins' | transloco }}</p>
+              <p class="figure mt-2 text-3xl text-ink" dir="ltr">{{ p.amountTnd | number: '1.0-3' : language.locale() }} <span class="font-sans text-sm font-normal text-muted">TND</span></p>
+              <p class="mt-0.5 flex flex-wrap gap-x-3 text-xs text-muted">
+                <span>{{ 'payouts.method.' + p.method | transloco }}</span>
+                <span><span dir="ltr">{{ p.coins | number: '1.0-3' : language.locale() }}</span> {{ 'settings.units.coins' | transloco }}</span>
+              </p>
             </div>
             @if (p.status === 'Requested' || p.status === 'Verified') {
-              <button type="button" (click)="cancelling.set(p)" class="btn btn-ghost btn-sm shrink-0">{{ 'payouts.mine.cancel' | transloco }}</button>
+              <button type="button" (click)="cancelling.set(p)" class="btn btn-danger-soft btn-sm shrink-0">{{ 'payouts.mine.cancel' | transloco }}</button>
             }
           </div>
           <div class="grid gap-5 p-5 sm:p-6 md:grid-cols-2">
-            <div class="space-y-2 text-sm">
+            <div class="space-y-3 text-sm">
               <p class="text-ink-soft">{{ 'payouts.next.' + p.status + '.' + p.method | transloco }}</p>
               @if (p.scheduledFor) {
-                <p class="rounded-lg bg-brand-soft px-3 py-2 font-medium text-brand">
-                  {{ p.scheduledFor | date: (p.method === 'Cash' ? 'full' : 'fullDate') : undefined : language.locale() }}
-                  @if (p.place) { <br /><span class="font-normal">{{ p.place }}</span> }
+                <p class="flex flex-col gap-0.5 rounded-lg border border-brand/15 bg-brand-soft px-3.5 py-2.5 font-medium text-brand">
+                  <span>{{ p.scheduledFor | date: (p.method === 'Cash' ? 'full' : 'fullDate') : undefined : language.locale() }}</span>
+                  @if (p.place) { <span class="font-normal text-ink-soft">{{ p.place }}</span> }
                 </p>
               }
               @if (p.method === 'BankTransfer') {
-                <p class="text-xs text-muted">{{ p.bankName }} · {{ p.accountHolder }} · <span dir="ltr">{{ rib(p.rib) }}</span></p>
+                <p class="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                  <span>{{ p.bankName }}</span>
+                  <span>{{ p.accountHolder }}</span>
+                  <span class="font-mono" dir="ltr">{{ rib(p.rib) }}</span>
+                </p>
               }
             </div>
             <app-payout-timeline [history]="p.history" />
@@ -83,27 +90,28 @@ import { Modal } from '../../../shared/ui/modal';
       <section class="card overflow-hidden">
         <div class="card-header"><h2 class="section-title">{{ 'payouts.mine.history' | transloco }}</h2></div>
         @if (past().length === 0) {
-          <p class="empty-state py-8">{{ 'payouts.mine.none' | transloco }}</p>
+          <p class="empty-state">{{ 'payouts.mine.none' | transloco }}</p>
         } @else {
           <ul class="divide-y divide-line">
             @for (p of past(); track p.id) {
               <li>
                 <button type="button" (click)="toggle(p.id)" [attr.aria-expanded]="expanded() === p.id"
-                  class="row-hover grid w-full gap-2 px-5 py-4 text-start text-sm sm:grid-cols-[1fr_auto] sm:items-center sm:px-6">
+                  class="list-row row-hover w-full cursor-pointer text-start text-sm">
                   <span class="min-w-0">
-                    <span class="flex flex-wrap items-center gap-2">
+                    <span class="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <span class="pill" [class]="tone(p.status)">{{ 'payouts.status.' + p.status | transloco }}</span>
                       <span class="font-mono text-xs text-ink-soft" dir="ltr">{{ p.reference }}</span>
-                      <span class="text-xs text-muted">{{ p.createdAt | date: 'mediumDate' : undefined : language.locale() }} · {{ 'payouts.method.' + p.method | transloco }}</span>
+                      <span class="text-xs text-muted">{{ p.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span>
+                      <span class="text-xs text-muted">{{ 'payouts.method.' + p.method | transloco }}</span>
                     </span>
                     @if (p.rejectionReason) { <span class="mt-1 block text-xs text-danger">{{ p.rejectionReason }}</span> }
                     @if (p.paidAt) { <span class="mt-1 block text-xs text-muted">{{ 'payouts.mine.paidOn' | transloco: { date: (p.paidAt | date: 'mediumDate' : undefined : language.locale()) } }}</span> }
                   </span>
-                  <span class="font-bold sm:text-end" [class]="p.status === 'Paid' ? 'text-success' : 'text-muted line-through'" dir="ltr">
+                  <span class="figure shrink-0 text-base sm:text-end" [class]="p.status === 'Paid' ? 'text-success' : 'text-muted line-through'" dir="ltr">
                     {{ p.amountTnd | number: '1.0-3' : language.locale() }} TND</span>
                 </button>
                 @if (expanded() === p.id) {
-                  <div class="border-t border-line bg-subtle/40 px-5 py-4 sm:px-6"><app-payout-timeline [history]="p.history" /></div>
+                  <div class="border-t border-line bg-subtle/40 px-4 py-4 sm:px-5"><app-payout-timeline [history]="p.history" /></div>
                 }
               </li>
             }
@@ -121,18 +129,20 @@ import { Modal } from '../../../shared/ui/modal';
         <h2 class="section-title">{{ 'payouts.form.title' | transloco }}</h2>
         <p class="mt-1 text-sm text-muted">{{ 'payouts.form.hint' | transloco }}</p>
 
-        <label for="poCoins" class="field-label mt-4">{{ 'payouts.form.coins' | transloco }}</label>
+        <label for="poCoins" class="field-label mt-5">{{ 'payouts.form.coins' | transloco }}</label>
         <input id="poCoins" type="number" step="0.001" [min]="data.value()!.minimum" [max]="data.value()!.available" [value]="coins()"
           (input)="coins.set($any($event.target).value)" class="mt-1.5 field" dir="ltr" />
-        <p class="field-hint" dir="ltr">≈ {{ amount() | number: '1.0-3' : language.locale() }} TND ·
-          {{ 'payouts.form.range' | transloco: { min: data.value()!.minimum, max: (data.value()!.available | number: '1.0-3' : language.locale()) } }}</p>
+        <p class="field-hint flex flex-wrap gap-x-3" dir="ltr">
+          <span class="font-semibold text-success">≈ {{ amount() | number: '1.0-3' : language.locale() }} TND</span>
+          <span>{{ 'payouts.form.range' | transloco: { min: data.value()!.minimum, max: (data.value()!.available | number: '1.0-3' : language.locale()) } }}</span>
+        </p>
 
         <fieldset class="mt-4">
           <legend class="field-label">{{ 'payouts.form.method' | transloco }}</legend>
           <div class="mt-1.5 grid grid-cols-2 gap-2">
             @for (m of methods; track m) {
-              <label class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2.5 text-sm transition-all duration-200"
-                [class]="method() === m ? 'border-brand bg-brand-soft text-brand' : 'border-line hover:border-brand/40'">
+              <label class="flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2.5 text-sm transition-colors duration-200"
+                [class]="method() === m ? 'border-brand bg-brand-soft font-medium text-brand' : 'border-line-strong hover:border-brand/40'">
                 <input type="radio" name="poMethod" [value]="m" [checked]="method() === m" (change)="method.set(m)" class="accent-brand" />
                 {{ 'payouts.method.' + m | transloco }}
               </label>
@@ -157,7 +167,7 @@ import { Modal } from '../../../shared/ui/modal';
           [placeholder]="'payouts.form.notePlaceholder' | transloco"></textarea>
 
         @if (formError(); as key) { <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p> }
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-3">
           <button type="button" (click)="asking.set(false)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="button" (click)="send()" [disabled]="busy() || !formReady()" class="btn btn-primary">{{ 'payouts.form.send' | transloco }}</button>
         </div>
@@ -168,7 +178,7 @@ import { Modal } from '../../../shared/ui/modal';
       <app-modal [label]="'payouts.mine.cancel' | transloco" (close)="cancelling.set(null)">
         <h2 class="section-title">{{ 'payouts.mine.cancelTitle' | transloco: { reference: p.reference } }}</h2>
         <p class="mt-2 text-sm text-muted">{{ 'payouts.mine.cancelHint' | transloco }}</p>
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-3">
           <button type="button" (click)="cancelling.set(null)" class="btn btn-ghost">{{ 'common.no' | transloco }}</button>
           <button type="button" (click)="cancel(p)" [disabled]="busy()" class="btn btn-danger">{{ 'payouts.mine.cancel' | transloco }}</button>
         </div>

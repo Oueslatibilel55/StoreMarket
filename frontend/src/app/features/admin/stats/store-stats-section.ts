@@ -11,11 +11,11 @@ import { StoreStatsView } from '../../../shared/stats/store-stats-view';
   selector: 'app-store-stats-section',
   imports: [RouterLink, TranslocoPipe, PeriodPicker, StoreStatsView],
   template: `
-    <section class="mt-8">
-      <div class="flex flex-wrap items-end justify-between gap-3">
-        <div>
+    <section class="mt-10 border-t border-line pt-6">
+      <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+        <div class="min-w-0">
           <h2 class="section-title">{{ 'stats.storeTitle' | transloco }}</h2>
-          <p class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          <p class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-sm">
             <a routerLink="/admin/products" [queryParams]="{ storeId: storeId() }" class="link">{{ 'stats.seeProducts' | transloco }}</a>
             <a routerLink="/admin/orders" [queryParams]="{ storeId: storeId() }" class="link">{{ 'stats.seeOrders' | transloco }}</a>
           </p>
@@ -23,11 +23,11 @@ import { StoreStatsView } from '../../../shared/stats/store-stats-view';
         <app-period-picker [from]="period().from" [to]="period().to" (changed)="period.set($event)" />
       </div>
       @if (stats.error()) {
-        <p class="alert-danger mt-4">{{ 'errors.unknown' | transloco }}</p>
+        <p class="alert-danger mt-5">{{ 'errors.unknown' | transloco }}</p>
       } @else if (stats.value(); as s) {
-        <div class="mt-4"><app-store-stats-view [stats]="s" [storeId]="storeId()" [admin]="true" /></div>
+        <div class="mt-5"><app-store-stats-view [stats]="s" [storeId]="storeId()" [admin]="true" /></div>
       } @else {
-        <p class="empty-state mt-4">{{ 'common.loading' | transloco }}</p>
+        <p class="py-10 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
       }
     </section>
   `,

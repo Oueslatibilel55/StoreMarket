@@ -1,17 +1,5 @@
-<main class="relative isolate flex min-h-[calc(100dvh-4rem)] items-start justify-center overflow-hidden px-4 py-12 sm:py-16">
-  <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,var(--color-brand-soft),transparent_65%)]"></div>
-  <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto size-96 rounded-full bg-brand/10 blur-3xl"></div>
-
-  <div class="w-full max-w-lg animate-pop-in">
-    <div class="flex flex-col items-center text-center">
-      <a routerLink="/" [attr.aria-label]="'app.name' | transloco" class="flex size-11 items-center justify-center rounded-xl bg-brand text-lg font-bold text-white shadow-brand transition-transform duration-200 hover:-rotate-6">
-        {{ ('app.name' | transloco).charAt(0) }}
-      </a>
-      <h1 class="mt-6 page-title">{{ 'auth.registerTitle' | transloco }}</h1>
-      <p class="page-subtitle">{{ 'auth.registerSubtitle' | transloco }}</p>
-    </div>
-
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 space-y-5 card p-6 shadow-pop sm:p-8">
+<app-auth-shell title="auth.registerTitle" subtitle="auth.registerSubtitle" [wide]="true">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-5">
       @if (error(); as key) {
         <p role="alert" class="alert-danger">{{ key | transloco }}</p>
       }
@@ -21,7 +9,7 @@
         <div class="mt-2 grid gap-3 sm:grid-cols-2">
           @for (type of accountTypes; track type) {
             <label class="flex cursor-pointer flex-col gap-1 rounded-xl border p-4 transition-all duration-200"
-              [class]="accountType() === type ? 'border-brand bg-brand-soft shadow-card ring-4 ring-brand-ring' : 'border-line-strong/80 bg-card hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-card-hover'">
+              [class]="accountType() === type ? 'border-brand bg-brand-soft ring-4 ring-brand-ring' : 'border-line-strong bg-card hover:border-brand/50'">
               <span class="flex items-center gap-2 font-semibold text-ink">
                 <input type="radio" formControlName="accountType" [value]="type" class="checkbox" />
                 {{ 'auth.accountType.' + type + '.title' | transloco }}
@@ -92,9 +80,8 @@
       </button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-muted">
+    <p class="mt-8 border-t border-line pt-6 text-sm text-muted">
       {{ 'auth.haveAccount' | transloco }}
       <a routerLink="/login" class="link font-semibold">{{ 'auth.login' | transloco }}</a>
     </p>
-  </div>
-</main>
+</app-auth-shell>

@@ -27,36 +27,48 @@ interface Draft {
   imports: [DatePipe, FormsModule, RouterLink, TranslocoPipe, StarInput, StarRating],
   template: `
     <main class="page-narrow animate-fade-in">
-      <h1 class="page-title">{{ 'reviews.mine' | transloco }}</h1>
-      <p class="page-subtitle">{{ 'reviews.mineHint' | transloco }}</p>
+      <header class="page-header">
+        <div class="min-w-0">
+          <h1 class="page-title">{{ 'reviews.mine' | transloco }}</h1>
+          <p class="page-subtitle">{{ 'reviews.mineHint' | transloco }}</p>
+        </div>
+      </header>
 
       @if (data.error()) {
-        <p class="alert-danger mt-8">{{ 'errors.unknown' | transloco }}</p>
+        <p class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
       } @else if (data.value(); as d) {
-        <section class="mt-8">
-          <h2 class="section-title text-lg">{{ 'reviews.toWrite' | transloco }} <span class="text-muted">({{ d.toWrite.length }})</span></h2>
+        <section class="card overflow-hidden">
+          <div class="card-header">
+            <h2 class="section-title">{{ 'reviews.toWrite' | transloco }}</h2>
+            <span class="pill pill-neutral" dir="ltr">{{ d.toWrite.length }}</span>
+          </div>
           @if (d.toWrite.length === 0) {
-            <div class="card empty-state mt-4">
-              <span class="text-3xl" aria-hidden="true">⭐</span>
-              <p>{{ 'reviews.nothingToWrite' | transloco }}</p>
-            </div>
+            <p class="empty-state">{{ 'reviews.nothingToWrite' | transloco }}</p>
           } @else {
-            <ul class="mt-4 space-y-3">
+            <ul class="divide-y divide-line">
               @for (t of d.toWrite; track keyOf(t)) {
                 @let key = keyOf(t);
-                <li class="card p-4 sm:p-5">
-                  <div class="flex items-center gap-3">
-                    <div class="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-subtle ring-1 ring-line">
-                      @if (t.imageUrl) { <img [src]="t.imageUrl" alt="" class="size-full object-cover" /> }
-                      @else { <span class="text-xl" aria-hidden="true">{{ t.target === 'Store' ? '🏪' : '🖼️' }}</span> }
-                    </div>
+                <li class="px-4 py-4 sm:px-5">
+                  <div class="flex flex-wrap items-center gap-3 sm:flex-nowrap">
+                    @if (t.target === 'Store') {
+                      <!-- A store review: the store's door (arch). -->
+                      <div class="arch flex h-14 w-11 shrink-0 items-center justify-center overflow-hidden bg-brand ring-1 ring-line">
+                        @if (t.imageUrl) { <img [src]="t.imageUrl" alt="" class="size-full object-cover" /> }
+                        @else { <span class="pt-1.5 font-display text-lg font-extrabold text-white" aria-hidden="true">{{ t.storeName.charAt(0).toUpperCase() }}</span> }
+                      </div>
+                    } @else {
+                      <div class="size-14 shrink-0 overflow-hidden rounded-lg border border-line bg-subtle">
+                        @if (t.imageUrl) { <img [src]="t.imageUrl" alt="" class="size-full object-cover" /> }
+                      </div>
+                    }
                     <div class="min-w-0 flex-1">
                       <p class="truncate font-semibold text-ink">
                         {{ t.target === 'Store' ? ('reviews.rateStore' | transloco: { name: t.storeName }) : t.productName }}
                       </p>
-                      <p class="truncate text-xs text-muted">
-                        @if (t.target === 'Product') { <bdi>{{ t.storeName }}</bdi> · }
-                        <span dir="ltr">{{ t.orderReference }}</span> · {{ 'reviews.deliveredOn' | transloco: { date: (t.deliveredAt | date: 'mediumDate' : undefined : language.locale()) } }}
+                      <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted">
+                        @if (t.target === 'Product') { <bdi>{{ t.storeName }}</bdi> }
+                        <span class="code-chip" dir="ltr">{{ t.orderReference }}</span>
+                        <span>{{ 'reviews.deliveredOn' | transloco: { date: (t.deliveredAt | date: 'mediumDate' : undefined : language.locale()) } }}</span>
                       </p>
                     </div>
                     @if (draft()?.key !== key) {
@@ -69,7 +81,7 @@ interface Draft {
                         <app-star-input [name]="'stars-' + key" [value]="dr.stars" (valueChange)="setStars($event)" />
                         <div>
                           <label class="field-label" [for]="'comment-' + key">{{ 'reviews.comment' | transloco }} <span class="text-muted">({{ 'reviews.optional' | transloco }})</span></label>
-                          <textarea [id]="'comment-' + key" name="comment" rows="3" class="field" [maxlength]="maxComment" dir="auto"
+                          <textarea [id]="'comment-' + key" name="comment" rows="3" class="mt-1.5 field" [maxlength]="maxComment" dir="auto"
                             [placeholder]="(t.target === 'Store' ? 'reviews.storePlaceholder' : 'reviews.productPlaceholder') | transloco"
                             [ngModel]="dr.comment" (ngModelChange)="setComment($event)"></textarea>
                           <p class="field-hint text-end" dir="ltr">{{ dr.comment.length }} / {{ maxComment }}</p>
@@ -88,28 +100,31 @@ interface Draft {
           }
         </section>
 
-        <section class="mt-10">
-          <h2 class="section-title text-lg">{{ 'reviews.written' | transloco }} <span class="text-muted">({{ d.written.length }})</span></h2>
+        <section class="card mt-8 overflow-hidden">
+          <div class="card-header">
+            <h2 class="section-title">{{ 'reviews.written' | transloco }}</h2>
+            <span class="pill pill-neutral" dir="ltr">{{ d.written.length }}</span>
+          </div>
           @if (d.written.length === 0) {
-            <p class="card empty-state mt-4">{{ 'reviews.noneWritten' | transloco }}</p>
+            <p class="empty-state">{{ 'reviews.noneWritten' | transloco }}</p>
           } @else {
-            <ul class="mt-4 space-y-3">
+            <ul class="divide-y divide-line">
               @for (r of d.written; track r.id) {
-                <li class="card p-4 sm:p-5">
+                <li class="px-4 py-5 sm:px-5">
                   <div class="flex flex-wrap items-start justify-between gap-2">
                     <div class="min-w-0">
-                      <p class="font-semibold text-ink">
+                      <p class="flex flex-wrap items-center gap-2 font-semibold text-ink">
                         @if (r.target === 'Store') {
-                          @if (r.storeSlug) { <a [routerLink]="['/stores', r.storeSlug]" class="hover:text-brand">{{ r.storeName }}</a> } @else { {{ r.storeName }} }
-                          <span class="pill pill-neutral ms-1 align-middle">{{ 'reviews.target.Store' | transloco }}</span>
+                          @if (r.storeSlug) { <a [routerLink]="['/stores', r.storeSlug]" class="hover:text-brand">{{ r.storeName }}</a> } @else { <span>{{ r.storeName }}</span> }
+                          <span class="pill pill-neutral">{{ 'reviews.target.Store' | transloco }}</span>
                         } @else {
-                          @if (r.productSlug) { <a [routerLink]="['/products', r.productSlug]" class="hover:text-brand">{{ r.productName }}</a> } @else { {{ r.productName }} }
+                          @if (r.productSlug) { <a [routerLink]="['/products', r.productSlug]" class="hover:text-brand">{{ r.productName }}</a> } @else { <span>{{ r.productName }}</span> }
                         }
                       </p>
-                      <p class="text-xs text-muted">
-                        @if (r.target === 'Product') { <bdi>{{ r.storeName }}</bdi> · }
-                        {{ r.createdAt | date: 'mediumDate' : undefined : language.locale() }}
-                        @if (r.editedAt) { · {{ 'reviews.edited' | transloco }} }
+                      <p class="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                        @if (r.target === 'Product') { <bdi>{{ r.storeName }}</bdi> }
+                        <span>{{ r.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span>
+                        @if (r.editedAt) { <span>{{ 'reviews.edited' | transloco }}</span> }
                       </p>
                     </div>
                     @if (r.hidden) { <span class="pill pill-danger">{{ 'reviews.hiddenPill' | transloco }}</span> }
@@ -129,13 +144,13 @@ interface Draft {
                     </form>
                   } @else {
                     <app-star-rating class="mt-2 block" [value]="r.stars" size="sm" />
-                    @if (r.comment) { <p class="mt-2 text-sm whitespace-pre-line text-ink-soft" dir="auto">{{ r.comment }}</p> }
+                    @if (r.comment) { <p class="mt-2 text-sm leading-relaxed whitespace-pre-line text-ink-soft" dir="auto">{{ r.comment }}</p> }
                     @if (r.hidden) {
                       <p class="alert-danger mt-3 text-sm">{{ 'reviews.hiddenNotice' | transloco: { reason: r.hiddenReason } }}</p>
                     }
                     @if (r.reply) {
-                      <div class="mt-3 rounded-lg border-s-2 border-brand bg-subtle px-4 py-3 text-sm">
-                        <p class="text-xs font-semibold text-ink">{{ 'reviews.storeReply' | transloco }}</p>
+                      <div class="mt-3 rounded-e-lg border-s-2 border-brand bg-brand-soft/60 px-4 py-3 text-sm">
+                        <p class="text-xs font-semibold text-brand">{{ 'reviews.storeReply' | transloco }}</p>
                         <p class="mt-1 whitespace-pre-line text-ink-soft" dir="auto">{{ r.reply }}</p>
                       </div>
                     }
@@ -154,7 +169,7 @@ interface Draft {
           }
         </section>
       } @else {
-        <p class="card empty-state mt-8">{{ 'common.loading' | transloco }}</p>
+        <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
       }
     </main>
   `,

@@ -12,22 +12,22 @@ const PAGE_SIZE = 30;
   selector: 'app-audit-log',
   imports: [TranslocoPipe, Pagination, AuditEntryItem],
   template: `
-    <header class="flex flex-wrap items-end justify-between gap-4">
+    <header class="page-header">
       <div class="min-w-0">
         <h1 class="page-title">{{ 'admin.audit.title' | transloco }}</h1>
         <p class="page-subtitle">{{ 'admin.audit.subtitle' | transloco }}</p>
       </div>
     </header>
 
-    <div class="card mt-6 overflow-hidden">
+    <div class="card overflow-hidden">
       @if (entries.value(); as result) {
         @if (result.items.length) {
-          <ul class="divide-y divide-line">
+          <ul class="divide-y divide-line *:block">
             @for (e of result.items; track e.id) {
               <app-audit-entry-item [entry]="e" />
             }
           </ul>
-          <div class="border-t border-line px-5 py-3">
+          <div class="border-t border-line px-4 py-3 sm:px-5">
             <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="goTo($event)" />
           </div>
         } @else {

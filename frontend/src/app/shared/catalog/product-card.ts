@@ -17,7 +17,11 @@ import { StarRating } from '../reviews/star-rating';
         @if (p.imageUrl) {
           <img [src]="p.imageUrl" [alt]="p.name" loading="lazy" class="absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
         } @else {
-          <span class="flex size-full items-center justify-center text-4xl text-muted/60" aria-hidden="true">🖼️</span>
+          <span class="flex size-full items-center justify-center text-line-strong" aria-hidden="true">
+            <svg class="size-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3.5" y="4.5" width="17" height="15" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="m4 17 5-5 4 4 2.5-2.5L20 17" stroke-linejoin="round" />
+            </svg>
+          </span>
         }
         @if (!p.inStock) {
           <span class="pill pill-dark absolute start-3 top-3">{{ 'shop.outOfStock' | transloco }}</span>
@@ -28,7 +32,7 @@ import { StarRating } from '../reviews/star-rating';
         }
       </div>
       <div class="flex flex-1 flex-col gap-1 p-4">
-        <p class="text-xs font-medium text-muted">
+        <p class="truncate text-xs font-medium text-brand">
           {{ p.storeName }}
           @if (!p.storeOpen) { · <span class="text-danger">{{ 'shop.storeClosed' | transloco }}</span> }
         </p>
@@ -38,7 +42,7 @@ import { StarRating } from '../reviews/star-rating';
         }
         <p class="mt-auto flex flex-wrap items-baseline gap-x-1.5 pt-2">
           @if (p.minPrice < p.price) { <span class="text-xs text-muted">{{ 'products.from' | transloco }}</span> }
-          <span class="text-base font-bold tracking-tight text-ink" dir="ltr">{{ p.minPrice | number: '1.0-3' : language.locale() }} <span class="text-xs font-semibold text-muted">TND</span></span>
+          <span class="font-display text-lg font-bold tracking-tight text-ink tabular-nums" dir="ltr">{{ p.minPrice | number: '1.0-3' : language.locale() }} <span class="text-xs font-semibold text-muted">TND</span></span>
           @if (p.compareAtPrice && p.compareAtPrice > p.price) {
             <span class="text-xs text-muted line-through" dir="ltr">{{ p.compareAtPrice | number: '1.0-3' : language.locale() }}</span>
           }

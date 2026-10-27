@@ -19,7 +19,7 @@ import { LanguageService } from '../../core/i18n/language.service';
           <span class="absolute inset-y-0 start-0 overflow-hidden whitespace-nowrap text-accent" [style.width.%]="fill()">★★★★★</span>
         </span>
         @if (showValue()) {
-          <span class="font-semibold text-ink" [class]="size() === 'sm' ? 'text-xs' : 'text-sm'" aria-hidden="true">{{ value() | number: '1.1-1' : language.locale() }}</span>
+          <span class="font-display font-bold text-ink tabular-nums" [class]="size() === 'sm' ? 'text-xs' : 'text-sm'" aria-hidden="true">{{ value() | number: '1.1-1' : language.locale() }}</span>
         }
         @if (count() !== null) {
           <span class="text-muted" [class]="size() === 'sm' ? 'text-xs' : 'text-sm'" aria-hidden="true">({{ count() | number: '1.0-0' : language.locale() }})</span>

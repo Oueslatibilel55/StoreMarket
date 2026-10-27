@@ -22,62 +22,64 @@ import { Modal } from '../../../shared/ui/modal';
   selector: 'app-store-billing-section',
   imports: [DatePipe, DecimalPipe, TranslocoPipe, LocalizedPipe, Modal, PaymentFields, PaymentList, RejectDialog, StatementTable],
   template: `
-    <section class="mt-8">
-      <div class="flex flex-wrap items-end justify-between gap-3">
+    <section class="mt-10 border-t border-line pt-6">
+      <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <h2 class="section-title">{{ 'billing.title' | transloco }}</h2>
         <button type="button" class="btn btn-primary btn-sm" (click)="openRecord()">{{ 'billing.record.subscription' | transloco }}</button>
       </div>
 
       @if (billing.error()) {
-        <p class="alert-danger mt-4">{{ 'errors.unknown' | transloco }}</p>
+        <p class="alert-danger mt-5">{{ 'errors.unknown' | transloco }}</p>
       } @else if (billing.value(); as b) {
-        <div class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <div class="stat-tile">
-            <p class="stat-label">{{ 'billing.monthlyPrice' | transloco }}</p>
-            @if (editingPrice()) {
-              <div class="mt-1 flex items-center gap-1.5">
-                <input type="number" min="0" step="0.001" class="field w-24 py-1" dir="ltr" [value]="price()" (input)="price.set($any($event.target).value)" />
-                <button type="button" class="btn btn-primary btn-sm" [disabled]="busy()" (click)="savePrice()">{{ 'common.save' | transloco }}</button>
-              </div>
-            } @else {
-              <p class="stat-value" dir="ltr">{{ b.monthlyPrice | number: '1.0-3' : language.locale() }} TND</p>
-              <button type="button" class="link mt-1 text-xs" (click)="editPrice(b.monthlyPrice)">{{ 'common.edit' | transloco }}</button>
-            }
+        <div class="mt-5 space-y-6">
+          <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <div class="stat-tile">
+              <p class="stat-label">{{ 'billing.monthlyPrice' | transloco }}</p>
+              @if (editingPrice()) {
+                <div class="mt-1 flex flex-wrap items-center gap-1.5">
+                  <input type="number" min="0" step="0.001" class="field w-24 py-1" dir="ltr" [value]="price()" (input)="price.set($any($event.target).value)" />
+                  <button type="button" class="btn btn-primary btn-sm" [disabled]="busy()" (click)="savePrice()">{{ 'common.save' | transloco }}</button>
+                </div>
+              } @else {
+                <p class="stat-value" dir="ltr">{{ b.monthlyPrice | number: '1.0-3' : language.locale() }} <span class="text-sm font-medium text-muted">TND</span></p>
+                <button type="button" class="link mt-1 cursor-pointer text-xs" (click)="editPrice(b.monthlyPrice)">{{ 'common.edit' | transloco }}</button>
+              }
+            </div>
+            <div class="stat-tile">
+              <p class="stat-label">{{ 'billing.paidUntil' | transloco }}</p>
+              <p class="stat-value text-xl" [class.text-danger]="b.state.late">{{ b.state.paidUntil | date: 'mediumDate' : undefined : language.locale() }}</p>
+            </div>
+            <div class="stat-tile">
+              <p class="stat-label">{{ 'billing.commissionsDue' | transloco }}</p>
+              <p class="stat-value" dir="ltr" [class.text-danger]="b.state.commissionsDue > 0">{{ b.state.commissionsDue | number: '1.0-3' : language.locale() }} <span class="text-sm font-medium text-muted">TND</span></p>
+              <p class="mt-1 text-xs text-muted">{{ 'billing.notInvoicedYet' | transloco: { amount: (b.currentMonth.amount | number: '1.0-3' : language.locale()), n: b.currentMonth.lines } }}</p>
+            </div>
+            <div class="stat-tile">
+              <p class="stat-label">{{ 'billing.state' | transloco }}</p>
+              <p class="mt-2 flex flex-wrap gap-1.5">
+                @if (b.state.suspended) { <span class="pill pill-danger">{{ 'billing.stateLabel.suspended' | transloco }}</span> }
+                @else if (b.state.overdue) { <span class="pill pill-danger">{{ 'billing.stateLabel.overdue' | transloco }}</span> }
+                @else if (b.state.daysLeft !== null) { <span class="pill pill-warning">{{ 'billing.stateLabel.countdown' | transloco: { n: b.state.daysLeft } }}</span> }
+                @else { <span class="pill pill-success">{{ 'billing.stateLabel.ok' | transloco }}</span> }
+                @if (b.state.waitingForApproval) { <span class="pill pill-brand">{{ 'billing.stateLabel.waiting' | transloco }}</span> }
+              </p>
+            </div>
           </div>
-          <div class="stat-tile">
-            <p class="stat-label">{{ 'billing.paidUntil' | transloco }}</p>
-            <p class="stat-value text-xl" [class.text-danger]="b.state.late">{{ b.state.paidUntil | date: 'mediumDate' : undefined : language.locale() }}</p>
-          </div>
-          <div class="stat-tile">
-            <p class="stat-label">{{ 'billing.commissionsDue' | transloco }}</p>
-            <p class="stat-value" dir="ltr" [class.text-danger]="b.state.commissionsDue > 0">{{ b.state.commissionsDue | number: '1.0-3' : language.locale() }} TND</p>
-            <p class="mt-1 text-xs text-muted">{{ 'billing.notInvoicedYet' | transloco: { amount: (b.currentMonth.amount | number: '1.0-3' : language.locale()), n: b.currentMonth.lines } }}</p>
-          </div>
-          <div class="stat-tile">
-            <p class="stat-label">{{ 'billing.state' | transloco }}</p>
-            <p class="mt-2 flex flex-wrap gap-1.5">
-              @if (b.state.suspended) { <span class="pill pill-danger">{{ 'billing.stateLabel.suspended' | transloco }}</span> }
-              @else if (b.state.overdue) { <span class="pill pill-danger">{{ 'billing.stateLabel.overdue' | transloco }}</span> }
-              @else if (b.state.daysLeft !== null) { <span class="pill pill-warning">{{ 'billing.stateLabel.countdown' | transloco: { n: b.state.daysLeft } }}</span> }
-              @else { <span class="pill pill-success">{{ 'billing.stateLabel.ok' | transloco }}</span> }
-              @if (b.state.waitingForApproval) { <span class="pill pill-brand">{{ 'billing.stateLabel.waiting' | transloco }}</span> }
-            </p>
-          </div>
-        </div>
-        @if (error()) { <p class="alert-danger mt-3">{{ error()! | transloco }}</p> }
+          @if (error()) { <p class="alert-danger">{{ error()! | transloco }}</p> }
 
-        <div class="card mt-4 overflow-hidden">
-          <div class="card-header"><h3 class="section-title">{{ 'billing.statement.title' | transloco }}</h3></div>
-          <app-statement-table [months]="b.months" invoiceLink="/admin/billing/invoices" [currentMonth]="b.currentMonth.month" />
-        </div>
+          <div class="card overflow-hidden">
+            <div class="card-header"><h3 class="section-title">{{ 'billing.statement.title' | transloco }}</h3></div>
+            <app-statement-table [months]="b.months" invoiceLink="/admin/billing/invoices" [currentMonth]="b.currentMonth.month" />
+          </div>
 
-        <div class="card mt-4 overflow-hidden">
-          <div class="card-header"><h3 class="section-title">{{ 'billing.payments.title' | transloco }}</h3></div>
-          <app-payment-list [payments]="b.payments" invoiceLink="/admin/billing/invoices" [actions]="true"
-            (approve)="approve($event)" (reject)="rejecting.set($event)" />
+          <div class="card overflow-hidden">
+            <div class="card-header"><h3 class="section-title">{{ 'billing.payments.title' | transloco }}</h3></div>
+            <app-payment-list [payments]="b.payments" invoiceLink="/admin/billing/invoices" [actions]="true"
+              (approve)="approve($event)" (reject)="rejecting.set($event)" />
+          </div>
         </div>
       } @else {
-        <p class="empty-state mt-4">{{ 'common.loading' | transloco }}</p>
+        <p class="py-10 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
       }
     </section>
 
@@ -98,16 +100,16 @@ import { Modal } from '../../../shared/ui/modal';
               }
             </select>
           </label>
-          <p class="mt-3 rounded-lg bg-subtle p-3 text-sm">
+          <p class="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 rounded-lg border border-line bg-subtle px-3 py-2.5 text-sm">
             {{ 'billing.record.total' | transloco: { months: q.months, price: (q.monthlyPrice | number: '1.0-3' : language.locale()) } }}
-            <strong class="ms-1 text-ink" dir="ltr">{{ amount() | number: '1.0-3' : language.locale() }} TND</strong>
+            <strong class="figure text-base text-ink" dir="ltr">{{ amount() | number: '1.0-3' : language.locale() }} TND</strong>
           </p>
         }
         <div class="mt-4">
           <app-payment-fields [(method)]="method" [(reference)]="reference" [(note)]="note" [(paidOn)]="paidOn" />
         </div>
-        @if (error()) { <p class="alert-danger mt-3">{{ error()! | transloco }}</p> }
-        <div class="mt-5 flex justify-end gap-2">
+        @if (error()) { <p class="alert-danger mt-4">{{ error()! | transloco }}</p> }
+        <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
           <button type="button" class="btn btn-ghost" (click)="recording.set(false)">{{ 'common.cancel' | transloco }}</button>
           <button type="button" class="btn btn-primary" [disabled]="busy() || !quote.value()" (click)="record()">{{ 'billing.record.confirm' | transloco }}</button>
         </div>

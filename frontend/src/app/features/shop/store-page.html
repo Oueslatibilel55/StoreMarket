@@ -7,99 +7,107 @@
   </main>
 } @else if (store.value(); as s) {
   <main class="page">
-    <div class="relative h-40 overflow-hidden rounded-xl border border-line bg-linear-to-br from-brand-soft via-subtle to-brand-soft shadow-card sm:h-56 lg:h-64">
-      @if (s.bannerUrl) { <img [src]="s.bannerUrl" alt="" class="absolute inset-0 size-full object-cover" /> }
-    </div>
-
-    <!-- Only the logo overlaps the cover; the name always starts below it, whatever its length. -->
-    <header class="relative flex flex-col gap-3 px-4 sm:flex-row sm:items-start sm:gap-5 sm:px-6">
-      <div class="relative -mt-12 size-24 shrink-0 overflow-hidden rounded-xl bg-subtle shadow-card-hover ring-4 ring-card sm:-mt-14 sm:size-28">
-        @if (s.logoUrl) {
-          <img [src]="s.logoUrl" [alt]="s.name" class="size-full object-cover" />
-        } @else {
-          <span class="flex size-full items-center justify-center bg-brand-soft text-3xl font-bold text-brand">{{ s.name.charAt(0).toUpperCase() }}</span>
-        }
+    <!-- Store header: the banner, then the store's door (its logo in an arch) standing on its bottom edge. -->
+    <section class="card overflow-hidden">
+      <div class="relative h-36 bg-brand-soft sm:h-52 lg:h-64">
+        @if (s.bannerUrl) { <img [src]="s.bannerUrl" alt="" class="absolute inset-0 size-full object-cover" /> }
       </div>
-      <div class="min-w-0 flex-1 sm:pt-4">
-        <div class="flex flex-wrap items-center gap-2">
-          <h1 class="page-title break-words">{{ s.name }}</h1>
-          @if (!s.isOpen) {
-            <span class="pill pill-danger">{{ 'shop.storeClosedLong' | transloco }}</span>
+      <header class="flex flex-col gap-4 px-5 pb-6 sm:flex-row sm:items-end sm:gap-6 sm:px-8">
+        <div class="arch relative z-10 -mt-16 h-28 w-22 shrink-0 overflow-hidden bg-card shadow-card ring-4 ring-card sm:-mt-20 sm:h-36 sm:w-28">
+          @if (s.logoUrl) {
+            <img [src]="s.logoUrl" [alt]="s.name" class="size-full object-cover" />
+          } @else {
+            <span class="flex size-full items-center justify-center bg-brand pt-4 font-display text-4xl font-extrabold text-white">{{ s.name.charAt(0).toUpperCase() }}</span>
           }
         </div>
-        <p class="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-muted">
-          <a routerLink="/stores" [queryParams]="{ category: s.category.slug }" class="pill pill-brand transition-colors hover:bg-brand hover:text-white">{{ s.category.name | localized: language.lang() }}</a>
-          <span class="pill pill-neutral">{{ 'cities.' + s.city | transloco }}</span>
-          @if (s.rating.count) {
-            <button type="button" (click)="scrollToReviews()" class="inline-flex cursor-pointer rounded-md transition-opacity hover:opacity-80"
-              [attr.aria-label]="'reviews.seeAll' | transloco">
-              <app-star-rating [value]="s.rating.average" [count]="s.rating.count" [showValue]="true" size="sm" />
-            </button>
-          }
-        </p>
-      </div>
-    </header>
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h1 class="page-title break-words">{{ s.name }}</h1>
+            @if (!s.isOpen) {
+              <span class="pill pill-danger">{{ 'shop.storeClosedLong' | transloco }}</span>
+            }
+          </div>
+          <p class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted">
+            <a routerLink="/stores" [queryParams]="{ category: s.category.slug }" class="font-medium text-brand transition-colors hover:text-brand-hover hover:underline">{{ s.category.name | localized: language.lang() }}</a>
+            <span>{{ 'cities.' + s.city | transloco }}</span>
+            @if (s.rating.count) {
+              <button type="button" (click)="scrollToReviews()" class="inline-flex cursor-pointer rounded-md transition-opacity hover:opacity-80"
+                [attr.aria-label]="'reviews.seeAll' | transloco">
+                <app-star-rating [value]="s.rating.average" [count]="s.rating.count" [showValue]="true" size="sm" />
+              </button>
+            }
+          </p>
+        </div>
+      </header>
+      @if (s.description) {
+        <p class="max-w-3xl border-t border-line px-5 py-5 leading-relaxed whitespace-pre-line text-ink-soft sm:px-8">{{ s.description }}</p>
+      }
+    </section>
 
-    <div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
-      <section>
-        @if (s.description) { <p class="max-w-3xl leading-relaxed whitespace-pre-line text-ink-soft">{{ s.description }}</p> }
-
-        <div class="mt-8 flex flex-wrap items-center justify-between gap-3">
-          <h2 class="section-title text-xl">{{ 'shop.products' | transloco }}</h2>
+    <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
+      <section class="min-w-0">
+        <div class="flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
+          <h2 class="section-title text-2xl">{{ 'shop.products' | transloco }}</h2>
           <select [value]="sort() ?? 'Newest'" (change)="apply({ sort: $any($event.target).value === 'Newest' ? null : $any($event.target).value, page: null })"
-            [attr.aria-label]="'shop.sortBy' | transloco" class="field w-auto">
+            [attr.aria-label]="'shop.sortBy' | transloco" class="field w-auto max-w-full">
             @for (o of sorts; track o) { <option [value]="o">{{ 'shop.sort.' + o | transloco }}</option> }
           </select>
         </div>
         @if (products.value(); as result) {
           @if (result.items.length) {
-            <ul class="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
+            <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
               @for (p of result.items; track p.id) { <li><app-product-card [product]="p" /></li> }
             </ul>
             <div class="mt-8">
               <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
             </div>
           } @else {
-            <div class="card mt-5"><p class="empty-state">{{ 'shop.noProducts' | transloco }}</p></div>
+            <div class="card mt-6"><p class="empty-state">{{ 'shop.noProducts' | transloco }}</p></div>
           }
         }
 
-        <div class="mt-12 border-t border-line pt-10">
+        <div class="mt-14 border-t border-line pt-10">
           <app-review-section kind="store" [slug]="s.slug" />
         </div>
       </section>
 
       <aside class="space-y-4 lg:sticky lg:top-20 lg:self-start">
         @if (auth.hasRole('Affiliate')) {
-          <div class="card card-body space-y-3 border-accent/40">
-            <h2 class="eyebrow">{{ 'partnerships.cta.title' | transloco }}</h2>
-            <app-partnership-cta [storeId]="s.id" [sharePath]="'/stores/' + s.slug" />
+          <div class="card border-s-4 border-s-accent">
+            <div class="card-header"><h2 class="section-title text-base">{{ 'partnerships.cta.title' | transloco }}</h2></div>
+            <div class="card-body">
+              <app-partnership-cta [storeId]="s.id" [sharePath]="'/stores/' + s.slug" />
+            </div>
           </div>
         }
-        <div class="card card-body space-y-2 text-sm">
-          <h2 class="eyebrow">{{ 'shop.delivery' | transloco }}</h2>
-          <p class="text-ink-soft">
-            {{ 'shop.deliveryFee' | transloco }}
-            <span class="font-semibold text-ink" dir="ltr">{{ s.deliveryFee | number: '1.0-3' : language.locale() }} <span class="text-xs text-muted">TND</span></span>
-          </p>
-          <p class="text-ink-soft">{{ 'shop.deliveryDelay' | transloco: { min: s.deliveryMinDays, max: s.deliveryMaxDays } }}</p>
-          <p class="border-t border-line pt-2 text-muted">
-            {{ 'shop.deliversTo' | transloco }}
-            @if (s.deliveryCities.length === 24) { {{ 'shop.allTunisia' | transloco }} }
-            @else { @for (c of s.deliveryCities; track c; let last = $last) { {{ 'cities.' + c | transloco }}{{ last ? '' : ', ' }} } }
-          </p>
+        <div class="card">
+          <div class="card-header"><h2 class="section-title text-base">{{ 'shop.delivery' | transloco }}</h2></div>
+          <div class="card-body space-y-3 text-sm">
+            <p class="flex flex-wrap items-baseline justify-between gap-2 text-ink-soft">
+              {{ 'shop.deliveryFee' | transloco }}
+              <span class="figure text-lg text-ink" dir="ltr">{{ s.deliveryFee | number: '1.0-3' : language.locale() }} <span class="text-xs font-semibold text-muted">TND</span></span>
+            </p>
+            <p class="text-ink-soft">{{ 'shop.deliveryDelay' | transloco: { min: s.deliveryMinDays, max: s.deliveryMaxDays } }}</p>
+            <p class="border-t border-line pt-3 text-muted">
+              {{ 'shop.deliversTo' | transloco }}
+              @if (s.deliveryCities.length === 24) { {{ 'shop.allTunisia' | transloco }} }
+              @else { @for (c of s.deliveryCities; track c; let last = $last) { {{ 'cities.' + c | transloco }}{{ last ? '' : ', ' }} } }
+            </p>
+          </div>
         </div>
-        <div class="card card-body space-y-2 text-sm">
-          <h2 class="eyebrow">{{ 'myStore.sections.contact' | transloco }}</h2>
-          <p><a [href]="'tel:' + s.phone" class="link" dir="ltr">{{ s.phone }}</a></p>
-          @if (s.address) { <p class="text-muted">{{ s.address }}</p> }
-          @if (s.facebookUrl || s.instagramUrl || s.websiteUrl) {
-            <div class="flex flex-wrap gap-2 pt-1">
-              @if (s.facebookUrl) { <a [href]="s.facebookUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">Facebook</a> }
-              @if (s.instagramUrl) { <a [href]="s.instagramUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">Instagram</a> }
-              @if (s.websiteUrl) { <a [href]="s.websiteUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">{{ 'myStore.fields.websiteUrl' | transloco }}</a> }
-            </div>
-          }
+        <div class="card">
+          <div class="card-header"><h2 class="section-title text-base">{{ 'myStore.sections.contact' | transloco }}</h2></div>
+          <div class="card-body space-y-2 text-sm">
+            <p><a [href]="'tel:' + s.phone" class="link" dir="ltr">{{ s.phone }}</a></p>
+            @if (s.address) { <p class="text-muted">{{ s.address }}</p> }
+            @if (s.facebookUrl || s.instagramUrl || s.websiteUrl) {
+              <div class="flex flex-wrap gap-2 pt-2">
+                @if (s.facebookUrl) { <a [href]="s.facebookUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">Facebook</a> }
+                @if (s.instagramUrl) { <a [href]="s.instagramUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">Instagram</a> }
+                @if (s.websiteUrl) { <a [href]="s.websiteUrl" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">{{ 'myStore.fields.websiteUrl' | transloco }}</a> }
+              </div>
+            }
+          </div>
         </div>
       </aside>
     </div>

@@ -1,39 +1,45 @@
 @let c = cart.cart();
 <main class="page animate-fade-in">
-  <a routerLink="/cart" class="btn btn-ghost btn-sm -ms-3"><span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'checkout.backToCart' | transloco }}</a>
-  <h1 class="page-title mt-2">{{ 'checkout.title' | transloco }}</h1>
-  <p class="page-subtitle">{{ 'checkout.subtitle' | transloco }}</p>
+  <a routerLink="/cart" class="back-link"><span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'checkout.backToCart' | transloco }}</a>
+  <header class="page-header">
+    <div class="min-w-0">
+      <h1 class="page-title">{{ 'checkout.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'checkout.subtitle' | transloco }}</p>
+    </div>
+  </header>
 
   @if (!c.stores.length && !cart.loading()) {
-    <div class="card empty-state mt-8">
+    <div class="card empty-state">
       <p class="font-semibold text-ink">{{ 'cart.empty' | transloco }}</p>
       <a routerLink="/products" class="btn btn-primary mt-3">{{ 'shop.allProducts' | transloco }}</a>
     </div>
   } @else {
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
-      <div class="space-y-6">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-8">
+      <div class="min-w-0 space-y-6">
         @if (canOrderForClient()) {
-          <section class="card card-body">
-            <h2 class="section-title">{{ 'checkout.whoFor' | transloco }}</h2>
-            <div class="mt-4 grid gap-3 sm:grid-cols-2">
-              @for (option of [false, true]; track option) {
-                <button type="button" (click)="setForClient(option)" [attr.aria-pressed]="forClient() === option"
-                  class="cursor-pointer rounded-xl border p-4 text-start transition-all duration-200"
-                  [class]="forClient() === option ? 'border-brand bg-brand-soft shadow-card ring-4 ring-brand-ring' : 'border-line-strong/80 bg-card hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-card-hover'">
-                  <span class="block font-semibold text-ink">{{ (option ? 'checkout.forClient' : 'checkout.forMe') | transloco }}</span>
-                  <span class="mt-1 block text-sm text-muted">{{ (option ? 'checkout.forClientHint' : 'checkout.forMeHint') | transloco }}</span>
-                </button>
+          <section class="card">
+            <div class="card-header"><h2 class="section-title">{{ 'checkout.whoFor' | transloco }}</h2></div>
+            <div class="card-body">
+              <div class="grid gap-3 sm:grid-cols-2">
+                @for (option of [false, true]; track option) {
+                  <button type="button" (click)="setForClient(option)" [attr.aria-pressed]="forClient() === option"
+                    class="cursor-pointer rounded-xl border p-4 text-start transition-[background-color,border-color,box-shadow] duration-200"
+                    [class]="forClient() === option ? 'border-brand bg-brand-soft ring-4 ring-brand-ring' : 'border-line-strong bg-card hover:border-brand/50'">
+                    <span class="block font-semibold text-ink">{{ (option ? 'checkout.forClient' : 'checkout.forMe') | transloco }}</span>
+                    <span class="mt-1 block text-sm text-muted">{{ (option ? 'checkout.forClientHint' : 'checkout.forMeHint') | transloco }}</span>
+                  </button>
+                }
+              </div>
+              @if (forClient()) {
+                <p class="alert-info mt-4">{{ 'checkout.affiliateModeInfo' | transloco: { code: '#' + auth.user()?.affiliateCode } }}</p>
               }
             </div>
-            @if (forClient()) {
-              <p class="alert-info mt-4">🤝 {{ 'checkout.affiliateModeInfo' | transloco: { code: '#' + auth.user()?.affiliateCode } }}</p>
-            }
           </section>
         }
 
-        <section class="card overflow-hidden">
+        <section class="card">
           <div class="card-header">
-            <div>
+            <div class="min-w-0">
               <h2 class="section-title">{{ (forClient() ? 'checkout.clientDetails' : 'checkout.delivery') | transloco }}</h2>
               <p class="mt-0.5 text-sm text-muted">{{ 'checkout.deliveryHint' | transloco }}</p>
             </div>
@@ -47,8 +53,8 @@
             <div>
               <label for="phone" class="field-label">{{ 'auth.phone' | transloco }}</label>
               <div class="mt-1.5 flex" dir="ltr">
-                <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">+216</span>
-                <input id="phone" type="tel" formControlName="phone" autocomplete="tel-national" placeholder="22 123 456" class="field rounded-s-none" />
+                <span class="inline-flex items-center rounded-s-lg border border-e-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">+216</span>
+                <input id="phone" type="tel" formControlName="phone" autocomplete="tel-national" placeholder="22 123 456" class="field min-w-0 rounded-s-none" />
               </div>
               @if (invalid('phone')) { <p class="field-error">{{ 'auth.validation.phone' | transloco }}</p> }
             </div>
@@ -74,13 +80,15 @@
           </div>
         </section>
 
-        <section class="card card-body">
-          <h2 class="section-title">{{ 'checkout.payment' | transloco }}</h2>
-          <div class="mt-4 flex items-start gap-3 rounded-xl border border-brand bg-brand-soft p-4 ring-4 ring-brand-ring">
-            <span class="text-2xl" aria-hidden="true">💵</span>
-            <div>
-              <p class="font-semibold text-ink">{{ 'checkout.cod' | transloco }}</p>
-              <p class="mt-0.5 text-sm text-ink-soft">{{ 'checkout.codHint' | transloco }}</p>
+        <section class="card">
+          <div class="card-header"><h2 class="section-title">{{ 'checkout.payment' | transloco }}</h2></div>
+          <div class="card-body">
+            <div class="flex items-start gap-3 rounded-xl border border-brand bg-brand-soft p-4">
+              <span class="mt-1 size-3 shrink-0 rounded-full border-4 border-brand bg-card" aria-hidden="true"></span>
+              <div class="min-w-0">
+                <p class="font-semibold text-ink">{{ 'checkout.cod' | transloco }}</p>
+                <p class="mt-0.5 text-sm text-ink-soft">{{ 'checkout.codHint' | transloco }}</p>
+              </div>
             </div>
           </div>
         </section>
@@ -95,16 +103,16 @@
           @for (group of c.stores; track group.storeId) {
             <div class="px-5 py-4">
               <p class="flex items-center justify-between gap-3 text-sm">
-                <span class="font-semibold text-ink">{{ group.name }}</span>
-                <span class="text-muted" dir="ltr">+ {{ group.deliveryFee | number: '1.0-3' : language.locale() }} TND</span>
+                <span class="min-w-0 truncate font-display font-bold text-ink">{{ group.name }}</span>
+                <span class="shrink-0 text-muted tabular-nums" dir="ltr">+ {{ group.deliveryFee | number: '1.0-3' : language.locale() }} TND</span>
               </p>
               <ul class="mt-2 space-y-1.5 text-sm">
                 @for (line of group.lines; track line.productId + (line.variantId ?? '')) {
                   <li class="flex justify-between gap-3">
-                    <span class="min-w-0 truncate text-ink-soft"><span dir="ltr">{{ line.quantity }} ×</span> {{ line.productName }}
+                    <span class="min-w-0 truncate text-ink-soft"><span dir="ltr" class="tabular-nums">{{ line.quantity }} ×</span> {{ line.productName }}
                       @if (forClient() ? false : line.affiliateCode) { <span class="code-chip ms-1" dir="ltr">#{{ line.affiliateCode }}</span> }
                     </span>
-                    <span class="shrink-0 font-medium text-ink" dir="ltr">{{ line.lineTotal | number: '1.0-3' : language.locale() }}</span>
+                    <span class="shrink-0 font-medium text-ink tabular-nums" dir="ltr">{{ line.lineTotal | number: '1.0-3' : language.locale() }}</span>
                   </li>
                 }
               </ul>
@@ -114,15 +122,15 @@
             </div>
           }
         </div>
-        <dl class="space-y-2 border-t border-line px-5 py-4 text-sm">
-          <div class="flex justify-between"><dt class="text-muted">{{ 'cart.items' | transloco }}</dt><dd class="font-medium" dir="ltr">{{ c.itemsTotal | number: '1.0-3' : language.locale() }} TND</dd></div>
-          <div class="flex justify-between"><dt class="text-muted">{{ 'cart.delivery' | transloco: { count: c.stores.length } }}</dt><dd class="font-medium" dir="ltr">{{ c.deliveryTotal | number: '1.0-3' : language.locale() }} TND</dd></div>
-          <div class="flex items-baseline justify-between border-t border-line pt-3">
+        <dl class="card-body space-y-2.5 border-t border-line text-sm">
+          <div class="flex justify-between gap-4"><dt class="text-muted">{{ 'cart.items' | transloco }}</dt><dd class="font-medium tabular-nums" dir="ltr">{{ c.itemsTotal | number: '1.0-3' : language.locale() }} TND</dd></div>
+          <div class="flex justify-between gap-4"><dt class="text-muted">{{ 'cart.delivery' | transloco: { count: c.stores.length } }}</dt><dd class="font-medium tabular-nums" dir="ltr">{{ c.deliveryTotal | number: '1.0-3' : language.locale() }} TND</dd></div>
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-line pt-4">
             <dt class="font-semibold text-ink">{{ 'checkout.toPay' | transloco }}</dt>
-            <dd class="text-2xl font-bold tracking-tight" dir="ltr">{{ c.total | number: '1.0-3' : language.locale() }} <span class="text-sm font-semibold text-muted">TND</span></dd>
+            <dd class="figure text-3xl text-ink" dir="ltr">{{ c.total | number: '1.0-3' : language.locale() }} <span class="text-sm font-semibold text-muted">TND</span></dd>
           </div>
         </dl>
-        <div class="space-y-3 border-t border-line px-5 py-4">
+        <div class="space-y-3 border-t border-line px-5 py-4 sm:px-6">
           @if (error(); as key) {
             <div role="alert" class="alert-danger flex-col">
               <span>{{ key | transloco }}</span>

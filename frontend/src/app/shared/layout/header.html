@@ -3,13 +3,14 @@
   cart, account. Role links (orders, affiliate, store, admin) join the top row from xl; below that they live in
   the second row, which scrolls sideways if needed. Labels shorten (FR / ع / EN, logout icon) below xl.
 -->
-<header class="sticky top-0 z-40 border-b border-line bg-card/80 backdrop-blur-xl backdrop-saturate-150 print:hidden">
+<header class="sticky top-0 z-40 border-t-[3px] border-b border-t-brand border-b-line bg-card/85 backdrop-blur-xl backdrop-saturate-150 print:hidden">
   <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:px-8">
     <a routerLink="/" class="group flex shrink-0 items-center gap-2.5">
-      <span class="flex size-8 items-center justify-center rounded-lg bg-brand text-sm font-bold text-white shadow-brand transition-transform duration-200 group-hover:-rotate-6">
+      <!-- The mark is an arch: a door into the stores (ADR 0005 motif). -->
+      <span class="arch flex h-9 w-7 items-end justify-center bg-brand pb-1.5 font-display text-sm font-extrabold text-white shadow-brand transition-transform duration-300 ease-out group-hover:-translate-y-0.5" aria-hidden="true">
         {{ ('app.name' | transloco).charAt(0) }}
       </span>
-      <span class="hidden text-lg font-bold tracking-tight text-ink min-[400px]:inline">{{ 'app.name' | transloco }}</span>
+      <span class="hidden font-display text-xl font-extrabold tracking-tight text-ink min-[400px]:inline">{{ 'app.name' | transloco }}</span>
     </a>
 
     <nav class="hidden items-center gap-1 md:flex">
@@ -26,7 +27,7 @@
     </form>
 
     <div class="ms-auto flex min-w-0 items-center gap-1.5 sm:gap-2.5 lg:ms-0">
-      <a routerLink="/products" class="flex size-9 shrink-0 items-center justify-center rounded-lg text-ink-soft transition-colors hover:bg-subtle hover:text-ink lg:hidden"
+      <a routerLink="/products" class="flex size-9 shrink-0 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-subtle hover:text-ink lg:hidden"
         [attr.aria-label]="'shop.search' | transloco" [title]="'shop.search' | transloco">
         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" stroke-linecap="round" />
@@ -34,14 +35,14 @@
       </a>
       <app-language-switcher class="shrink-0" />
 
-      <a routerLink="/cart" routerLinkActive="bg-subtle text-brand" class="relative flex size-9 shrink-0 items-center justify-center rounded-lg text-ink-soft transition-colors hover:bg-subtle hover:text-ink"
+      <a routerLink="/cart" routerLinkActive="bg-subtle text-brand" class="relative flex size-9 shrink-0 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-subtle hover:text-ink"
         [attr.aria-label]="'cart.title' | transloco" [title]="'cart.title' | transloco">
         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 8H6.2" stroke-linecap="round" stroke-linejoin="round" />
           <circle cx="9.5" cy="20" r="1.2" /><circle cx="17" cy="20" r="1.2" />
         </svg>
         @if (cart.count(); as n) {
-          <span class="absolute -end-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-bold text-white ring-2 ring-card" dir="ltr">{{ n > 99 ? '99+' : n }}</span>
+          <span class="absolute -end-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-ink ring-2 ring-card" dir="ltr">{{ n > 99 ? '99+' : n }}</span>
         }
       </a>
 

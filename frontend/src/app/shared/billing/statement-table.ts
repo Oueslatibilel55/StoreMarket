@@ -14,37 +14,39 @@ import { LanguageService } from '../../core/i18n/language.service';
   imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe],
   template: `
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead class="bg-subtle/60 text-xs text-muted">
+      <table class="data-table">
+        <thead>
           <tr>
-            <th scope="col" class="px-4 py-2 text-start font-medium">{{ 'billing.statement.month' | transloco }}</th>
-            <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.statement.subscription' | transloco }}</th>
-            <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.statement.commissions' | transloco }}</th>
-            <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.statement.paid' | transloco }}</th>
-            <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.statement.left' | transloco }}</th>
-            <th scope="col" class="px-4 py-2 text-start font-medium">{{ 'billing.statement.invoice' | transloco }}</th>
+            <th scope="col">{{ 'billing.statement.month' | transloco }}</th>
+            <th scope="col" class="text-end">{{ 'billing.statement.subscription' | transloco }}</th>
+            <th scope="col" class="text-end">{{ 'billing.statement.commissions' | transloco }}</th>
+            <th scope="col" class="text-end">{{ 'billing.statement.paid' | transloco }}</th>
+            <th scope="col" class="text-end">{{ 'billing.statement.left' | transloco }}</th>
+            <th scope="col">{{ 'billing.statement.invoice' | transloco }}</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-line">
+        <tbody>
           @for (m of months(); track m.month) {
             <tr>
-              <td class="px-4 py-2.5 whitespace-nowrap font-medium text-ink">{{ m.month | date: 'MMMM y' : undefined : language.locale() }}</td>
-              <td class="px-4 py-2.5 text-end tabular-nums whitespace-nowrap" dir="ltr">
+              <td class="whitespace-nowrap font-medium text-ink">{{ m.month | date: 'MMMM y' : undefined : language.locale() }}</td>
+              <td class="text-end tabular-nums whitespace-nowrap" dir="ltr">
                 @if (m.subscriptionPaid || m.subscriptionMonthsPaid) {
                   {{ m.subscriptionPaid | number: '1.0-3' : language.locale() }}
                   <span class="block text-xs text-muted">{{ 'billing.statement.months' | transloco: { n: m.subscriptionMonthsPaid } }}</span>
                 } @else { <span class="text-muted">—</span> }
               </td>
-              <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ m.invoiceId ? (m.commissionsBilled | number: '1.0-3' : language.locale()) : '—' }}</td>
-              <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ m.invoiceId ? (m.commissionsPaid | number: '1.0-3' : language.locale()) : '—' }}</td>
-              <td class="px-4 py-2.5 text-end font-semibold tabular-nums" dir="ltr"
+              <td class="text-end tabular-nums whitespace-nowrap" dir="ltr">{{ m.invoiceId ? (m.commissionsBilled | number: '1.0-3' : language.locale()) : '—' }}</td>
+              <td class="text-end tabular-nums whitespace-nowrap" dir="ltr">{{ m.invoiceId ? (m.commissionsPaid | number: '1.0-3' : language.locale()) : '—' }}</td>
+              <td class="figure text-end whitespace-nowrap" dir="ltr"
                 [class.text-danger]="m.invoiceId && m.invoiceStatus !== 'Paid'">
                 {{ m.invoiceId ? (m.commissionsBilled - m.commissionsPaid | number: '1.0-3' : language.locale()) : '—' }}
               </td>
-              <td class="px-4 py-2.5 whitespace-nowrap">
+              <td class="whitespace-nowrap">
                 @if (m.invoiceId) {
-                  <a [routerLink]="[invoiceLink(), m.invoiceId]" class="link font-mono text-xs" dir="ltr">{{ m.invoiceReference }}</a>
-                  <span class="pill ms-1.5" [class]="tone(m.invoiceStatus)">{{ 'billing.invoiceStatus.' + m.invoiceStatus | transloco }}</span>
+                  <span class="inline-flex items-center gap-2">
+                    <a [routerLink]="[invoiceLink(), m.invoiceId]" class="link font-mono text-xs" dir="ltr">{{ m.invoiceReference }}</a>
+                    <span class="pill" [class]="tone(m.invoiceStatus)">{{ 'billing.invoiceStatus.' + m.invoiceStatus | transloco }}</span>
+                  </span>
                 } @else {
                   <span class="text-xs text-muted">{{ (m.month === currentMonth() ? 'billing.statement.inProgress' : 'billing.statement.none') | transloco }}</span>
                 }

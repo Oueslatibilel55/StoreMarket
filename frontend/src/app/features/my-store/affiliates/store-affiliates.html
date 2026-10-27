@@ -1,32 +1,33 @@
 <main class="page max-w-4xl animate-fade-in">
   <app-my-store-tabs />
 
-  <header>
-    <h1 class="page-title">{{ 'partnerships.store.title' | transloco }}</h1>
-    <p class="page-subtitle">{{ 'partnerships.store.subtitle' | transloco }}</p>
+  <header class="page-header">
+    <div class="min-w-0">
+      <h1 class="page-title">{{ 'partnerships.store.title' | transloco }}</h1>
+      <p class="page-subtitle">{{ 'partnerships.store.subtitle' | transloco }}</p>
+    </div>
   </header>
 
   @if (partnerships.error(); as err) {
-    <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
+    <p role="alert" class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
   } @else if (partnerships.value(); as all) {
-    <div class="mt-6 grid grid-cols-3 gap-2 sm:gap-4">
-      <div class="card p-3 sm:p-5">
-        <p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'partnerships.store.requests' | transloco }}</p>
-        <p class="mt-2 text-2xl font-bold tracking-tight" [class]="requests().length ? 'text-accent-ink' : 'text-ink'" dir="ltr">{{ requests().length }}</p>
+    <div class="grid grid-cols-3 gap-2 sm:gap-4">
+      <div class="stat-tile p-3 sm:p-4">
+        <p class="stat-label truncate">{{ 'partnerships.store.requests' | transloco }}</p>
+        <p class="stat-value" [class]="requests().length ? 'text-accent-ink' : 'text-ink'" dir="ltr">{{ requests().length }}</p>
       </div>
-      <div class="card p-3 sm:p-5">
-        <p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'partnerships.store.partners' | transloco }}</p>
-        <p class="mt-2 text-2xl font-bold tracking-tight text-ink" dir="ltr">{{ partners().length }}</p>
+      <div class="stat-tile p-3 sm:p-4">
+        <p class="stat-label truncate">{{ 'partnerships.store.partners' | transloco }}</p>
+        <p class="stat-value" dir="ltr">{{ partners().length }}</p>
       </div>
-      <div class="card p-3 sm:p-5">
-        <p class="eyebrow truncate text-[10px] sm:text-xs">{{ 'partnerships.store.history' | transloco }}</p>
-        <p class="mt-2 text-2xl font-bold tracking-tight text-ink" dir="ltr">{{ history().length }}</p>
+      <div class="stat-tile p-3 sm:p-4">
+        <p class="stat-label truncate">{{ 'partnerships.store.history' | transloco }}</p>
+        <p class="stat-value" dir="ltr">{{ history().length }}</p>
       </div>
     </div>
 
     @if (all.length === 0) {
       <div class="card empty-state mt-6">
-        <span class="text-3xl" aria-hidden="true">🤝</span>
         <p class="font-semibold text-ink">{{ 'partnerships.store.empty' | transloco }}</p>
         <p>{{ 'partnerships.store.emptyHint' | transloco }}</p>
       </div>
@@ -40,10 +41,10 @@
         </div>
         <ul class="divide-y divide-line">
           @for (p of requests(); track p.id) {
-            <li class="space-y-3 px-5 py-4 sm:px-6">
-              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <li class="space-y-3 px-4 py-4 sm:px-5">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <ng-container *ngTemplateOutlet="affiliateRow; context: { $implicit: p }" />
-                <div class="flex gap-2">
+                <div class="flex flex-wrap gap-2">
                   <button type="button" (click)="ask('refuse', p)" class="btn btn-danger-soft btn-sm">{{ 'partnerships.store.refuse' | transloco }}</button>
                   <button type="button" (click)="ask('accept', p)" class="btn btn-primary btn-sm">{{ 'partnerships.store.accept' | transloco }}</button>
                 </div>
@@ -65,7 +66,7 @@
         </div>
         <ul class="divide-y divide-line">
           @for (p of partners(); track p.id) {
-            <li class="row-hover flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <li class="list-row">
               <ng-container *ngTemplateOutlet="affiliateRow; context: { $implicit: p }" />
               <button type="button" (click)="ask('end', p)" class="btn btn-ghost btn-sm self-start hover:text-danger sm:self-auto">{{ 'partnerships.store.end' | transloco }}</button>
             </li>
@@ -81,7 +82,7 @@
         </div>
         <ul class="divide-y divide-line">
           @for (p of history(); track p.id) {
-            <li class="space-y-2 px-5 py-4 sm:px-6">
+            <li class="space-y-2 px-4 py-4 sm:px-5">
               <ng-container *ngTemplateOutlet="affiliateRow; context: { $implicit: p }" />
               @if (p.decisionReason || p.endReason) {
                 <p class="rounded-lg bg-subtle px-3 py-2 text-sm text-ink-soft">{{ p.decisionReason || p.endReason }}</p>
@@ -92,13 +93,13 @@
       </section>
     }
   } @else {
-    <p class="card empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+    <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
   }
 </main>
 
 <ng-template #affiliateRow let-p>
   <div class="flex min-w-0 flex-1 items-center gap-3">
-    <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-soft font-semibold text-brand ring-1 ring-brand/15">
+    <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-soft font-display font-bold text-brand ring-1 ring-brand/15">
       {{ p.affiliate.fullName.charAt(0).toUpperCase() }}
     </span>
     <div class="min-w-0">
@@ -108,11 +109,11 @@
         <span class="pill" [class]="tone(p.status)">{{ 'partnerships.status.' + p.status | transloco }}</span>
         @if (!p.affiliate.codeActive) { <span class="pill pill-danger">{{ 'partnerships.codeInactive' | transloco }}</span> }
       </p>
-      <p class="mt-0.5 text-xs text-muted">
-        {{ 'partnerships.store.profile' | transloco: {
+      <p class="mt-0.5 flex flex-wrap gap-x-3 text-xs text-muted">
+        <span>{{ 'partnerships.store.profile' | transloco: {
           date: (p.affiliate.memberSince | date: 'mediumDate' : undefined : language.locale()),
-          count: p.affiliate.activePartnerships } }}
-        · {{ (p.decidedAt ?? p.createdAt) | date: 'mediumDate' : undefined : language.locale() }}
+          count: p.affiliate.activePartnerships } }}</span>
+        <span>{{ (p.decidedAt ?? p.createdAt) | date: 'mediumDate' : undefined : language.locale() }}</span>
       </p>
     </div>
   </div>
@@ -130,7 +131,7 @@
     @if (error(); as key) {
       <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p>
     }
-    <div class="mt-6 flex justify-end gap-3">
+    <div class="mt-6 flex flex-wrap justify-end gap-3">
       <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
       <button type="button" (click)="confirm()" [disabled]="busy()" class="btn" [class]="d.kind === 'accept' ? 'btn-primary' : 'btn-danger'">
         {{ 'partnerships.store.' + d.kind | transloco }}

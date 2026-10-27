@@ -19,7 +19,7 @@ import { StatsTable } from './stats-table';
       [ordersQuery]="admin() ? { storeId: storeId() } : null">
       <app-kpi [label]="'stats.kpi.coinsGenerated' | transloco" [link]="admin() ? '/admin/coins' : null"
         [query]="{ storeId: storeId(), type: 'Earned', from: stats().period.from, to: stats().period.to }">
-        {{ stats().coinsGenerated | number: '1.0-3' : language.locale() }}
+        <span class="text-success">{{ stats().coinsGenerated | number: '1.0-3' : language.locale() }}</span>
       </app-kpi>
       <app-kpi [label]="'stats.kpi.rating' | transloco" [hint]="'stats.kpi.ratingCount' | transloco: { n: stats().rating.count }">
         {{ stats().rating.average !== null ? (stats().rating.average! | number: '1.1-2' : language.locale()) + ' ★' : '—' }}
@@ -30,7 +30,7 @@ import { StatsTable } from './stats-table';
       </app-kpi>
     </app-conversion-tiles>
 
-    <div class="mt-4 grid gap-4">
+    <div class="mt-6 grid gap-6">
       <app-stats-table [title]="'stats.topProducts' | transloco" [rows]="stats().topProducts" nameKey="stats.col.product"
         [linkBase]="admin() ? '/admin/products' : null" csvName="products" />
       <app-stats-table [title]="'stats.topAffiliates' | transloco" [rows]="stats().topAffiliates" nameKey="stats.col.affiliate"

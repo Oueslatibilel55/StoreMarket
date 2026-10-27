@@ -1,34 +1,32 @@
-<header class="flex flex-wrap items-end justify-between gap-4">
+<header class="page-header">
   <div class="min-w-0">
     <h1 class="page-title">{{ 'admin.roleRequests.title' | transloco }}</h1>
     <p class="page-subtitle">{{ 'admin.roleRequests.subtitle' | transloco }}</p>
   </div>
 </header>
 
-<div class="mt-6 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-  <div class="inline-flex gap-1 rounded-xl border border-line bg-card p-1 shadow-card" role="tablist">
-    @for (s of statuses; track s) {
-      <button type="button" role="tab" [attr.aria-selected]="selected() === s" (click)="filter(s)"
-        class="nav-link whitespace-nowrap"
-        [class.nav-link-active]="selected() === s">
-        {{ (s === 'all' ? 'admin.roleRequests.all' : 'roleRequests.status.' + s) | transloco }}
-      </button>
-    }
-  </div>
+<div class="tabs mb-6" role="tablist">
+  @for (s of statuses; track s) {
+    <button type="button" role="tab" [attr.aria-selected]="selected() === s" (click)="filter(s)"
+      class="tab cursor-pointer"
+      [class.tab-active]="selected() === s">
+      {{ (s === 'all' ? 'admin.roleRequests.all' : 'roleRequests.status.' + s) | transloco }}
+    </button>
+  }
 </div>
 
-<div class="card mt-6 overflow-hidden">
+<div class="card overflow-hidden">
   @if (requests.error()) {
-    <div class="p-5"><p class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
+    <div class="card-body"><p class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
   } @else if (requests.value(); as result) {
     @if (result.items.length === 0) {
       <p class="empty-state">{{ 'admin.roleRequests.empty' | transloco }}</p>
     } @else {
       <ul class="divide-y divide-line">
         @for (r of result.items; track r.id) {
-          <li class="row-hover grid gap-4 px-5 py-4 md:grid-cols-[2fr_1.5fr_auto] md:items-center">
+          <li class="grid gap-4 px-4 py-4 sm:px-5 md:grid-cols-[2fr_1.5fr_auto] md:items-center">
             <div class="flex min-w-0 items-start gap-3">
-              <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand" aria-hidden="true">{{ r.userFullName.charAt(0).toUpperCase() }}</span>
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft font-display text-sm font-bold text-brand" aria-hidden="true">{{ r.userFullName.charAt(0).toUpperCase() }}</span>
               <div class="min-w-0">
                 <a [routerLink]="['/admin/users', r.userId]" class="text-sm font-semibold text-ink transition-colors hover:text-brand">{{ r.userFullName }}</a>
                 <p class="truncate text-sm text-muted" dir="ltr">{{ r.userEmail }}</p>
@@ -52,7 +50,7 @@
               }
               <p class="field-hint">{{ r.createdAt | date: 'medium' : undefined : language.locale() }}</p>
             </div>
-            <div class="flex items-center gap-2 md:justify-end">
+            <div class="flex flex-wrap items-center gap-2 md:justify-end">
               @if (r.status === 'Pending' && !isSelf(r)) {
                 <button type="button" (click)="ask('refuse', r)" class="btn btn-danger-soft">
                   {{ 'admin.roleRequests.refuse' | transloco }}
@@ -72,7 +70,7 @@
           </li>
         }
       </ul>
-      <div class="border-t border-line px-5 py-3">
+      <div class="border-t border-line px-4 py-3 sm:px-5">
         <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="goTo($event)" />
       </div>
     }
@@ -98,7 +96,7 @@
     @if (error(); as key) {
       <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
     }
-    <div class="mt-6 flex justify-end gap-3">
+    <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
       <button type="button" (click)="cancel()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
       <button type="button" (click)="confirm()" [disabled]="busy() || (d.kind === 'refuse' && !reason().trim())"
         class="btn"

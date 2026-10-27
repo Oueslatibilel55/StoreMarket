@@ -19,11 +19,9 @@ const TABS = [
   imports: [RouterLink, RouterLinkActive, TranslocoPipe, BillingBanner],
   template: `
     <app-billing-banner />
-    <nav class="mb-8 grid grid-cols-3 gap-1 rounded-xl border border-line bg-card p-1 shadow-card sm:inline-flex sm:flex-wrap print:hidden"
-      [attr.aria-label]="'myStore.nav' | transloco">
+    <nav class="tabs mb-8 print:hidden" [attr.aria-label]="'myStore.nav' | transloco">
       @for (t of tabs; track t.key) {
-        <a [routerLink]="t.link" routerLinkActive="!bg-brand-soft !text-brand" [routerLinkActiveOptions]="{ exact: t.exact }"
-          class="truncate rounded-lg px-2 py-2 text-center text-sm font-semibold text-muted transition-colors hover:bg-subtle hover:text-ink sm:px-4">
+        <a [routerLink]="t.link" routerLinkActive="tab-active" [routerLinkActiveOptions]="{ exact: t.exact }" class="tab">
           {{ 'myStore.tabs.' + t.key | transloco }}
         </a>
       }

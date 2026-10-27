@@ -13,18 +13,19 @@ import { StarRating } from '../reviews/star-rating';
   template: `
     @let s = store();
     <a [routerLink]="['/stores', s.slug]" class="group card-interactive flex h-full flex-col overflow-hidden">
-      <div class="h-24 overflow-hidden bg-linear-to-br from-brand-soft via-subtle to-brand-soft">
+      <div class="h-24 overflow-hidden bg-brand-soft">
         @if (s.bannerUrl) { <img [src]="s.bannerUrl" alt="" loading="lazy" class="size-full object-cover transition-transform duration-500 group-hover:scale-105" /> }
       </div>
-      <div class="-mt-8 flex flex-1 flex-col gap-1 px-5 pb-5">
-        <div class="size-16 overflow-hidden rounded-xl bg-card shadow-card ring-4 ring-card">
+      <div class="-mt-10 flex flex-1 flex-col gap-1 px-5 pb-5">
+        <!-- A store's logo sits in an arch: its door (ADR 0005 motif). -->
+        <div class="arch h-18 w-15 overflow-hidden bg-card shadow-card ring-4 ring-card">
           @if (s.logoUrl) {
             <img [src]="s.logoUrl" [alt]="s.name" class="size-full object-cover" />
           } @else {
-            <span class="flex size-full items-center justify-center bg-brand-soft text-xl font-bold text-brand">{{ s.name.charAt(0).toUpperCase() }}</span>
+            <span class="flex size-full items-center justify-center bg-brand pt-3 font-display text-xl font-extrabold text-white">{{ s.name.charAt(0).toUpperCase() }}</span>
           }
         </div>
-        <p class="mt-2 font-semibold text-ink transition-colors group-hover:text-brand">{{ s.name }}</p>
+        <p class="mt-2 font-display text-lg font-bold tracking-tight text-ink transition-colors group-hover:text-brand">{{ s.name }}</p>
         <p class="text-xs text-muted">{{ s.category.name | localized: language.lang() }} · {{ 'cities.' + s.city | transloco }}</p>
         @if (s.rating.count) {
           <app-star-rating [value]="s.rating.average" [count]="s.rating.count" [showValue]="true" size="sm" />

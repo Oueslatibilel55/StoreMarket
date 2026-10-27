@@ -24,8 +24,8 @@ import { MyStoreTabs } from '../my-store-tabs';
   template: `
     <main class="page">
       <app-my-store-tabs />
-      <header class="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <header class="page-header">
+        <div class="min-w-0">
           <h1 class="page-title">{{ 'billing.mine.title' | transloco }}</h1>
           <p class="page-subtitle">{{ 'billing.mine.subtitle' | transloco }}</p>
         </div>
@@ -35,14 +35,14 @@ import { MyStoreTabs } from '../my-store-tabs';
       </header>
 
       @if (noStore()) {
-        <div class="card mt-6 p-6 text-center">
-          <p class="text-muted">{{ 'errors.store.notFound' | transloco }}</p>
-          <a routerLink="/my-store" class="btn btn-primary mt-4">{{ 'myStore.createTitle' | transloco }}</a>
+        <div class="card empty-state">
+          <p>{{ 'errors.store.notFound' | transloco }}</p>
+          <a routerLink="/my-store" class="btn btn-primary mt-3">{{ 'myStore.createTitle' | transloco }}</a>
         </div>
       } @else if (billing.error()) {
-        <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
+        <p role="alert" class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
       } @else if (billing.value(); as b) {
-        <div class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           <div class="stat-tile">
             <p class="stat-label">{{ 'billing.monthlyPrice' | transloco }}</p>
             <p class="stat-value" dir="ltr">{{ b.monthlyPrice | number: '1.0-3' : language.locale() }} TND</p>
@@ -64,14 +64,16 @@ import { MyStoreTabs } from '../my-store-tabs';
         <p class="mt-3 text-sm text-muted">{{ 'billing.mine.rule' | transloco: { n: b.graceDays } }}</p>
 
         @if (b.offers.length) {
-          <section class="card mt-6 p-5">
-            <h2 class="section-title">{{ 'billing.mine.offers' | transloco }}</h2>
-            <ul class="mt-3 flex flex-wrap gap-2">
+          <section class="card mt-6 overflow-hidden">
+            <div class="card-header"><h2 class="section-title">{{ 'billing.mine.offers' | transloco }}</h2></div>
+            <ul class="divide-y divide-line">
               @for (o of b.offers; track o.id) {
-                <li class="pill pill-brand">
-                  {{ o.name | localized: language.lang() }} ·
-                  <span dir="ltr">{{ o.discountPercent !== null ? '−' + o.discountPercent + ' %' : '−' + (o.discountAmount | number: '1.0-3' : language.locale()) + ' TND' }}</span>
-                  @if (o.months) { · {{ 'billing.offers.forMonths' | transloco: { n: o.months } }} }
+                <li class="list-row">
+                  <span class="font-medium text-ink">{{ o.name | localized: language.lang() }}</span>
+                  <span class="flex flex-wrap items-center gap-2 text-sm text-muted">
+                    <span class="pill pill-brand figure" dir="ltr">{{ o.discountPercent !== null ? '−' + o.discountPercent + ' %' : '−' + (o.discountAmount | number: '1.0-3' : language.locale()) + ' TND' }}</span>
+                    @if (o.months) { <span>{{ 'billing.offers.forMonths' | transloco: { n: o.months } }}</span> }
+                  </span>
                 </li>
               }
             </ul>
@@ -92,7 +94,7 @@ import { MyStoreTabs } from '../my-store-tabs';
           <app-declare-payment [monthlyPrice]="b.monthlyPrice" (declared)="done()" (closed)="declaring.set(false)" />
         }
       } @else {
-        <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+        <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
       }
     </main>
   `,

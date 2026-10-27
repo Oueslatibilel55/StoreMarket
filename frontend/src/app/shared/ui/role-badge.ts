@@ -4,9 +4,10 @@ import { Role } from '../../core/auth/auth.models';
 
 const STYLES: Record<Role, string> = {
   Buyer: 'pill-neutral',
-  Affiliate: 'pill-warning',
-  StoreOwner: 'pill-success',
-  Admin: 'pill-brand',
+  // Affiliates earn coins: olive, the colour of money earned.
+  Affiliate: 'pill-success',
+  StoreOwner: 'pill-brand',
+  Admin: 'bg-ink text-white ring-ink',
 };
 
 @Component({

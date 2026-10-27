@@ -1,20 +1,19 @@
 @if (auth.user()?.affiliateCode; as code) {
-  <section class="card overflow-hidden">
-    <div class="card-body">
-      <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
-        <div class="min-w-0 flex-1">
-          <h2 class="section-title">{{ 'affiliate.yourCode' | transloco }}</h2>
-          <p class="mt-1 text-sm text-muted">{{ 'affiliate.codeHint' | transloco }}</p>
-        </div>
-        <div class="flex flex-wrap items-center gap-3">
-          <span dir="ltr"
-            class="rounded-xl bg-brand-soft px-4 py-2 font-mono text-2xl font-bold tracking-wider text-brand ring-1 ring-brand/15 ring-inset select-all">#{{ code }}</span>
-          <button type="button" (click)="copy(code)" class="btn" [class]="copied() ? 'btn-success' : 'btn-secondary'">
-            {{ (copied() ? 'affiliate.copied' : 'affiliate.copy') | transloco }}
-          </button>
-        </div>
+  <section class="overflow-hidden rounded-xl bg-ink text-white shadow-card">
+    <div class="grid gap-6 p-5 sm:p-7 md:grid-cols-[1fr_auto] md:items-end">
+      <div class="min-w-0">
+        <h2 class="font-display text-lg font-bold tracking-tight text-white">{{ 'affiliate.yourCode' | transloco }}</h2>
+        <p class="mt-1 max-w-md text-sm text-white/70">{{ 'affiliate.codeHint' | transloco }}</p>
+        <p class="mt-5"><span dir="ltr"
+          class="figure inline-block text-4xl leading-none break-all min-[360px]:text-5xl text-white select-all sm:text-6xl">#{{ code }}</span></p>
       </div>
-      <p class="mt-5 alert-info">{{ 'affiliate.nextStep' | transloco }}</p>
+      <div class="flex flex-wrap gap-3">
+        <button type="button" (click)="copy(code)" class="btn btn-lg"
+          [class]="copied() ? 'btn-success' : 'bg-white text-ink hover:-translate-y-px hover:bg-brand-soft'">
+          {{ (copied() ? 'affiliate.copied' : 'affiliate.copy') | transloco }}
+        </button>
+      </div>
     </div>
+    <p class="border-t border-white/10 bg-white/5 px-5 py-3.5 text-sm text-white/80 sm:px-7">{{ 'affiliate.nextStep' | transloco }}</p>
   </section>
 }

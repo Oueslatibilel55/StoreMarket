@@ -24,7 +24,7 @@ export type ModerationAction = 'disable' | 'enable' | 'delete';
       @if (error(); as key) {
         <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
       }
-      <div class="mt-6 flex justify-end gap-3">
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button type="button" (click)="close.emit()" [disabled]="busy()" class="btn btn-ghost">
           {{ 'common.cancel' | transloco }}
         </button>

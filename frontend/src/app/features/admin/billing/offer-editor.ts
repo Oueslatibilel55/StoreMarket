@@ -19,7 +19,7 @@ const TARGETS: OfferTarget[] = ['AllStores', 'StoreCategories', 'Stores'];
   template: `
     <app-modal [label]="'billing.offers.edit' | transloco" (close)="closed.emit()">
       <h2 class="section-title">{{ (offer() ? 'billing.offers.edit' : 'billing.offers.new') | transloco }}</h2>
-      <div class="mt-4 grid gap-3">
+      <div class="mt-5 grid gap-4">
         <label class="block"><span class="field-label">{{ 'billing.offers.nameFr' | transloco }}</span>
           <input class="field" maxlength="100" [value]="nameFr()" (input)="nameFr.set($any($event.target).value)" /></label>
         <div class="grid gap-3 sm:grid-cols-2">
@@ -59,7 +59,7 @@ const TARGETS: OfferTarget[] = ['AllStores', 'StoreCategories', 'Stores'];
             @for (c of categories.value() ?? []; track c.id) {
               <button type="button" (click)="toggle(c.id)" [attr.aria-pressed]="ids().includes(c.id)"
                 class="cursor-pointer rounded-full border px-3 py-1 text-sm transition-colors"
-                [class]="ids().includes(c.id) ? 'border-brand bg-brand-soft text-brand' : 'border-line text-ink-soft hover:border-brand'">
+                [class]="ids().includes(c.id) ? 'border-brand bg-brand-soft font-medium text-brand' : 'border-line-strong bg-card text-ink-soft hover:border-brand hover:text-brand'">
                 {{ c.name | localized: language.lang() }}
               </button>
             }
@@ -71,7 +71,7 @@ const TARGETS: OfferTarget[] = ['AllStores', 'StoreCategories', 'Stores'];
             @for (s of stores.value()?.items ?? []; track s.id) {
               <button type="button" (click)="toggle(s.id)" [attr.aria-pressed]="ids().includes(s.id)"
                 class="cursor-pointer rounded-full border px-3 py-1 text-sm transition-colors"
-                [class]="ids().includes(s.id) ? 'border-brand bg-brand-soft text-brand' : 'border-line text-ink-soft hover:border-brand'">
+                [class]="ids().includes(s.id) ? 'border-brand bg-brand-soft font-medium text-brand' : 'border-line-strong bg-card text-ink-soft hover:border-brand hover:text-brand'">
                 {{ s.name }}
               </button>
             }
@@ -84,8 +84,8 @@ const TARGETS: OfferTarget[] = ['AllStores', 'StoreCategories', 'Stores'];
         <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="checkbox" [checked]="active()" (change)="active.set($any($event.target).checked)" />
           {{ 'billing.offers.active' | transloco }}</label>
       </div>
-      @if (error()) { <p class="alert-danger mt-3">{{ error()! | transloco }}</p> }
-      <div class="mt-5 flex justify-end gap-2">
+      @if (error()) { <p class="alert-danger mt-4">{{ error()! | transloco }}</p> }
+      <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
         <button type="button" class="btn btn-ghost" (click)="closed.emit()">{{ 'common.cancel' | transloco }}</button>
         <button type="button" class="btn btn-primary" [disabled]="busy()" (click)="save()">{{ 'common.save' | transloco }}</button>
       </div>

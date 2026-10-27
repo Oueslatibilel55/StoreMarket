@@ -1,4 +1,4 @@
-<header class="flex flex-wrap items-end justify-between gap-4">
+<header class="page-header">
   <div class="min-w-0">
     <h1 class="page-title">{{ 'admin.users.title' | transloco }}</h1>
     @if (counts.value(); as c) {
@@ -9,102 +9,104 @@
   </div>
 </header>
 
-@if (counts.value(); as c) {
-  <div class="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-    <div class="card p-5">
-      <p class="eyebrow">{{ 'admin.users.stats.total' | transloco }}</p>
-      <p class="mt-2 text-2xl font-bold tracking-tight text-ink tabular-nums" dir="ltr">{{ c.total }}</p>
-    </div>
-    <div class="card p-5">
-      <p class="eyebrow">{{ 'admin.users.stats.affiliates' | transloco }}</p>
-      <p class="mt-2 text-2xl font-bold tracking-tight text-ink tabular-nums" dir="ltr">{{ c.affiliates }}</p>
-    </div>
-    <div class="card p-5">
-      <p class="eyebrow">{{ 'admin.users.stats.owners' | transloco }}</p>
-      <p class="mt-2 text-2xl font-bold tracking-tight text-ink tabular-nums" dir="ltr">{{ c.storeOwners }}</p>
-    </div>
-    <div class="card p-5">
-      <p class="eyebrow">{{ 'admin.users.stats.blocked' | transloco }}</p>
-      <p class="mt-2 text-2xl font-bold tracking-tight tabular-nums" [class]="c.blocked ? 'text-danger' : 'text-ink'" dir="ltr">{{ c.blocked }}</p>
-    </div>
-  </div>
-}
-
-<div class="card mt-6 overflow-hidden">
-  <div class="grid gap-3 border-b border-line bg-subtle/40 p-4 sm:grid-cols-2 sm:items-center sm:px-5 lg:grid-cols-[1fr_auto_auto_auto]">
-    <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
-      [placeholder]="'admin.users.searchPlaceholder' | transloco" [attr.aria-label]="'admin.users.searchPlaceholder' | transloco"
-      class="field sm:col-span-2 lg:col-span-1" />
-
-    <select [value]="role() ?? ''" (change)="apply({ role: $any($event.target).value || null, page: null })"
-      [attr.aria-label]="'account.roles' | transloco"
-      class="field sm:w-auto">
-      <option value="">{{ 'admin.users.allRoles' | transloco }}</option>
-      @for (r of roles; track r) {
-        <option [value]="r">{{ 'roles.' + r | transloco }}</option>
-      }
-    </select>
-
-    <select [value]="status() ?? ''" (change)="apply({ status: $any($event.target).value || null, page: null })"
-      [attr.aria-label]="'admin.users.status' | transloco"
-      class="field sm:w-auto">
-      <option value="">{{ 'admin.users.allStatuses' | transloco }}</option>
-      @for (s of statuses; track s) {
-        <option [value]="s">{{ 'admin.status.' + s | transloco }}</option>
-      }
-    </select>
-
-    @if (hasFilters()) {
-      <button type="button" (click)="clear()" class="btn btn-ghost">
-        {{ 'common.clearFilters' | transloco }}
-      </button>
-    }
-  </div>
-
-  @if (users.error()) {
-    <div class="p-5"><p class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
-  } @else if (users.value(); as result) {
-    @if (result.items.length === 0) {
-      <p class="empty-state">{{ 'admin.users.empty' | transloco }}</p>
-    } @else {
-      <ul class="divide-y divide-line">
-        @for (u of result.items; track u.id) {
-          <li>
-            <a [routerLink]="['/admin/users', u.id]" class="row-hover grid gap-3 px-5 py-4 md:grid-cols-[2fr_1fr_1.5fr_auto] md:items-center">
-              <div class="flex min-w-0 items-center gap-3">
-                <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft text-sm font-semibold text-brand" aria-hidden="true">{{ u.fullName.charAt(0).toUpperCase() }}</span>
-                <div class="min-w-0">
-                  <p class="truncate text-sm font-semibold text-ink">{{ u.fullName }}</p>
-                  <p class="truncate text-sm text-muted" dir="ltr">{{ u.email }}</p>
-                </div>
-              </div>
-              <p class="text-sm text-ink-soft tabular-nums md:text-start" dir="ltr">{{ u.phone }}</p>
-              <div class="flex flex-wrap items-center gap-1.5">
-                @for (r of u.roles; track r) {
-                  <app-role-badge [role]="r" />
-                }
-                @if (u.affiliateCode) {
-                  <span class="code-chip" dir="ltr">#{{ u.affiliateCode }}</span>
-                }
-                @if (u.store; as s) {
-                  <span class="pill pill-neutral max-w-48" [title]="'admin.users.store' | transloco">🏪 <span class="truncate">{{ s.name }}</span></span>
-                }
-              </div>
-              <div class="flex items-center gap-3 md:justify-end">
-                @if (u.status === 'Blocked') {
-                  <span class="pill pill-danger">{{ 'admin.status.Blocked' | transloco }}</span>
-                }
-                <span class="text-xs text-muted tabular-nums">{{ u.createdAt | date: 'shortDate' : undefined : language.locale() }}</span>
-              </div>
-            </a>
-          </li>
-        }
-      </ul>
-      <div class="border-t border-line px-5 py-3">
-        <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
+<div class="space-y-6">
+  @if (counts.value(); as c) {
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <div class="stat-tile">
+        <p class="stat-label">{{ 'admin.users.stats.total' | transloco }}</p>
+        <p class="stat-value" dir="ltr">{{ c.total }}</p>
       </div>
-    }
-  } @else {
-    <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+      <div class="stat-tile">
+        <p class="stat-label">{{ 'admin.users.stats.affiliates' | transloco }}</p>
+        <p class="stat-value" dir="ltr">{{ c.affiliates }}</p>
+      </div>
+      <div class="stat-tile">
+        <p class="stat-label">{{ 'admin.users.stats.owners' | transloco }}</p>
+        <p class="stat-value" dir="ltr">{{ c.storeOwners }}</p>
+      </div>
+      <div class="stat-tile">
+        <p class="stat-label">{{ 'admin.users.stats.blocked' | transloco }}</p>
+        <p class="stat-value" [class.text-danger]="c.blocked" dir="ltr">{{ c.blocked }}</p>
+      </div>
+    </div>
   }
+
+  <div class="card overflow-hidden">
+    <div class="panel-toolbar grid sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]">
+      <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
+        [placeholder]="'admin.users.searchPlaceholder' | transloco" [attr.aria-label]="'admin.users.searchPlaceholder' | transloco"
+        class="field sm:col-span-2 lg:col-span-1" />
+
+      <select [value]="role() ?? ''" (change)="apply({ role: $any($event.target).value || null, page: null })"
+        [attr.aria-label]="'account.roles' | transloco"
+        class="field sm:w-auto">
+        <option value="">{{ 'admin.users.allRoles' | transloco }}</option>
+        @for (r of roles; track r) {
+          <option [value]="r">{{ 'roles.' + r | transloco }}</option>
+        }
+      </select>
+
+      <select [value]="status() ?? ''" (change)="apply({ status: $any($event.target).value || null, page: null })"
+        [attr.aria-label]="'admin.users.status' | transloco"
+        class="field sm:w-auto">
+        <option value="">{{ 'admin.users.allStatuses' | transloco }}</option>
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ 'admin.status.' + s | transloco }}</option>
+        }
+      </select>
+
+      @if (hasFilters()) {
+        <button type="button" (click)="clear()" class="btn btn-ghost">
+          {{ 'common.clearFilters' | transloco }}
+        </button>
+      }
+    </div>
+
+    @if (users.error()) {
+      <div class="card-body"><p class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
+    } @else if (users.value(); as result) {
+      @if (result.items.length === 0) {
+        <p class="empty-state">{{ 'admin.users.empty' | transloco }}</p>
+      } @else {
+        <ul class="divide-y divide-line">
+          @for (u of result.items; track u.id) {
+            <li>
+              <a [routerLink]="['/admin/users', u.id]" class="row-hover grid gap-3 px-4 py-4 sm:px-5 md:grid-cols-[2fr_1fr_1.5fr_auto] md:items-center">
+                <div class="flex min-w-0 items-center gap-3">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-soft font-display text-sm font-bold text-brand" aria-hidden="true">{{ u.fullName.charAt(0).toUpperCase() }}</span>
+                  <div class="min-w-0">
+                    <p class="truncate text-sm font-semibold text-ink">{{ u.fullName }}</p>
+                    <p class="truncate text-sm text-muted" dir="ltr">{{ u.email }}</p>
+                  </div>
+                </div>
+                <p class="text-sm text-ink-soft tabular-nums md:text-start" dir="ltr">{{ u.phone }}</p>
+                <div class="flex min-w-0 flex-wrap items-center gap-1.5">
+                  @for (r of u.roles; track r) {
+                    <app-role-badge [role]="r" />
+                  }
+                  @if (u.affiliateCode) {
+                    <span class="code-chip" dir="ltr">#{{ u.affiliateCode }}</span>
+                  }
+                  @if (u.store; as s) {
+                    <span class="pill pill-neutral max-w-48" [title]="'admin.users.store' | transloco"><span class="truncate">{{ s.name }}</span></span>
+                  }
+                </div>
+                <div class="flex items-center gap-3 md:justify-end">
+                  @if (u.status === 'Blocked') {
+                    <span class="pill pill-danger">{{ 'admin.status.Blocked' | transloco }}</span>
+                  }
+                  <span class="text-xs text-muted tabular-nums">{{ u.createdAt | date: 'shortDate' : undefined : language.locale() }}</span>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+        <div class="border-t border-line px-4 py-3 sm:px-5">
+          <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
+        </div>
+      }
+    } @else {
+      <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+    }
+  </div>
 </div>

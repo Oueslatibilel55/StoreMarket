@@ -2,12 +2,13 @@ import { Component, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { AuthShell } from '../../../shared/layout/auth-shell';
 import { AuthService } from '../../../core/auth/auth.service';
 import { errorKey } from '../../../core/http/problem';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe, AuthShell],
   templateUrl: './login.html',
 })
 export class Login {

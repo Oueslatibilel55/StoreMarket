@@ -20,15 +20,19 @@ export function imageFileError(file: Pick<File, 'type' | 'size'>, maxMb: number)
   selector: 'app-image-upload',
   imports: [TranslocoPipe],
   template: `
-    <div class="flex items-center gap-4">
-      <div class="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-line-strong/70 bg-subtle">
+    <div class="flex flex-wrap items-center gap-4 rounded-xl border-2 border-dashed border-line-strong bg-subtle/40 p-3 transition-colors duration-200 hover:border-brand sm:flex-nowrap">
+      <div class="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-card ring-1 ring-line">
         @if (url(); as src) {
           <img [src]="src" alt="" class="size-full object-cover" />
         } @else {
-          <span class="text-2xl text-muted" aria-hidden="true">🖼️</span>
+          <svg class="size-7 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="16" rx="2" />
+            <circle cx="9" cy="10" r="1.75" />
+            <path d="m21 16-5-5-9 9" />
+          </svg>
         }
       </div>
-      <div class="min-w-0 space-y-1 text-sm">
+      <div class="min-w-0 flex-1 space-y-1.5 text-sm">
         <div class="flex flex-wrap items-center gap-3">
           <label class="btn btn-secondary btn-sm"
             [class.pointer-events-none]="progress() !== null" [class.opacity-50]="progress() !== null">

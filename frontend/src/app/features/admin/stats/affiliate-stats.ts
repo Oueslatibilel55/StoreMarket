@@ -18,20 +18,20 @@ import { StatsTable } from '../../../shared/stats/stats-table';
   selector: 'app-affiliate-stats',
   imports: [DecimalPipe, TranslocoPipe, ConversionTiles, KpiTile, PeriodPicker, StatsTable],
   template: `
-    <section class="mt-8">
-      <div class="flex flex-wrap items-end justify-between gap-3">
+    <section class="mt-10 border-t border-line pt-6">
+      <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
         <h2 class="section-title">{{ 'stats.affiliateTitle' | transloco }}</h2>
         <app-period-picker [from]="period().from" [to]="period().to" (changed)="period.set($event)" />
       </div>
       @if (stats.error()) {
-        <p class="alert-danger mt-4">{{ 'errors.unknown' | transloco }}</p>
+        <p class="alert-danger mt-5">{{ 'errors.unknown' | transloco }}</p>
       } @else if (stats.value(); as s) {
-        <div class="mt-4">
+        <div class="mt-5">
           <app-conversion-tiles [orders]="s.orders" [sales]="s.sales" [period]="s.period" [ordersQuery]="{ affiliateId: affiliateId() }">
             <app-kpi [label]="'stats.kpi.coinsEarned' | transloco" link="/admin/coins"
               [query]="{ affiliateId: affiliateId(), type: 'Earned', from: s.period.from, to: s.period.to }"
               [hint]="'stats.kpi.expectedNow' | transloco: { n: (s.coinsExpected | number: '1.0-3' : language.locale()) }">
-              {{ s.coinsEarned | number: '1.0-3' : language.locale() }}
+              <span class="text-success">{{ s.coinsEarned | number: '1.0-3' : language.locale() }}</span>
             </app-kpi>
             <app-kpi [label]="'stats.kpi.partnerStores' | transloco" link="/admin/partnerships" [query]="{ affiliateId: affiliateId() }"
               [hint]="'stats.kpi.partnersHint' | transloco: { requested: s.partnerships.requested, refused: s.partnerships.refused, ended: s.partnerships.ended }">
@@ -39,14 +39,14 @@ import { StatsTable } from '../../../shared/stats/stats-table';
             </app-kpi>
           </app-conversion-tiles>
         </div>
-        <div class="mt-4 grid gap-4">
+        <div class="mt-6 grid gap-6">
           <app-stats-table [title]="'stats.coinsByStore' | transloco" [rows]="s.byStore" nameKey="stats.col.store" countKey="stats.col.lines"
             linkBase="/admin/stores" csvName="affiliate-stores" />
           <app-stats-table [title]="'stats.coinsByProduct' | transloco" [rows]="s.byProduct" nameKey="stats.col.product" countKey="stats.col.lines"
             linkBase="/admin/products" csvName="affiliate-products" />
         </div>
       } @else {
-        <p class="empty-state mt-4">{{ 'common.loading' | transloco }}</p>
+        <p class="py-10 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
       }
     </section>
   `,

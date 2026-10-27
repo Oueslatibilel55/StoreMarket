@@ -28,153 +28,164 @@ function today(): string {
   selector: 'app-admin-payout-detail',
   imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, Modal, PayoutTimeline],
   template: `
-    <a routerLink="/admin/payouts" class="link text-sm"><span class="inline-block rtl:rotate-180" aria-hidden="true">←</span> {{ 'payouts.admin.title' | transloco }}</a>
+    <a routerLink="/admin/payouts" class="back-link"><span class="inline-block rtl:rotate-180" aria-hidden="true">←</span> {{ 'payouts.admin.title' | transloco }}</a>
 
     @if (detail.value(); as d) {
-      <header class="mt-3 flex flex-wrap items-end justify-between gap-4">
+      <header class="page-header">
         <div class="min-w-0">
           <p class="flex flex-wrap items-center gap-2">
             <span class="pill" [class]="tone(d.payout.status)">{{ 'payouts.status.' + d.payout.status | transloco }}</span>
             <span class="pill pill-neutral">{{ 'payouts.method.' + d.payout.method | transloco }}</span>
           </p>
-          <h1 class="page-title mt-2 font-mono" dir="ltr">{{ d.payout.reference }}</h1>
+          <h1 class="page-title mt-2 break-all font-mono" dir="ltr">{{ d.payout.reference }}</h1>
           <p class="page-subtitle">{{ 'payouts.admin.requestedOn' | transloco: { date: (d.payout.createdAt | date: 'medium' : undefined : language.locale()) } }}</p>
         </div>
-        <div class="text-end">
-          <p class="text-3xl font-bold tracking-tight text-ink" dir="ltr">{{ d.payout.amountTnd | number: '1.0-3' : language.locale() }} <span class="text-base text-muted">TND</span></p>
-          <p class="text-xs text-muted" dir="ltr">{{ d.payout.coins | number: '1.0-3' : language.locale() }} {{ 'settings.units.coins' | transloco }} × {{ d.payout.coinValueInTnd | number: '1.0-3' : language.locale() }} TND</p>
+        <div class="sm:text-end">
+          <p class="figure text-3xl text-ink" dir="ltr">{{ d.payout.amountTnd | number: '1.0-3' : language.locale() }} <span class="text-base font-medium text-muted">TND</span></p>
+          <p class="mt-1 text-xs text-muted tabular-nums" dir="ltr">{{ d.payout.coins | number: '1.0-3' : language.locale() }} {{ 'settings.units.coins' | transloco }} × {{ d.payout.coinValueInTnd | number: '1.0-3' : language.locale() }} TND</p>
         </div>
       </header>
 
-      @if (error(); as key) { <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p> }
+      <div class="space-y-6">
+        @if (error(); as key) { <p role="alert" class="alert-danger">{{ key | transloco }}</p> }
 
-      @if (d.payout.status === 'Requested' || d.payout.status === 'Verified' || d.payout.status === 'Scheduled') {
-        <div class="card mt-6 flex flex-wrap items-center justify-between gap-3 p-4">
-          <p class="text-sm text-ink-soft">{{ 'payouts.admin.next.' + d.payout.status | transloco }}</p>
-          <div class="flex flex-wrap gap-2">
-            @if (d.payout.status === 'Requested') {
-              <button type="button" (click)="open('verify')" class="btn btn-primary btn-sm">{{ 'payouts.admin.verify' | transloco }}</button>
-            }
-            @if (d.payout.status === 'Verified') {
-              <button type="button" (click)="open('schedule')" class="btn btn-primary btn-sm">{{ 'payouts.admin.schedule' | transloco }}</button>
-            }
-            @if (d.payout.status === 'Scheduled') {
-              <button type="button" (click)="open('paid')" class="btn btn-success btn-sm">{{ 'payouts.admin.markPaid' | transloco }}</button>
-              <button type="button" (click)="open('schedule')" class="btn btn-secondary btn-sm">{{ 'payouts.admin.reschedule' | transloco }}</button>
-            }
-            @if (d.payout.status !== 'Scheduled') {
-              <button type="button" (click)="open('reject')" class="btn btn-danger-soft btn-sm">{{ 'payouts.admin.reject' | transloco }}</button>
-            }
+        @if (d.payout.status === 'Requested' || d.payout.status === 'Verified' || d.payout.status === 'Scheduled') {
+          <div class="card flex flex-col gap-3 border-s-4 border-s-brand px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+            <p class="text-sm font-medium text-ink-soft">{{ 'payouts.admin.next.' + d.payout.status | transloco }}</p>
+            <div class="flex flex-wrap gap-2">
+              @if (d.payout.status === 'Requested') {
+                <button type="button" (click)="open('verify')" class="btn btn-primary btn-sm">{{ 'payouts.admin.verify' | transloco }}</button>
+              }
+              @if (d.payout.status === 'Verified') {
+                <button type="button" (click)="open('schedule')" class="btn btn-primary btn-sm">{{ 'payouts.admin.schedule' | transloco }}</button>
+              }
+              @if (d.payout.status === 'Scheduled') {
+                <button type="button" (click)="open('paid')" class="btn btn-success btn-sm">{{ 'payouts.admin.markPaid' | transloco }}</button>
+                <button type="button" (click)="open('schedule')" class="btn btn-secondary btn-sm">{{ 'payouts.admin.reschedule' | transloco }}</button>
+              }
+              @if (d.payout.status !== 'Scheduled') {
+                <button type="button" (click)="open('reject')" class="btn btn-danger-soft btn-sm">{{ 'payouts.admin.reject' | transloco }}</button>
+              }
+            </div>
           </div>
-        </div>
-      }
+        }
 
-      <div class="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-        <div class="min-w-0 space-y-6">
-          <section class="card p-5 sm:p-6">
-            <h2 class="section-title">{{ 'payouts.admin.request' | transloco }}</h2>
-            <dl class="mt-4 grid gap-4 text-sm sm:grid-cols-2">
-              @if (d.payout.method === 'BankTransfer') {
-                <div><dt class="eyebrow">{{ 'payouts.form.bankName' | transloco }}</dt><dd class="mt-1 text-ink">{{ d.payout.bankName }}</dd></div>
-                <div><dt class="eyebrow">{{ 'payouts.form.accountHolder' | transloco }}</dt><dd class="mt-1 text-ink">{{ d.payout.accountHolder }}</dd></div>
-                <div class="sm:col-span-2"><dt class="eyebrow">{{ 'payouts.form.rib' | transloco }}</dt><dd class="mt-1 font-mono text-ink" dir="ltr">{{ rib(d.payout.rib) }}</dd></div>
-              }
-              @if (d.payout.scheduledFor) {
-                <div><dt class="eyebrow">{{ 'payouts.admin.scheduledFor' | transloco }}</dt>
-                  <dd class="mt-1 font-medium text-brand">{{ d.payout.scheduledFor | date: (d.payout.method === 'Cash' ? 'full' : 'fullDate') : undefined : language.locale() }}</dd></div>
-              }
-              @if (d.payout.place) { <div><dt class="eyebrow">{{ 'payouts.admin.place' | transloco }}</dt><dd class="mt-1 text-ink">{{ d.payout.place }}</dd></div> }
-              @if (d.payout.paidAt) {
-                <div><dt class="eyebrow">{{ 'payouts.admin.paidAt' | transloco }}</dt><dd class="mt-1 text-ink">{{ d.payout.paidAt | date: 'medium' : undefined : language.locale() }}</dd></div>
-                <div><dt class="eyebrow">{{ 'payouts.admin.paidReference' | transloco }}</dt><dd class="mt-1 text-ink">{{ d.payout.paidReference }}</dd></div>
-              }
-              @if (d.payout.note) {
-                <div class="sm:col-span-2"><dt class="eyebrow">{{ 'payouts.form.note' | transloco }}</dt><dd class="mt-1 rounded-lg bg-subtle px-3 py-2 text-ink-soft">{{ d.payout.note }}</dd></div>
-              }
-              @if (d.payout.rejectionReason) {
-                <div class="sm:col-span-2"><dt class="eyebrow">{{ 'payouts.admin.rejectionReason' | transloco }}</dt><dd class="mt-1 text-danger">{{ d.payout.rejectionReason }}</dd></div>
-              }
-            </dl>
-          </section>
-
-          <section class="card overflow-hidden">
-            <div class="card-header flex-wrap gap-2">
-              <div class="min-w-0">
-                <h2 class="section-title">{{ 'payouts.admin.covered' | transloco }}</h2>
-                <p class="mt-0.5 text-sm text-muted">{{ 'payouts.admin.coveredHint' | transloco }}</p>
+        <div class="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+          <div class="min-w-0 space-y-6">
+            <section class="card">
+              <div class="card-header"><h2 class="section-title">{{ 'payouts.admin.request' | transloco }}</h2></div>
+              <div class="card-body">
+                <dl class="detail-grid">
+                  @if (d.payout.method === 'BankTransfer') {
+                    <div><dt>{{ 'payouts.form.bankName' | transloco }}</dt><dd>{{ d.payout.bankName }}</dd></div>
+                    <div><dt>{{ 'payouts.form.accountHolder' | transloco }}</dt><dd>{{ d.payout.accountHolder }}</dd></div>
+                    <div class="sm:col-span-2"><dt>{{ 'payouts.form.rib' | transloco }}</dt><dd class="break-all font-mono" dir="ltr">{{ rib(d.payout.rib) }}</dd></div>
+                  }
+                  @if (d.payout.scheduledFor) {
+                    <div><dt>{{ 'payouts.admin.scheduledFor' | transloco }}</dt>
+                      <dd class="text-brand!">{{ d.payout.scheduledFor | date: (d.payout.method === 'Cash' ? 'full' : 'fullDate') : undefined : language.locale() }}</dd></div>
+                  }
+                  @if (d.payout.place) { <div><dt>{{ 'payouts.admin.place' | transloco }}</dt><dd>{{ d.payout.place }}</dd></div> }
+                  @if (d.payout.paidAt) {
+                    <div><dt>{{ 'payouts.admin.paidAt' | transloco }}</dt><dd>{{ d.payout.paidAt | date: 'medium' : undefined : language.locale() }}</dd></div>
+                    <div><dt>{{ 'payouts.admin.paidReference' | transloco }}</dt><dd>{{ d.payout.paidReference }}</dd></div>
+                  }
+                  @if (d.payout.note) {
+                    <div class="sm:col-span-2"><dt>{{ 'payouts.form.note' | transloco }}</dt><dd class="rounded-lg border border-line bg-subtle px-3 py-2 font-normal! text-ink-soft!">{{ d.payout.note }}</dd></div>
+                  }
+                  @if (d.payout.rejectionReason) {
+                    <div class="sm:col-span-2"><dt>{{ 'payouts.admin.rejectionReason' | transloco }}</dt><dd class="text-danger!">{{ d.payout.rejectionReason }}</dd></div>
+                  }
+                </dl>
               </div>
-              <span class="pill" [class]="uncovered() > 0 ? 'pill-warning' : 'pill-success'" dir="ltr">
-                {{ coveredTotal() | number: '1.0-3' : language.locale() }} / {{ d.payout.coins | number: '1.0-3' : language.locale() }}</span>
-            </div>
-            @if (uncovered() > 0) {
-              <p class="alert-info mx-4 mt-4">{{ 'payouts.admin.fromAdjustments' | transloco: { coins: (uncovered() | number: '1.0-3' : language.locale()), total: (d.adjustmentsTotal | number: '1.0-3' : language.locale()) } }}</p>
-            }
-            @if (d.covered.length === 0) {
-              <p class="empty-state py-8">{{ 'payouts.admin.coveredNone' | transloco }}</p>
-            } @else {
-              <ul class="divide-y divide-line">
-                @for (e of d.covered; track e.entryId) {
-                  <li class="grid gap-2 px-5 py-3.5 text-sm sm:grid-cols-[1fr_auto] sm:items-center sm:px-6">
-                    <div class="min-w-0">
-                      <p class="truncate font-medium text-ink">{{ e.productName }} <span class="font-normal text-muted">· {{ e.storeName }}</span></p>
-                      <p class="text-xs text-muted">
-                        @if (e.orderReference) { <a [routerLink]="['/admin/orders', e.orderReference]" class="link font-mono" dir="ltr">{{ e.orderReference }}</a> · }
-                        {{ 'payouts.admin.deliveredOn' | transloco: { date: (e.creditedAt | date: 'mediumDate' : undefined : language.locale()) } }}
-                      </p>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2 sm:justify-end">
-                      <span class="pill" [class]="e.invoiceId ? 'pill-success' : 'pill-neutral'">{{ (e.invoiceId ? 'payouts.admin.invoiced' : 'payouts.admin.notInvoiced') | transloco }}</span>
-                      <span class="font-semibold text-ink" dir="ltr">{{ e.coveredCoins | number: '1.0-3' : language.locale() }}
-                        @if (e.coveredCoins !== e.coins) { <span class="text-xs font-normal text-muted">/ {{ e.coins | number: '1.0-3' : language.locale() }}</span> }</span>
-                    </div>
-                  </li>
-                }
-              </ul>
-            }
-          </section>
+            </section>
+
+            <section class="card overflow-hidden">
+              <div class="card-header">
+                <div class="min-w-0">
+                  <h2 class="section-title">{{ 'payouts.admin.covered' | transloco }}</h2>
+                  <p class="mt-1 text-sm text-muted">{{ 'payouts.admin.coveredHint' | transloco }}</p>
+                </div>
+                <span class="pill tabular-nums" [class]="uncovered() > 0 ? 'pill-warning' : 'pill-success'" dir="ltr">
+                  {{ coveredTotal() | number: '1.0-3' : language.locale() }} / {{ d.payout.coins | number: '1.0-3' : language.locale() }}</span>
+              </div>
+              @if (uncovered() > 0) {
+                <p class="alert-info mx-4 mt-4 sm:mx-5">{{ 'payouts.admin.fromAdjustments' | transloco: { coins: (uncovered() | number: '1.0-3' : language.locale()), total: (d.adjustmentsTotal | number: '1.0-3' : language.locale()) } }}</p>
+              }
+              @if (d.covered.length === 0) {
+                <p class="empty-state">{{ 'payouts.admin.coveredNone' | transloco }}</p>
+              } @else {
+                <ul class="divide-y divide-line">
+                  @for (e of d.covered; track e.entryId) {
+                    <li class="list-row text-sm">
+                      <div class="min-w-0">
+                        <p class="flex flex-wrap gap-x-3">
+                          <span class="min-w-0 truncate font-medium text-ink">{{ e.productName }}</span>
+                          <span class="text-muted">{{ e.storeName }}</span>
+                        </p>
+                        <p class="mt-0.5 flex flex-wrap gap-x-3 text-xs text-muted">
+                          @if (e.orderReference) { <a [routerLink]="['/admin/orders', e.orderReference]" class="link font-mono" dir="ltr">{{ e.orderReference }}</a> }
+                          <span>{{ 'payouts.admin.deliveredOn' | transloco: { date: (e.creditedAt | date: 'mediumDate' : undefined : language.locale()) } }}</span>
+                        </p>
+                      </div>
+                      <div class="flex flex-wrap items-center gap-3 sm:justify-end">
+                        <span class="pill" [class]="e.invoiceId ? 'pill-success' : 'pill-neutral'">{{ (e.invoiceId ? 'payouts.admin.invoiced' : 'payouts.admin.notInvoiced') | transloco }}</span>
+                        <span class="figure text-success" dir="ltr">{{ e.coveredCoins | number: '1.0-3' : language.locale() }}
+                          @if (e.coveredCoins !== e.coins) { <span class="text-xs font-normal text-muted">/ {{ e.coins | number: '1.0-3' : language.locale() }}</span> }</span>
+                      </div>
+                    </li>
+                  }
+                </ul>
+              }
+            </section>
+          </div>
+
+          <aside class="min-w-0 space-y-6">
+            <section class="card">
+              <div class="card-header"><h2 class="section-title">{{ 'payouts.admin.affiliate' | transloco }}</h2></div>
+              <div class="card-body">
+                <a [routerLink]="['/admin/users', d.affiliate.id]" class="block font-semibold text-ink hover:text-brand">{{ d.affiliate.fullName }}</a>
+                <p class="mt-1.5 flex flex-wrap items-center gap-2 text-sm">
+                  @if (d.affiliate.code) { <span class="code-chip" dir="ltr">#{{ d.affiliate.code }}</span> }
+                  @if (!d.affiliate.isActive) { <span class="pill pill-danger">{{ 'admin.status.Blocked' | transloco }}</span> }
+                  @else if (!d.affiliate.canEarn) { <span class="pill pill-warning">{{ 'payouts.admin.cannotEarn' | transloco }}</span> }
+                </p>
+                <p class="mt-2 truncate text-sm text-muted" dir="ltr">{{ d.affiliate.email }}</p>
+                @if (d.affiliate.phone) { <p class="text-sm text-muted" dir="ltr">{{ d.affiliate.phone }}</p> }
+                <dl class="detail-grid mt-5 grid-cols-2 border-t border-line pt-4">
+                  <div><dt>{{ 'coins.balance' | transloco }}</dt><dd><span class="figure text-lg" dir="ltr">{{ d.affiliate.balance | number: '1.0-3' : language.locale() }}</span></dd></div>
+                  <div><dt>{{ 'coins.earned' | transloco }}</dt><dd><span class="figure text-lg text-success" dir="ltr">{{ d.affiliate.totalEarned | number: '1.0-3' : language.locale() }}</span></dd></div>
+                </dl>
+                <a routerLink="/admin/coins" [queryParams]="{ search: d.affiliate.code ?? d.affiliate.email }" class="link mt-4 inline-block text-sm">{{ 'payouts.admin.seeLedger' | transloco }}</a>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-header"><h2 class="section-title">{{ 'payouts.admin.steps' | transloco }}</h2></div>
+              <div class="card-body">
+                <app-payout-timeline [history]="d.payout.history" [affiliateName]="d.payout.affiliateName" />
+              </div>
+            </section>
+
+            <section class="card overflow-hidden">
+              <div class="card-header"><h2 class="section-title">{{ 'payouts.admin.others' | transloco }}</h2></div>
+              @if (d.otherPayouts.length === 0) {
+                <p class="empty-state">{{ 'payouts.admin.othersNone' | transloco }}</p>
+              } @else {
+                <ul class="divide-y divide-line">
+                  @for (o of d.otherPayouts; track o.id) {
+                    <li><a [routerLink]="['/admin/payouts', o.id]" class="row-hover flex items-center justify-between gap-3 px-4 py-3 text-sm sm:px-5">
+                      <span class="min-w-0"><span class="block truncate font-mono text-xs text-ink-soft" dir="ltr">{{ o.reference }}</span>
+                        <span class="text-xs text-muted">{{ o.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span></span>
+                      <span class="flex shrink-0 flex-col items-end gap-1"><span class="pill" [class]="tone(o.status)">{{ 'payouts.status.' + o.status | transloco }}</span>
+                        <span class="figure text-ink" dir="ltr">{{ o.amountTnd | number: '1.0-3' : language.locale() }}</span></span>
+                    </a></li>
+                  }
+                </ul>
+              }
+            </section>
+          </aside>
         </div>
-
-        <aside class="min-w-0 space-y-6">
-          <section class="card p-5">
-            <h2 class="section-title">{{ 'payouts.admin.affiliate' | transloco }}</h2>
-            <a [routerLink]="['/admin/users', d.affiliate.id]" class="mt-3 block font-semibold text-ink hover:text-brand">{{ d.affiliate.fullName }}</a>
-            <p class="mt-1 flex flex-wrap items-center gap-2 text-sm">
-              @if (d.affiliate.code) { <span class="code-chip" dir="ltr">#{{ d.affiliate.code }}</span> }
-              @if (!d.affiliate.isActive) { <span class="pill pill-danger">{{ 'admin.status.Blocked' | transloco }}</span> }
-              @else if (!d.affiliate.canEarn) { <span class="pill pill-warning">{{ 'payouts.admin.cannotEarn' | transloco }}</span> }
-            </p>
-            <p class="mt-2 truncate text-sm text-muted" dir="ltr">{{ d.affiliate.email }}</p>
-            @if (d.affiliate.phone) { <p class="text-sm text-muted" dir="ltr">{{ d.affiliate.phone }}</p> }
-            <div class="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-4">
-              <div><p class="eyebrow">{{ 'coins.balance' | transloco }}</p><p class="mt-1 font-bold text-accent-ink" dir="ltr">{{ d.affiliate.balance | number: '1.0-3' : language.locale() }}</p></div>
-              <div><p class="eyebrow">{{ 'coins.earned' | transloco }}</p><p class="mt-1 font-bold" dir="ltr">{{ d.affiliate.totalEarned | number: '1.0-3' : language.locale() }}</p></div>
-            </div>
-            <a routerLink="/admin/coins" [queryParams]="{ search: d.affiliate.code ?? d.affiliate.email }" class="link mt-4 inline-block text-xs">{{ 'payouts.admin.seeLedger' | transloco }}</a>
-          </section>
-
-          <section class="card p-5">
-            <h2 class="section-title mb-4">{{ 'payouts.admin.steps' | transloco }}</h2>
-            <app-payout-timeline [history]="d.payout.history" [affiliateName]="d.payout.affiliateName" />
-          </section>
-
-          <section class="card overflow-hidden">
-            <div class="card-header"><h2 class="section-title">{{ 'payouts.admin.others' | transloco }}</h2></div>
-            @if (d.otherPayouts.length === 0) {
-              <p class="empty-state py-6">{{ 'payouts.admin.othersNone' | transloco }}</p>
-            } @else {
-              <ul class="divide-y divide-line">
-                @for (o of d.otherPayouts; track o.id) {
-                  <li><a [routerLink]="['/admin/payouts', o.id]" class="row-hover flex items-center justify-between gap-2 px-5 py-3 text-sm">
-                    <span class="min-w-0"><span class="block font-mono text-xs text-ink-soft" dir="ltr">{{ o.reference }}</span>
-                      <span class="text-xs text-muted">{{ o.createdAt | date: 'mediumDate' : undefined : language.locale() }}</span></span>
-                    <span class="flex shrink-0 items-center gap-2"><span class="pill" [class]="tone(o.status)">{{ 'payouts.status.' + o.status | transloco }}</span>
-                      <span class="font-semibold" dir="ltr">{{ o.amountTnd | number: '1.0-3' : language.locale() }}</span></span>
-                  </a></li>
-                }
-              </ul>
-            }
-          </section>
-        </aside>
       </div>
 
       @if (step(); as s) {
@@ -209,7 +220,7 @@ function today(): string {
           }
 
           @if (stepError(); as key) { <p role="alert" class="alert-danger mt-4">{{ key | transloco }}</p> }
-          <div class="mt-6 flex justify-end gap-3">
+          <div class="mt-6 flex flex-wrap justify-end gap-2 border-t border-line pt-4">
             <button type="button" (click)="step.set(null)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
             <button type="button" (click)="confirm(d.payout)" [disabled]="busy() || !ready(d.payout)" class="btn" [class]="s === 'reject' ? 'btn-danger' : 'btn-primary'">
               {{ 'payouts.admin.' + s + 'Confirm' | transloco }}</button>
@@ -217,9 +228,9 @@ function today(): string {
         </app-modal>
       }
     } @else if (detail.error()) {
-      <p class="alert-danger mt-6">{{ errorKeyOf(detail.error()) | transloco }}</p>
+      <p class="alert-danger">{{ errorKeyOf(detail.error()) | transloco }}</p>
     } @else {
-      <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+      <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
     }
   `,
 })

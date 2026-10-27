@@ -27,20 +27,20 @@ import { downloadCsv, toCsv } from '../csv';
         <p class="empty-state">{{ 'stats.noData' | transloco }}</p>
       } @else {
         <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-subtle/60 text-xs text-muted">
+          <table class="data-table">
+            <thead>
               <tr>
-                <th scope="col" class="px-4 py-2 text-start font-medium">{{ nameKey() | transloco }}</th>
-                <th scope="col" class="px-4 py-2 text-end font-medium">{{ countKey() | transloco }}</th>
-                <th scope="col" class="hidden px-4 py-2 text-end font-medium sm:table-cell">{{ 'stats.col.quantity' | transloco }}</th>
-                <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'stats.col.amount' | transloco }}</th>
-                @if (showCoins()) { <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'stats.col.coins' | transloco }}</th> }
+                <th scope="col">{{ nameKey() | transloco }}</th>
+                <th scope="col" class="text-end">{{ countKey() | transloco }}</th>
+                <th scope="col" class="hidden text-end sm:table-cell">{{ 'stats.col.quantity' | transloco }}</th>
+                <th scope="col" class="text-end">{{ 'stats.col.amount' | transloco }}</th>
+                @if (showCoins()) { <th scope="col" class="text-end">{{ 'stats.col.coins' | transloco }}</th> }
               </tr>
             </thead>
-            <tbody class="divide-y divide-line">
+            <tbody>
               @for (r of rows(); track r.id) {
                 <tr class="row-hover">
-                  <td class="max-w-48 px-4 py-2.5 sm:max-w-none">
+                  <td class="max-w-48 sm:max-w-none">
                     @if (linkBase()) {
                       <a [routerLink]="[linkBase(), r.id]" class="link block truncate font-medium">{{ r.name }}</a>
                     } @else {
@@ -48,11 +48,11 @@ import { downloadCsv, toCsv } from '../csv';
                     }
                     @if (r.detail) { <span class="block truncate text-xs text-muted" [attr.dir]="detailLtr() ? 'ltr' : null">{{ r.detail }}</span> }
                   </td>
-                  <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ r.count | number: '1.0-0' : language.locale() }}</td>
-                  <td class="hidden px-4 py-2.5 text-end tabular-nums sm:table-cell" dir="ltr">{{ r.quantity | number: '1.0-0' : language.locale() }}</td>
-                  <td class="px-4 py-2.5 text-end tabular-nums whitespace-nowrap" dir="ltr">{{ r.amount | number: '1.0-3' : language.locale() }}</td>
+                  <td class="text-end tabular-nums" dir="ltr">{{ r.count | number: '1.0-0' : language.locale() }}</td>
+                  <td class="hidden text-end tabular-nums sm:table-cell" dir="ltr">{{ r.quantity | number: '1.0-0' : language.locale() }}</td>
+                  <td class="figure text-end whitespace-nowrap text-ink" dir="ltr">{{ r.amount | number: '1.0-3' : language.locale() }}</td>
                   @if (showCoins()) {
-                    <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ r.coins | number: '1.0-3' : language.locale() }}</td>
+                    <td class="figure text-end text-success" dir="ltr">{{ r.coins | number: '1.0-3' : language.locale() }}</td>
                   }
                 </tr>
               }

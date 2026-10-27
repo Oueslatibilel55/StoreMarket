@@ -20,64 +20,66 @@ const STATUSES: StoreOrderStatus[] = ['Placed', 'Confirmed', 'Shipped', 'Deliver
   template: `
     <main class="page max-w-5xl animate-fade-in">
       <app-my-store-tabs />
-      <h1 class="page-title">{{ 'storeOrders.title' | transloco }}</h1>
-      <p class="page-subtitle">{{ 'storeOrders.subtitle' | transloco }}</p>
+      <header class="page-header">
+        <div class="min-w-0">
+          <h1 class="page-title">{{ 'storeOrders.title' | transloco }}</h1>
+          <p class="page-subtitle">{{ 'storeOrders.subtitle' | transloco }}</p>
+        </div>
+      </header>
 
-      <nav class="-mx-4 mt-6 flex gap-1 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" [attr.aria-label]="'storeOrders.title' | transloco">
-        <a [routerLink]="[]" [queryParams]="{ status: null, page: null }" queryParamsHandling="merge"
-          class="nav-link shrink-0 whitespace-nowrap" [class.nav-link-active]="!status()">
-          {{ 'storeOrders.all' | transloco }}
-        </a>
-        @for (s of statuses; track s) {
-          <a [routerLink]="[]" [queryParams]="{ status: s, page: null }" queryParamsHandling="merge"
-            class="nav-link shrink-0 whitespace-nowrap" [class.nav-link-active]="status() === s">
-            {{ 'orders.status.' + s | transloco }}
-            @if (count(s); as n) { <span class="ms-1 rounded-full bg-subtle px-1.5 text-xs font-semibold text-ink-soft" dir="ltr">{{ n }}</span> }
+      <div class="card overflow-hidden">
+        <nav class="tabs px-2 sm:px-3" [attr.aria-label]="'storeOrders.title' | transloco">
+          <a [routerLink]="[]" [queryParams]="{ status: null, page: null }" queryParamsHandling="merge"
+            class="tab" [class.tab-active]="!status()">
+            {{ 'storeOrders.all' | transloco }}
           </a>
-        }
-      </nav>
-
-      <div class="card mt-4 overflow-hidden">
-        <div class="border-b border-line p-4">
+          @for (s of statuses; track s) {
+            <a [routerLink]="[]" [queryParams]="{ status: s, page: null }" queryParamsHandling="merge"
+              class="tab" [class.tab-active]="status() === s">
+              {{ 'orders.status.' + s | transloco }}
+              @if (count(s); as n) { <span class="ms-1 rounded-full bg-subtle px-1.5 text-xs font-semibold text-ink-soft tabular-nums" dir="ltr">{{ n }}</span> }
+            </a>
+          }
+        </nav>
+        <div class="panel-toolbar">
           <input type="search" [value]="search() ?? ''" (input)="onSearch($any($event.target).value)"
             [placeholder]="'storeOrders.searchPlaceholder' | transloco" [attr.aria-label]="'storeOrders.searchPlaceholder' | transloco" class="field" />
         </div>
         @if (orders.value(); as result) {
           @if (result.items.length === 0) {
-            <div class="empty-state">
-              <span class="text-3xl" aria-hidden="true">📦</span>
-              <p>{{ 'storeOrders.none' | transloco }}</p>
-            </div>
+            <p class="empty-state">{{ 'storeOrders.none' | transloco }}</p>
           } @else {
             <ul class="divide-y divide-line">
               @for (o of result.items; track o.id) {
                 <li>
-                  <a [routerLink]="['/my-store/orders', o.id]" class="row-hover flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                  <a [routerLink]="['/my-store/orders', o.id]" class="list-row row-hover group">
                     <div class="min-w-0">
                       <p class="flex flex-wrap items-center gap-2">
-                        <span class="font-mono font-semibold text-ink" dir="ltr">{{ o.reference }}</span>
+                        <span class="font-mono font-semibold text-ink transition-colors group-hover:text-brand" dir="ltr">{{ o.reference }}</span>
                         <span class="pill" [class]="tone(o.status)">{{ 'orders.status.' + o.status | transloco }}</span>
-                        @if (o.hasAffiliate) { <span class="pill pill-brand">🤝 {{ 'storeOrders.withCode' | transloco }}</span> }
+                        @if (o.hasAffiliate) { <span class="pill pill-brand">{{ 'storeOrders.withCode' | transloco }}</span> }
                       </p>
-                      <p class="mt-1 truncate text-sm text-muted">
-                        {{ o.clientName }} · {{ 'cities.' + o.city | transloco }} · {{ 'orders.itemCount' | transloco: { count: o.itemCount } }}
-                        · {{ o.createdAt | date: 'short' : undefined : language.locale() }}
+                      <p class="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-sm text-muted">
+                        <span class="min-w-0 truncate">{{ o.clientName }}</span>
+                        <span>{{ 'cities.' + o.city | transloco }}</span>
+                        <span>{{ 'orders.itemCount' | transloco: { count: o.itemCount } }}</span>
+                        <span>{{ o.createdAt | date: 'short' : undefined : language.locale() }}</span>
                       </p>
                     </div>
-                    <p class="shrink-0 text-end">
-                      <span class="block font-bold text-ink" dir="ltr">{{ o.amountToCollect | number: '1.0-3' : language.locale() }} TND</span>
+                    <p class="flex shrink-0 items-baseline justify-between gap-3 sm:block sm:text-end">
+                      <span class="figure block text-ink" dir="ltr">{{ o.amountToCollect | number: '1.0-3' : language.locale() }} TND</span>
                       <span class="text-xs" [class]="o.paymentStatus === 'Collected' ? 'text-success' : 'text-muted'">{{ 'orders.payment.' + o.paymentStatus | transloco }}</span>
                     </p>
                   </a>
                 </li>
               }
             </ul>
-            <div class="border-t border-line bg-subtle/40 px-5 py-3">
+            <div class="border-t border-line bg-subtle/40 px-4 py-3 sm:px-5">
               <app-pagination [page]="result.page" [pageSize]="pageSize" [total]="result.total" (pageChange)="apply({ page: $event })" />
             </div>
           }
         } @else if (orders.error()) {
-          <p class="alert-danger m-5">{{ 'errors.unknown' | transloco }}</p>
+          <div class="card-body"><p role="alert" class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
         } @else {
           <p class="empty-state">{{ 'common.loading' | transloco }}</p>
         }

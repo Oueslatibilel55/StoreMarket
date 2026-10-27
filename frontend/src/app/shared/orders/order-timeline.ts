@@ -17,7 +17,8 @@ import { orderStatusTone, StoreOrderEvent } from '../../core/orders/order-api';
               [class]="e.to === 'Delivered' ? 'bg-success' : e.to === 'Cancelled' || e.to === 'NotDelivered' ? 'bg-danger' : 'bg-brand'" aria-hidden="true"></span>
             <p class="flex flex-wrap items-center gap-2">
               <span class="pill" [class]="tone(e.to)">{{ 'orders.status.' + e.to | transloco }}</span>
-              <span class="text-xs text-muted">{{ e.at | date: 'medium' : undefined : language.locale() }} · {{ 'orders.actor.' + e.actorRole | transloco }}</span>
+              <span class="text-xs text-muted">{{ e.at | date: 'medium' : undefined : language.locale() }}</span>
+              <span class="text-xs font-medium text-ink-soft">{{ 'orders.actor.' + e.actorRole | transloco }}</span>
             </p>
             @if (e.notDeliveredReason) {
               <p class="mt-1 text-xs font-medium text-danger">{{ 'orders.notDelivered.' + e.notDeliveredReason | transloco }}</p>

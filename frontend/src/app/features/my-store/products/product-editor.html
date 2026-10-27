@@ -1,31 +1,35 @@
 <main class="page max-w-4xl">
   <app-my-store-tabs />
 
-  <a routerLink="/my-store/products" class="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand">
-    <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'products.back' | transloco }}
-  </a>
-
   @if (product.error()) {
-    <p role="alert" class="mt-6 alert-danger">{{ 'errors.product.notFound' | transloco }}</p>
+    <a routerLink="/my-store/products" class="back-link">
+      <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'products.back' | transloco }}
+    </a>
+    <p role="alert" class="alert-danger">{{ 'errors.product.notFound' | transloco }}</p>
   } @else if (id() && !product.hasValue()) {
     <p class="empty-state">{{ 'common.loading' | transloco }}</p>
   } @else {
-    <header class="mt-4 flex flex-wrap items-end justify-between gap-4">
-      <h1 class="page-title min-w-0 flex-1">{{ (id() ? 'products.editTitle' : 'products.addTitle') | transloco }}</h1>
+    <header class="page-header">
+      <div class="min-w-0">
+        <a routerLink="/my-store/products" class="back-link">
+          <span aria-hidden="true" class="inline-block rtl:rotate-180">←</span> {{ 'products.back' | transloco }}
+        </a>
+        <h1 class="page-title">{{ (id() ? 'products.editTitle' : 'products.addTitle') | transloco }}</h1>
+      </div>
       @if (id()) {
         <button type="button" (click)="confirmDelete.set(true)" class="btn btn-danger-soft btn-sm">{{ 'admin.storeCategories.delete' | transloco }}</button>
       }
     </header>
 
     @if (product.value()?.isDisabled) {
-      <div role="alert" class="mt-6 rounded-xl border border-danger/20 bg-danger/6 p-5">
+      <div role="alert" class="mb-6 rounded-xl border border-danger/20 bg-danger/6 p-5">
         <p class="font-semibold text-danger">{{ 'products.disabledByAdmin' | transloco }}</p>
         <p class="mt-1.5 text-sm text-ink">{{ product.value()?.moderationReason }}</p>
         <p class="mt-1.5 text-sm text-muted">{{ 'products.disabledHint' | transloco }}</p>
       </div>
     }
 
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="mt-8 space-y-6">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6">
       <!-- Basics -->
       <section class="card">
         <div class="card-header">
@@ -52,20 +56,20 @@
             <textarea id="description" rows="4" formControlName="description" maxlength="5000"
               class="mt-1.5 field resize-y"></textarea>
           </div>
-          <div class="grid gap-6 sm:col-span-2 sm:grid-cols-3">
+          <div class="grid gap-6 sm:col-span-2 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <label for="price" class="field-label">{{ 'products.fields.price' | transloco }}</label>
               <div class="mt-1.5 flex" dir="ltr">
-                <input id="price" type="number" step="0.001" min="0" formControlName="price" class="field rounded-e-none" />
-                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">TND</span>
+                <input id="price" type="number" step="0.001" min="0" formControlName="price" class="field min-w-0 rounded-e-none" />
+                <span class="inline-flex shrink-0 items-center rounded-e-lg border border-s-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">TND</span>
               </div>
               @if (invalid('price')) { <p class="field-error">{{ 'errors.product.priceInvalid' | transloco }}</p> }
             </div>
             <div>
               <label for="compare" class="field-label">{{ 'products.fields.compareAtPrice' | transloco }}</label>
               <div class="mt-1.5 flex" dir="ltr">
-                <input id="compare" type="number" step="0.001" min="0" formControlName="compareAtPrice" class="field rounded-e-none" />
-                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">TND</span>
+                <input id="compare" type="number" step="0.001" min="0" formControlName="compareAtPrice" class="field min-w-0 rounded-e-none" />
+                <span class="inline-flex shrink-0 items-center rounded-e-lg border border-s-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">TND</span>
               </div>
               <p class="field-hint">{{ 'products.compareHint' | transloco }}</p>
             </div>
@@ -74,7 +78,7 @@
               <input id="sku" formControlName="sku" dir="ltr" class="mt-1.5 field font-mono" />
             </div>
           </div>
-          <div class="grid gap-6 border-t border-line pt-6 sm:col-span-2 sm:grid-cols-3">
+          <div class="grid gap-6 border-t border-line pt-6 sm:col-span-2 sm:grid-cols-2 lg:grid-cols-3">
             @if (!axes().length) {
               <div>
                 <label for="stock" class="field-label">{{ 'products.fields.stock' | transloco }}</label>
@@ -106,15 +110,16 @@
           <div class="flex flex-wrap items-end gap-6">
             <div>
               <label for="percent" class="field-label">{{ 'products.fields.affiliatePercent' | transloco }}</label>
-              <div class="mt-1.5 flex w-40" dir="ltr">
+              <div class="mt-1.5 flex w-40 max-w-full" dir="ltr">
                 <input id="percent" type="number" step="1" [min]="percentMin()" [max]="percentMax()" formControlName="affiliatePercent"
-                  [placeholder]="storePercent()" class="field rounded-e-none" />
-                <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">%</span>
+                  [placeholder]="storePercent()" class="field min-w-0 rounded-e-none" />
+                <span class="inline-flex shrink-0 items-center rounded-e-lg border border-s-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">%</span>
               </div>
             </div>
-            <p class="flex flex-wrap items-center gap-x-1.5 rounded-lg border border-accent/30 bg-accent/10 px-4 py-2.5 text-sm text-ink-soft">
-              {{ 'products.coinsPreview' | transloco: { percent: effectivePercent() } }}
-              <span class="font-semibold text-accent-ink" dir="ltr">≈ {{ coins() | number: '1.0-3' : language.locale() }}</span> {{ 'settings.units.coins' | transloco }}
+            <p class="flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-line bg-subtle/60 px-4 py-2.5 text-sm text-ink-soft">
+              <span>{{ 'products.coinsPreview' | transloco: { percent: effectivePercent() } }}</span>
+              <span class="figure text-base text-success" dir="ltr">≈ {{ coins() | number: '1.0-3' : language.locale() }}</span>
+              <span>{{ 'settings.units.coins' | transloco }}</span>
             </p>
           </div>
           <p class="field-hint mt-3">{{ 'products.percentHint' | transloco: { store: storePercent(), min: percentMin(), max: percentMax() } }}</p>
@@ -126,7 +131,7 @@
         <div class="card-header">
           <div class="min-w-0">
             <h2 class="section-title">{{ 'products.sections.photos' | transloco }}</h2>
-            <p class="mt-0.5 text-xs text-muted">{{ 'products.photosHint' | transloco: { max: maxImages } }}</p>
+            <p class="mt-0.5 text-sm text-muted">{{ 'products.photosHint' | transloco: { max: maxImages } }}</p>
           </div>
           <span class="pill pill-neutral" dir="ltr">{{ images().length }} / {{ maxImages }}</span>
         </div>
@@ -135,7 +140,7 @@
             <ul class="flex flex-wrap gap-4">
               @for (img of images(); track img.id; let i = $index, first = $first, last = $last) {
                 <li class="relative">
-                  <img [src]="img.url" alt="" class="size-24 rounded-xl border-2 object-cover shadow-card" [class]="first ? 'border-brand' : 'border-line'" />
+                  <img [src]="img.url" alt="" class="size-24 rounded-lg border-2 object-cover" [class]="first ? 'border-brand' : 'border-line'" />
                   @if (first) { <span class="pill pill-dark absolute start-1.5 top-1.5 px-1.5 text-[10px]">{{ 'products.mainPhoto' | transloco }}</span> }
                   <div class="mt-1.5 flex items-center justify-between rounded-lg border border-line bg-card text-xs">
                     <button type="button" (click)="moveImage(i, -1)" [disabled]="first" class="btn btn-ghost btn-sm px-2 disabled:opacity-30" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"><span class="inline-block rtl:rotate-180">◀</span></button>
@@ -158,7 +163,7 @@
           <div class="card-header">
             <div class="min-w-0">
               <h2 class="section-title">{{ 'products.sections.fields' | transloco }}</h2>
-              <p class="mt-0.5 text-xs text-muted">{{ 'products.fieldsHint' | transloco }}</p>
+              <p class="mt-0.5 text-sm text-muted">{{ 'products.fieldsHint' | transloco }}</p>
             </div>
           </div>
           <div class="card-body grid gap-6 sm:grid-cols-2">
@@ -180,7 +185,7 @@
                       <input type="number" step="0.001" min="0" [value]="val.number ?? ''" [attr.aria-label]="a.name | localized: language.lang()"
                         (input)="setValue(a.key, { number: num($event) })"
                         [class]="a.unit ? 'rounded-e-none' : ''" class="field" />
-                      @if (a.unit) { <span class="inline-flex items-center rounded-e-lg border border-s-0 border-line-strong/80 bg-subtle px-3 text-sm font-medium text-muted">{{ a.unit }}</span> }
+                      @if (a.unit) { <span class="inline-flex shrink-0 items-center rounded-e-lg border border-s-0 border-line-strong bg-subtle px-3 text-sm font-medium text-muted">{{ a.unit }}</span> }
                     </div>
                   }
                   @case ('Boolean') {
@@ -220,7 +225,7 @@
           <div class="card-header">
             <div class="min-w-0">
               <h2 class="section-title">{{ 'products.sections.variants' | transloco }}</h2>
-              <p class="mt-0.5 text-xs text-muted">{{ 'products.variantsHint' | transloco }}</p>
+              <p class="mt-0.5 text-sm text-muted">{{ 'products.variantsHint' | transloco }}</p>
             </div>
           </div>
           <div class="card-body space-y-6">
@@ -257,14 +262,15 @@
 
             @if (axes().length) {
               @if (combos().length) {
-                <div class="overflow-hidden rounded-xl border border-line">
+                <!-- Stacks into a small grid per variant on phones, a plain table from sm. -->
+                <div class="overflow-hidden rounded-lg border border-line">
                   <table class="w-full text-sm">
-                    <thead class="hidden bg-subtle text-xs font-semibold tracking-wide text-muted uppercase sm:table-header-group">
+                    <thead class="hidden bg-subtle/60 text-xs text-muted sm:table-header-group">
                       <tr>
-                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.variant' | transloco }}</th>
-                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.fields.stock' | transloco }}</th>
-                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.variantPrice' | transloco }}</th>
-                        <th class="px-4 py-2.5 text-start font-semibold">{{ 'products.fields.sku' | transloco }}</th>
+                        <th class="px-4 py-3 text-start font-semibold">{{ 'products.variant' | transloco }}</th>
+                        <th class="px-4 py-3 text-start font-semibold">{{ 'products.fields.stock' | transloco }}</th>
+                        <th class="px-4 py-3 text-start font-semibold">{{ 'products.variantPrice' | transloco }}</th>
+                        <th class="px-4 py-3 text-start font-semibold">{{ 'products.fields.sku' | transloco }}</th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-line">
@@ -304,7 +310,7 @@
       @if (error(); as key) {
         <p role="alert" class="alert-danger">{{ key | transloco }}</p>
       }
-      <div class="sticky bottom-4 z-10 flex flex-wrap items-center justify-end gap-3 rounded-xl border border-line bg-card/90 px-5 py-3 shadow-pop backdrop-blur">
+      <div class="flex flex-wrap items-center justify-end gap-3 border-t border-line pt-5">
         @if (saved()) { <p class="me-auto text-sm font-medium text-success" role="status">{{ 'admin.settings.saved' | transloco }}</p> }
         <a routerLink="/my-store/products" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</a>
         <button type="submit" [disabled]="saving()" class="btn btn-primary">
@@ -317,7 +323,7 @@
       <app-modal [label]="'admin.confirm.title' | transloco" (close)="confirmDelete.set(false)">
         <h2 class="section-title">{{ 'products.confirmDelete' | transloco: { name: form.controls.name.value } }}</h2>
         <p class="mt-2 text-sm text-muted">{{ 'products.deleteHint' | transloco }}</p>
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-wrap justify-end gap-3">
           <button type="button" (click)="confirmDelete.set(false)" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="button" (click)="remove()" [disabled]="saving()" class="btn btn-danger">{{ 'common.confirm' | transloco }}</button>
         </div>

@@ -16,11 +16,14 @@ export interface FilterChip {
   imports: [TranslocoPipe],
   template: `
     @if (chips().length) {
-      <div class="flex flex-wrap items-center gap-2 border-b border-line bg-subtle/40 px-4 py-2.5 text-sm">
+      <div class="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3 sm:px-5">
         @for (c of chips(); track c.label) {
-          <span class="pill pill-brand gap-1.5">
-            {{ c.label | transloco: { value: c.value } }}
-            <button type="button" (click)="cleared.emit({ ...c.clear, page: null })" class="cursor-pointer" [attr.aria-label]="'filters.remove' | transloco">×</button>
+          <span class="inline-flex max-w-full min-w-0 items-center gap-1 rounded-full bg-brand-soft py-1 ps-3 pe-1 text-sm font-medium text-brand ring-1 ring-brand/15 ring-inset">
+            <span class="truncate">{{ c.label | transloco: { value: c.value } }}</span>
+            <button type="button" (click)="cleared.emit({ ...c.clear, page: null })" [attr.aria-label]="'filters.remove' | transloco"
+              class="flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full text-brand transition-colors hover:bg-brand hover:text-white">
+              <span aria-hidden="true">×</span>
+            </button>
           </span>
         }
       </div>

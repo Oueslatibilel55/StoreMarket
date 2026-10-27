@@ -2,41 +2,42 @@
 
 /*
  * Design tokens — use these utilities (bg-brand, text-ink, border-line, shadow-card...) instead of raw colors.
- * Neutrals follow the slate scale; the brand is an indigo/violet. See ADR 0005 for the design system.
+ * "Souk moderne" (ADR 0005): whitewashed limestone surfaces, Sidi Bou Said blue, olive for money earned,
+ * saffron for attention, harissa red for danger, a deep medina-night navy for text.
+ * Type: Bricolage Grotesque for display (titles, figures, prices), IBM Plex Sans / Plex Sans Arabic for text.
  */
 @theme {
-  --font-sans: 'Inter', 'Noto Sans Arabic', ui-sans-serif, system-ui, sans-serif;
-  --font-arabic: 'Noto Sans Arabic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: 'IBM Plex Sans Arabic', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand: oklch(0.52 0.22 277);
-  --color-brand-hover: oklch(0.46 0.22 277);
-  --color-brand-soft: oklch(0.962 0.022 277);
-  --color-brand-ring: oklch(0.52 0.22 277 / 0.18);
-  --color-accent: oklch(0.78 0.16 75);
-  --color-accent-ink: oklch(0.5 0.12 65);
-  --color-surface: oklch(0.984 0.003 248);
-  --color-subtle: oklch(0.968 0.007 248);
-  --color-card: oklch(1 0 0);
-  --color-ink: oklch(0.208 0.042 266);
-  --color-ink-soft: oklch(0.372 0.044 257);
-  --color-muted: oklch(0.554 0.046 257);
-  --color-line: oklch(0.929 0.013 255 / 0.75);
-  --color-line-strong: oklch(0.869 0.022 252);
-  --color-success: oklch(0.56 0.14 155);
-  --color-danger: oklch(0.577 0.215 27);
+  --color-brand: #0b5cad;
+  --color-brand-hover: #084a8c;
+  --color-brand-soft: #e7f0fa;
+  --color-brand-ring: rgb(11 92 173 / 0.2);
+  --color-accent: #e3a21a;
+  --color-accent-ink: #855500;
+  --color-surface: #f3f5f6;
+  --color-subtle: #eaeef1;
+  --color-card: #ffffff;
+  --color-ink: #10233f;
+  --color-ink-soft: #33435e;
+  --color-muted: #5f6c82;
+  --color-line: #e1e6eb;
+  --color-line-strong: #c9d1da;
+  --color-success: #4c7a23;
+  --color-danger: #c2352b;
 
-  /* Soft, multi-layered elevations. */
-  --shadow-card: 0 1px 2px 0 oklch(0.2 0.04 266 / 0.04), 0 1px 3px 0 oklch(0.2 0.04 266 / 0.05);
-  --shadow-card-hover:
-    0 2px 4px -1px oklch(0.2 0.04 266 / 0.05), 0 8px 16px -4px oklch(0.2 0.04 266 / 0.08),
-    0 16px 32px -8px oklch(0.2 0.04 266 / 0.08);
-  --shadow-pop:
-    0 4px 6px -2px oklch(0.2 0.04 266 / 0.05), 0 12px 24px -6px oklch(0.2 0.04 266 / 0.12),
-    0 32px 64px -12px oklch(0.2 0.04 266 / 0.18);
-  --shadow-brand: 0 1px 2px 0 oklch(0.52 0.22 277 / 0.3), 0 4px 12px -2px oklch(0.52 0.22 277 / 0.35);
+  /* Crisp, navy-tinted elevations: a hairline at rest, depth only on hover and dialogs. */
+  --shadow-card: 0 1px 0 0 rgb(16 35 63 / 0.04), 0 1px 2px 0 rgb(16 35 63 / 0.05);
+  --shadow-card-hover: 0 2px 4px -1px rgb(16 35 63 / 0.06), 0 14px 28px -10px rgb(16 35 63 / 0.18);
+  --shadow-pop: 0 4px 8px -2px rgb(16 35 63 / 0.08), 0 24px 56px -12px rgb(16 35 63 / 0.3);
+  --shadow-brand: inset 0 1px 0 0 rgb(255 255 255 / 0.14), 0 6px 14px -6px rgb(11 92 173 / 0.6);
 
   --animate-fade-in: fade-in 0.2s ease-out both;
-  --animate-pop-in: pop-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-pop-in: pop-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* The one orchestrated moment: the home arch opens from its threshold. */
+  --animate-arch-open: arch-open 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
 
   @keyframes fade-in {
     from {
@@ -49,6 +50,14 @@
       transform: translateY(8px) scale(0.98);
     }
   }
+  @keyframes arch-open {
+    from {
+      clip-path: inset(100% 0 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
 }
 
 @layer base {
@@ -58,7 +67,6 @@
   body {
     background-color: var(--color-surface);
     color: var(--color-ink);
-    font-feature-settings: 'cv11', 'ss01';
   }
   ::selection {
     background-color: var(--color-brand-soft);
@@ -76,6 +84,7 @@
   h1,
   h2,
   h3 {
+    font-family: var(--font-display);
     text-wrap: balance;
   }
 }
@@ -89,16 +98,25 @@
   @apply mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-12;
 }
 @utility page-title {
-  @apply text-2xl font-bold tracking-tight text-ink sm:text-3xl;
+  @apply font-display text-[1.75rem] leading-tight font-bold tracking-tight text-ink sm:text-4xl;
 }
 @utility page-subtitle {
-  @apply mt-1.5 text-sm text-muted sm:text-base;
+  @apply mt-2 text-sm text-muted sm:text-base;
 }
 @utility section-title {
-  @apply text-lg font-semibold tracking-tight text-ink;
+  @apply font-display text-lg font-bold tracking-tight text-ink;
 }
+/* A small label over a value (sentence case — no shouting caps). */
 @utility eyebrow {
-  @apply text-xs font-semibold tracking-wider text-muted uppercase;
+  @apply text-xs font-semibold text-muted;
+}
+/* Top of every page: title + subtitle at the start, actions at the end, a hairline under it. */
+@utility page-header {
+  @apply mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-b border-line pb-5 sm:mb-8;
+}
+/* "← Back to …" above a detail page title. */
+@utility back-link {
+  @apply mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-brand;
 }
 
 /* ---------- Surfaces ---------- */
@@ -107,7 +125,7 @@
   @apply rounded-xl border border-line bg-card shadow-card;
 }
 @utility card-interactive {
-  @apply rounded-xl border border-line bg-card shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-card-hover active:translate-y-0;
+  @apply rounded-xl border border-line bg-card shadow-card transition-[translate,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-brand/25 hover:shadow-card-hover active:translate-y-0;
 }
 @utility card-header {
   @apply flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4 sm:px-6;
@@ -123,28 +141,66 @@
   @apply text-xs font-medium text-muted;
 }
 @utility stat-value {
-  @apply mt-1 text-2xl font-bold tracking-tight text-ink tabular-nums;
+  @apply mt-1 font-display text-2xl font-bold tracking-tight text-ink tabular-nums;
 }
 @utility row-hover {
   @apply transition-colors duration-150 hover:bg-subtle/70;
+}
+/* Filter / search bar on top of a list card. */
+@utility panel-toolbar {
+  @apply flex flex-wrap items-center gap-3 border-b border-line bg-subtle/50 px-4 py-3 sm:px-5;
+}
+/* One row of a list card (`<ul class="divide-y divide-line">`): item at the start, meta / actions at the end. */
+@utility list-row {
+  @apply flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5;
+}
+/* Key / value facts of a detail page: <dl class="detail-grid"><div><dt/><dd/></div>…</dl>. */
+@utility detail-grid {
+  @apply grid gap-x-6 gap-y-4 sm:grid-cols-2;
+  & dt {
+    @apply text-xs font-semibold text-muted;
+  }
+  & dd {
+    @apply mt-0.5 text-sm font-medium text-ink;
+  }
+}
+/* Plain data tables. */
+@utility data-table {
+  @apply w-full text-sm;
+  & thead {
+    @apply bg-subtle/60 text-xs text-muted;
+  }
+  & th {
+    @apply px-4 py-3 text-start font-semibold;
+  }
+  & td {
+    @apply px-4 py-3 align-middle;
+  }
+  & tbody tr {
+    @apply border-t border-line;
+  }
+}
+/* Money and other figures that must stand out (prices, totals, coins). */
+@utility figure {
+  @apply font-display font-bold tracking-tight tabular-nums;
 }
 
 /* ---------- Buttons ---------- */
 
 @utility btn {
-  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold whitespace-nowrap transition-all duration-200 select-none active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+  @apply inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full px-4.5 py-2 text-sm font-semibold whitespace-nowrap transition-[translate,scale,background-color,border-color,color,box-shadow,filter] duration-200 ease-out select-none active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50;
 }
 @utility btn-sm {
-  @apply gap-1.5 rounded-md px-3 py-1.5 text-xs;
+  @apply gap-1.5 px-3 py-1.5 text-xs;
 }
 @utility btn-lg {
-  @apply px-5 py-2.5 text-base;
+  @apply px-6 py-3 text-base;
 }
 @utility btn-primary {
   @apply bg-brand text-white shadow-brand hover:-translate-y-px hover:bg-brand-hover;
 }
 @utility btn-secondary {
-  @apply border border-line-strong/80 bg-card text-ink shadow-card hover:border-line-strong hover:bg-subtle;
+  @apply border border-line-strong bg-card text-ink hover:border-ink/40 hover:bg-subtle;
 }
 @utility btn-ghost {
   @apply text-ink-soft hover:bg-subtle hover:text-ink;
@@ -168,7 +224,7 @@
   @apply block text-sm font-medium text-ink-soft;
 }
 @utility field {
-  @apply block w-full rounded-lg border border-line-strong/80 bg-card px-3 py-2 text-sm text-ink shadow-card transition-all duration-150 outline-none placeholder:text-muted/70 hover:border-line-strong focus:border-brand focus:ring-4 focus:ring-brand-ring disabled:cursor-not-allowed disabled:bg-subtle disabled:opacity-70;
+  @apply block w-full rounded-lg border border-line-strong bg-card px-3 py-2 text-sm text-ink transition-[border-color,box-shadow] duration-150 outline-none placeholder:text-muted/70 hover:border-ink/35 focus:border-brand focus:ring-4 focus:ring-brand-ring disabled:cursor-not-allowed disabled:bg-subtle disabled:opacity-70;
 }
 @utility field-hint {
   @apply mt-1.5 text-xs text-muted;
@@ -191,8 +247,9 @@
 @utility alert-info {
   @apply flex items-start gap-2 rounded-lg border border-brand/15 bg-brand-soft px-3.5 py-2.5 text-sm text-ink-soft;
 }
+/* Nothing here yet: an empty doorway (dashed arch) above the message. */
 @utility empty-state {
-  @apply flex flex-col items-center justify-center gap-2 px-6 py-14 text-center text-sm text-muted;
+  @apply flex flex-col items-center justify-center gap-2 px-6 py-14 text-center text-sm text-muted before:mb-2 before:block before:h-12 before:w-9 before:rounded-t-full before:rounded-b-sm before:border-2 before:border-dashed before:border-line-strong before:content-[''];
 }
 
 /* ---------- Pills (statuses, roles, commissions) ---------- */
@@ -225,13 +282,40 @@
 /* ---------- Navigation ---------- */
 
 @utility nav-link {
-  @apply rounded-lg px-3 py-1.5 text-sm font-medium text-ink-soft transition-colors duration-150 hover:bg-subtle hover:text-ink;
+  @apply rounded-full px-3 py-1.5 text-sm font-medium text-ink-soft transition-colors duration-150 hover:bg-subtle hover:text-ink;
 }
 @utility nav-link-active {
-  @apply bg-brand-soft text-brand hover:bg-brand-soft hover:text-brand;
+  @apply bg-brand-soft font-semibold text-brand hover:bg-brand-soft hover:text-brand;
+}
+/* Section tabs (store owner, affiliate, account, detail pages): underlined, scroll sideways on phones. */
+@utility tabs {
+  @apply flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none];
+}
+@utility tab {
+  @apply -mb-px shrink-0 border-b-2 border-transparent px-3 py-2.5 text-sm font-semibold whitespace-nowrap text-muted transition-colors duration-150 hover:border-line-strong hover:text-ink;
+}
+@utility tab-active {
+  @apply border-brand text-brand hover:border-brand hover:text-brand;
+}
+/* Vertical menus (admin sidebar): a brand rule at the start marks the current entry. */
+@utility side-link {
+  @apply flex items-center justify-between gap-2 rounded-e-lg border-s-2 border-transparent px-3 py-2 text-sm font-medium whitespace-nowrap text-ink-soft transition-colors duration-150 hover:bg-subtle hover:text-ink;
+}
+@utility side-link-active {
+  @apply border-brand bg-brand-soft font-semibold text-brand hover:bg-brand-soft hover:text-brand;
 }
 
-/* Arabic gets its own font stack; layout direction comes from <html dir="rtl">. */
+/* ---------- Motif ---------- */
+
+/* The arch of a Sidi Bou Said door, kept for "a door into a store": logo mark, store logos, home hero. */
+@utility arch {
+  @apply rounded-t-full rounded-b-md;
+}
+
+/* Arabic gets its own font stack (titles too: Bricolage has no Arabic); direction comes from <html dir="rtl">. */
+html[lang='ar'] {
+  --font-display: var(--font-arabic);
+}
 html[lang='ar'] body {
   font-family: var(--font-arabic);
 }
@@ -242,5 +326,6 @@ html[lang='ar'] body {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
   }
 }

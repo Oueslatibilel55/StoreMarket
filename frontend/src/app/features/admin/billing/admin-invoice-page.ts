@@ -18,38 +18,45 @@ import { RejectDialog } from '../../../shared/billing/reject-dialog';
     @if (detail.error()) {
       <p class="alert-danger">{{ 'errors.billing.invoiceNotFound' | transloco }}</p>
     } @else if (detail.value(); as d) {
-      <div class="mb-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
-        <a [routerLink]="['/admin/stores', d.storeId]" class="link text-sm">← {{ d.storeName }}</a>
+      <div class="mb-5 flex flex-wrap items-center justify-between gap-3 print:hidden">
+        <a [routerLink]="['/admin/stores', d.storeId]" class="back-link mb-0"><span class="inline-block rtl:rotate-180" aria-hidden="true">←</span> {{ d.storeName }}</a>
         <button type="button" class="btn btn-secondary btn-sm" (click)="print()">{{ 'billing.invoice.print' | transloco }}</button>
       </div>
-      <app-invoice-view [detail]="d" />
 
-      @if (d.invoice.status !== 'Paid') {
-        <section class="card mt-6 p-5 sm:p-6 print:hidden">
-          <h2 class="section-title">{{ 'billing.record.invoice' | transloco }}</h2>
-          <label class="mt-4 block max-w-xs">
-            <span class="field-label">{{ 'billing.fields.amount' | transloco }}</span>
-            <input type="number" min="0" step="0.001" class="field" dir="ltr" [value]="amount() ?? left(d)" (input)="amount.set($any($event.target).value)" />
-          </label>
-          <div class="mt-3">
-            <app-payment-fields [(method)]="method" [(reference)]="reference" [(note)]="note" [(paidOn)]="paidOn" />
-          </div>
-          @if (error()) { <p class="alert-danger mt-3">{{ error()! | transloco }}</p> }
-          <button type="button" class="btn btn-primary mt-4" [disabled]="busy()" (click)="record(d.invoice.id, left(d))">{{ 'billing.record.confirm' | transloco }}</button>
+      <div class="space-y-6">
+        <app-invoice-view [detail]="d" />
+
+        @if (d.invoice.status !== 'Paid') {
+          <section class="card print:hidden">
+            <div class="card-header"><h2 class="section-title">{{ 'billing.record.invoice' | transloco }}</h2></div>
+            <div class="card-body">
+              <label class="block max-w-xs">
+                <span class="field-label">{{ 'billing.fields.amount' | transloco }}</span>
+                <input type="number" min="0" step="0.001" class="field mt-1.5" dir="ltr" [value]="amount() ?? left(d)" (input)="amount.set($any($event.target).value)" />
+              </label>
+              <div class="mt-4">
+                <app-payment-fields [(method)]="method" [(reference)]="reference" [(note)]="note" [(paidOn)]="paidOn" />
+              </div>
+              @if (error()) { <p class="alert-danger mt-4">{{ error()! | transloco }}</p> }
+              <div class="mt-5 flex justify-end border-t border-line pt-4">
+                <button type="button" class="btn btn-primary" [disabled]="busy()" (click)="record(d.invoice.id, left(d))">{{ 'billing.record.confirm' | transloco }}</button>
+              </div>
+            </div>
+          </section>
+        }
+
+        <section class="card overflow-hidden print:hidden">
+          <div class="card-header"><h2 class="section-title">{{ 'billing.payments.title' | transloco }}</h2></div>
+          <app-payment-list [payments]="d.payments" invoiceLink="/admin/billing/invoices" [actions]="true"
+            (approve)="approve($event)" (reject)="rejecting.set($event)" />
         </section>
-      }
-
-      <section class="card mt-6 overflow-hidden print:hidden">
-        <div class="card-header"><h2 class="section-title">{{ 'billing.payments.title' | transloco }}</h2></div>
-        <app-payment-list [payments]="d.payments" invoiceLink="/admin/billing/invoices" [actions]="true"
-          (approve)="approve($event)" (reject)="rejecting.set($event)" />
-      </section>
+      </div>
 
       @if (rejecting(); as p) {
         <app-reject-dialog [payment]="p" [busy]="busy()" [error]="error()" (confirmed)="reject(p, $event)" (cancelled)="rejecting.set(null)" />
       }
     } @else {
-      <p class="empty-state">{{ 'common.loading' | transloco }}</p>
+      <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
     }
   `,
 })

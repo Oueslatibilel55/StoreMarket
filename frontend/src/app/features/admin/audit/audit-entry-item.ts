@@ -9,10 +9,11 @@ import { changedFields, displayValue } from './audit-diff';
 
 @Component({
   selector: 'app-audit-entry-item',
+  host: { class: 'block' },
   imports: [DatePipe, RouterLink, TranslocoPipe],
   template: `
-    <li class="row-hover flex gap-3 px-5 py-4 sm:px-6">
-      <span class="mt-1.5 size-2 shrink-0 rounded-full bg-brand ring-4 ring-brand-soft" aria-hidden="true"></span>
+    <li class="flex gap-3 px-4 py-4 sm:px-5">
+      <span class="mt-1.5 size-2 shrink-0 rounded-full bg-brand" aria-hidden="true"></span>
       <div class="min-w-0 flex-1">
         <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
           <span class="text-sm font-semibold text-ink">{{ 'audit.actions.' + entry().action | transloco }}</span>
@@ -39,17 +40,17 @@ import { changedFields, displayValue } from './audit-diff';
           }
           <span class="ms-auto text-xs whitespace-nowrap text-muted tabular-nums">{{ entry().createdAt | date: 'medium' : undefined : language.locale() }}</span>
         </div>
-        <p class="mt-1 text-sm text-muted">
-          {{ 'audit.by' | transloco }} <span class="font-medium text-ink-soft" dir="ltr">{{ entry().actorEmail }}</span>
+        <p class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted">
+          <span class="min-w-0 break-all">{{ 'audit.by' | transloco }} <span class="font-medium text-ink-soft" dir="ltr">{{ entry().actorEmail }}</span></span>
           @if (entry().reason) {
-            · {{ 'audit.reason' | transloco }}: <span class="text-ink">{{ reasonLabel() | transloco }}</span>
+            <span class="min-w-0 break-words">{{ 'audit.reason' | transloco }}: <span class="text-ink">{{ reasonLabel() | transloco }}</span></span>
           }
         </p>
         @if (changes().length) {
-          <ul class="mt-3 divide-y divide-line overflow-hidden rounded-lg border border-line bg-subtle/40 text-sm">
+          <ul class="mt-3 divide-y divide-line overflow-hidden rounded-lg border border-line bg-subtle/50 text-sm">
             @for (c of changes(); track c.field) {
               <li class="grid gap-1.5 px-3 py-2 sm:grid-cols-[minmax(0,10rem)_1fr] sm:items-center sm:gap-3">
-                <span class="eyebrow truncate">{{ 'audit.fields.' + c.field | transloco }}</span>
+                <span class="truncate text-xs font-semibold text-muted">{{ 'audit.fields.' + c.field | transloco }}</span>
                 <div class="flex min-w-0 flex-wrap items-center gap-2">
                   <span class="min-w-0 break-words rounded-md bg-danger/8 px-1.5 py-0.5 font-mono text-xs text-danger line-through decoration-danger/50">{{ show(c.field, c.before) }}</span>
                   <span aria-hidden="true" class="inline-block text-muted rtl:rotate-180">→</span>

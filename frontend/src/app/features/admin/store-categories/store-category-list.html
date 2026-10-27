@@ -1,4 +1,4 @@
-<header class="flex flex-wrap items-end justify-between gap-4">
+<header class="page-header">
   <div class="min-w-0">
     <h1 class="page-title">{{ 'admin.storeCategories.title' | transloco }}</h1>
     <p class="page-subtitle">{{ 'admin.storeCategories.subtitle' | transloco }}</p>
@@ -9,20 +9,21 @@
 </header>
 
 @if (error() && !pending()) {
-  <p role="alert" class="mt-6 alert-danger">{{ error()! | transloco }}</p>
+  <p role="alert" class="mb-6 alert-danger">{{ error()! | transloco }}</p>
 }
 
-<div class="card mt-6 overflow-hidden">
+<div class="card overflow-hidden">
   @if (categories.error()) {
-    <p class="m-5 alert-danger">{{ 'errors.unknown' | transloco }}</p>
+    <div class="card-body"><p class="alert-danger">{{ 'errors.unknown' | transloco }}</p></div>
   } @else if (categories.value(); as list) {
     @if (list.length === 0) {
       <p class="empty-state">{{ 'admin.storeCategories.empty' | transloco }}</p>
     } @else {
       <ul class="divide-y divide-line">
         @for (c of list; track c.id; let first = $first, last = $last) {
-          <li class="row-hover flex flex-wrap items-center gap-4 px-4 py-3.5 sm:px-6" [class.opacity-60]="!c.isActive">
-            <div class="flex flex-col">
+          <li class="list-row row-hover" [class.opacity-60]="!c.isActive">
+            <div class="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
+            <div class="flex shrink-0 flex-col">
               <button type="button" (click)="move(c, 'up')" [disabled]="first" [attr.aria-label]="'admin.storeCategories.moveUp' | transloco"
                 class="flex size-5 items-center justify-center rounded text-[10px] text-muted transition-colors hover:bg-brand-soft hover:text-brand disabled:pointer-events-none disabled:opacity-30">▲</button>
               <button type="button" (click)="move(c, 'down')" [disabled]="last" [attr.aria-label]="'admin.storeCategories.moveDown' | transloco"
@@ -35,13 +36,15 @@
             }
             <div class="min-w-0 flex-1">
               <p class="truncate font-semibold text-ink">{{ c.name | localized: language.lang() }}</p>
-              <p class="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+              <p class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                 <span>{{ c.name.fr }}</span>
-                @if (c.name.ar) { <span aria-hidden="true">·</span> <span dir="rtl">{{ c.name.ar }}</span> }
-                @if (c.name.en) { <span aria-hidden="true">·</span> <span dir="ltr">{{ c.name.en }}</span> }
-                <span class="code-chip" dir="ltr">/{{ c.slug }}</span>
+                @if (c.name.ar) { <span dir="rtl">{{ c.name.ar }}</span> }
+                @if (c.name.en) { <span dir="ltr">{{ c.name.en }}</span> }
+                <span class="code-chip max-w-full truncate" dir="ltr">/{{ c.slug }}</span>
               </p>
             </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 sm:justify-end">
             <span class="pill" [class]="c.isActive ? 'pill-success' : 'pill-neutral'">
               {{ (c.isActive ? 'admin.storeCategories.active' : 'admin.storeCategories.inactive') | transloco }}
             </span>
@@ -51,6 +54,7 @@
                 {{ (c.isActive ? 'admin.storeCategories.deactivate' : 'admin.storeCategories.activate') | transloco }}
               </button>
               <button type="button" (click)="open({ kind: 'delete', category: c })" class="btn btn-danger-soft btn-sm">{{ 'admin.storeCategories.delete' | transloco }}</button>
+            </div>
             </div>
           </li>
         }
@@ -114,7 +118,7 @@
         @if (error(); as key) {
           <p role="alert" class="alert-danger">{{ key | transloco }}</p>
         }
-        <div class="mt-6 flex justify-end gap-3">
+        <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
           <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
           <button type="submit" [disabled]="busy()" class="btn btn-primary">
             {{ (busy() ? 'common.saving' : 'admin.settings.save') | transloco }}
@@ -134,7 +138,7 @@
       @if (error(); as key) {
         <p role="alert" class="mt-4 alert-danger">{{ key | transloco }}</p>
       }
-      <div class="mt-6 flex justify-end gap-3">
+      <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button type="button" (click)="close()" class="btn btn-ghost">{{ 'common.cancel' | transloco }}</button>
         <button type="button" (click)="confirm()" [disabled]="busy()"
           class="btn"

@@ -15,16 +15,17 @@ import { StatsTable } from '../../../shared/stats/stats-table';
   selector: 'app-product-stats-page',
   imports: [DecimalPipe, RouterLink, TranslocoPipe, ConversionTiles, KpiTile, PeriodPicker, StatsTable],
   template: `
-    <a routerLink="/admin/products" class="link text-sm">← {{ 'stats.backToProducts' | transloco }}</a>
     @if (stats.error()) {
-      <p class="alert-danger mt-6">{{ 'errors.product.notFound' | transloco }}</p>
+      <a routerLink="/admin/products" class="back-link"><span class="rtl:rotate-180" aria-hidden="true">←</span> {{ 'stats.backToProducts' | transloco }}</a>
+      <p class="alert-danger">{{ 'errors.product.notFound' | transloco }}</p>
     } @else if (stats.value(); as p) {
-      <header class="mt-3 flex flex-wrap items-end justify-between gap-4">
+      <header class="page-header">
         <div class="min-w-0">
+          <a routerLink="/admin/products" class="back-link"><span class="rtl:rotate-180" aria-hidden="true">←</span> {{ 'stats.backToProducts' | transloco }}</a>
           <h1 class="page-title break-words">{{ p.name }}</h1>
-          <p class="page-subtitle flex flex-wrap items-center gap-2">
+          <p class="page-subtitle flex flex-wrap items-center gap-x-3 gap-y-2">
             <a [routerLink]="['/admin/stores', p.storeId]" class="link">{{ p.storeName }}</a>
-            <span dir="ltr">{{ p.price | number: '1.0-3' : language.locale() }} TND</span>
+            <span class="figure text-ink" dir="ltr">{{ p.price | number: '1.0-3' : language.locale() }} TND</span>
             <span class="pill pill-brand" dir="ltr">{{ p.affiliatePercent }} %</span>
             <span class="pill" [class]="p.isVisible ? 'pill-success' : 'pill-neutral'">{{ (p.isVisible ? 'stats.visible' : 'stats.hidden') | transloco }}</span>
             @if (p.isVisible) { <a [routerLink]="['/products', p.slug]" class="link">{{ 'stats.seeInShop' | transloco }}</a> }
@@ -33,24 +34,23 @@ import { StatsTable } from '../../../shared/stats/stats-table';
         <app-period-picker [from]="from()" [to]="to()" (changed)="setPeriod($event)" />
       </header>
 
-      <div class="mt-6">
+      <div class="space-y-6">
         <app-conversion-tiles [orders]="p.orders" [sales]="p.sales" [period]="p.period" [ordersQuery]="{ productId: p.id }">
           <app-kpi [label]="'stats.kpi.coinsEarnedHere' | transloco" link="/admin/coins"
             [query]="{ productId: p.id, type: 'Earned', from: p.period.from, to: p.period.to }">
-            {{ p.coinsEarned | number: '1.0-3' : language.locale() }}
+            <span class="text-success">{{ p.coinsEarned | number: '1.0-3' : language.locale() }}</span>
           </app-kpi>
           <app-kpi [label]="'stats.kpi.rating' | transloco" [hint]="'stats.kpi.ratingCount' | transloco: { n: p.rating.count }">
             {{ p.rating.average !== null ? (p.rating.average! | number: '1.1-2' : language.locale()) + ' ★' : '—' }}
           </app-kpi>
         </app-conversion-tiles>
-      </div>
 
-      <div class="mt-4">
         <app-stats-table [title]="'stats.topAffiliates' | transloco" [rows]="p.topAffiliates" nameKey="stats.col.affiliate" countKey="stats.col.lines"
           [detailLtr]="true" linkBase="/admin/users" csvName="product-affiliates" />
       </div>
     } @else {
-      <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+      <a routerLink="/admin/products" class="back-link"><span class="rtl:rotate-180" aria-hidden="true">←</span> {{ 'stats.backToProducts' | transloco }}</a>
+      <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p>
     }
   `,
 })

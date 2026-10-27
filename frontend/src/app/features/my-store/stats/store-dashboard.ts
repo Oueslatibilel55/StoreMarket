@@ -19,8 +19,8 @@ import { MyStoreTabs } from '../my-store-tabs';
   template: `
     <main class="page">
       <app-my-store-tabs />
-      <header class="flex flex-wrap items-end justify-between gap-4">
-        <div>
+      <header class="page-header">
+        <div class="min-w-0">
           <h1 class="page-title">{{ 'stats.storeDashboard' | transloco }}</h1>
           <p class="page-subtitle">{{ 'stats.storeDashboardHint' | transloco }}</p>
         </div>
@@ -28,16 +28,16 @@ import { MyStoreTabs } from '../my-store-tabs';
       </header>
 
       @if (noStore()) {
-        <div class="card mt-6 p-6 text-center">
-          <p class="text-muted">{{ 'errors.store.notFound' | transloco }}</p>
-          <a routerLink="/my-store" class="btn btn-primary mt-4">{{ 'myStore.createTitle' | transloco }}</a>
+        <div class="card empty-state">
+          <p>{{ 'errors.store.notFound' | transloco }}</p>
+          <a routerLink="/my-store" class="btn btn-primary mt-3">{{ 'myStore.createTitle' | transloco }}</a>
         </div>
       } @else if (stats.error()) {
-        <p class="alert-danger mt-6">{{ 'errors.unknown' | transloco }}</p>
+        <p role="alert" class="alert-danger">{{ 'errors.unknown' | transloco }}</p>
       } @else if (stats.value(); as s) {
-        <div class="mt-6"><app-store-stats-view [stats]="s" storeId="" /></div>
+        <app-store-stats-view [stats]="s" storeId="" />
       } @else {
-        <p class="empty-state mt-6">{{ 'common.loading' | transloco }}</p>
+        <p class="card empty-state">{{ 'common.loading' | transloco }}</p>
       }
     </main>
   `,

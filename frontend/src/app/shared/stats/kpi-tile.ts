@@ -18,7 +18,7 @@ import { Params, RouterLink } from '@angular/router';
     </ng-template>
     @if (link()) {
       <a [routerLink]="link()" [queryParams]="query()"
-        class="stat-tile h-full text-start transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-card-hover">
+        class="stat-tile h-full text-start transition-[translate,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-brand/25 hover:shadow-card-hover">
         <ng-container *ngTemplateOutlet="body" />
       </a>
     } @else {

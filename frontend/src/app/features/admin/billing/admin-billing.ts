@@ -28,135 +28,139 @@ const PAGE_SIZE = 20;
   selector: 'app-admin-billing',
   imports: [DatePipe, DecimalPipe, RouterLink, TranslocoPipe, LocalizedPipe, Pagination, PaymentList, PeriodPicker, RejectDialog, OfferEditor],
   template: `
-    <header class="flex flex-wrap items-end justify-between gap-4">
-      <div>
+    <header class="page-header">
+      <div class="min-w-0">
         <h1 class="page-title">{{ 'billing.admin.title' | transloco }}</h1>
         <p class="page-subtitle">{{ 'billing.admin.subtitle' | transloco }}</p>
       </div>
       <button type="button" class="btn btn-secondary btn-sm" [disabled]="busy()" (click)="runNow()">{{ 'billing.admin.run' | transloco }}</button>
     </header>
-    @if (runResult(); as r) {
-      <p class="alert-success mt-4">{{ 'billing.admin.ran' | transloco: { invoices: r.invoicesIssued, suspended: r.storesSuspended, reactivated: r.storesReactivated } }}</p>
-    }
-    @if (error()) { <p class="alert-danger mt-4">{{ error()! | transloco }}</p> }
 
-    <nav class="mt-6 flex gap-1 overflow-x-auto border-b border-line" [attr.aria-label]="'billing.admin.title' | transloco">
-      @for (t of tabs; track t) {
-        <button type="button" (click)="go({ tab: t === 'queue' ? null : t, page: null })"
-          class="-mb-px shrink-0 cursor-pointer border-b-2 px-3 py-2 text-sm font-medium transition-colors"
-          [class]="current() === t ? 'border-brand text-brand' : 'border-transparent text-muted hover:text-ink'">
-          {{ 'billing.admin.tabs.' + t | transloco }}
-        </button>
+    <div class="space-y-6">
+      @if (runResult(); as r) {
+        <p class="alert-success">{{ 'billing.admin.ran' | transloco: { invoices: r.invoicesIssued, suspended: r.storesSuspended, reactivated: r.storesReactivated } }}</p>
       }
-    </nav>
+      @if (error()) { <p class="alert-danger">{{ error()! | transloco }}</p> }
 
-    @switch (current()) {
-      @case ('queue') {
-        <section class="card mt-6 overflow-hidden">
-          @if (queue.value(); as q) {
-            <app-payment-list [payments]="q.items" invoiceLink="/admin/billing/invoices" [actions]="true" [showStore]="true"
-              (approve)="approve($event)" (reject)="rejecting.set($event)" />
-            @if (q.total > pageSize) {
-              <div class="border-t border-line px-5 py-3"><app-pagination [page]="q.page" [pageSize]="pageSize" [total]="q.total" (pageChange)="go({ page: $event })" /></div>
-            }
-          } @else { <p class="empty-state">{{ 'common.loading' | transloco }}</p> }
-        </section>
-      }
-      @case ('overdue') {
-        <section class="card mt-6 overflow-hidden">
-          @if (overdue.value(); as list) {
-            @if (list.length === 0) {
-              <p class="empty-state">{{ 'billing.admin.noOverdue' | transloco }}</p>
-            } @else {
-              <ul class="divide-y divide-line">
-                @for (s of list; track s.storeId) {
-                  <li>
-                    <a [routerLink]="['/admin/stores', s.storeId]" class="row-hover flex flex-wrap items-center justify-between gap-3 px-5 py-3.5">
-                      <div class="min-w-0">
-                        <p class="font-semibold text-ink">{{ s.storeName }}</p>
-                        <p class="text-xs text-muted">{{ 'billing.paidUntil' | transloco }} {{ s.paidUntil | date: 'mediumDate' : undefined : language.locale() }}</p>
-                      </div>
-                      <div class="flex flex-wrap items-center gap-2">
-                        @if (s.commissionsDue > 0) { <span class="text-sm font-semibold text-danger" dir="ltr">{{ s.commissionsDue | number: '1.0-3' : language.locale() }} TND</span> }
-                        @if (s.status === 'Suspended') { <span class="pill pill-danger">{{ 'billing.stateLabel.suspended' | transloco }}</span> }
-                        @else if (s.overdue) { <span class="pill pill-danger">{{ 'billing.stateLabel.overdue' | transloco }}</span> }
-                        @else if (s.daysLeft !== null) { <span class="pill pill-warning">{{ 'billing.stateLabel.countdown' | transloco: { n: s.daysLeft } }}</span> }
-                        @if (s.waitingForApproval) { <span class="pill pill-brand">{{ 'billing.stateLabel.waiting' | transloco }}</span> }
-                      </div>
-                    </a>
-                  </li>
-                }
-              </ul>
-            }
-          } @else { <p class="empty-state">{{ 'common.loading' | transloco }}</p> }
-        </section>
-      }
-      @case ('offers') {
-        <div class="mt-6 flex justify-end">
-          <button type="button" class="btn btn-primary btn-sm" (click)="editing.set('new')">{{ 'billing.offers.new' | transloco }}</button>
-        </div>
-        <section class="card mt-3 overflow-hidden">
-          @if (offers.value(); as list) {
-            @if (list.length === 0) {
-              <p class="empty-state">{{ 'billing.offers.none' | transloco }}</p>
-            } @else {
-              <ul class="divide-y divide-line">
-                @for (o of list; track o.id) {
-                  <li class="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5">
-                    <div class="min-w-0">
-                      <p class="flex flex-wrap items-center gap-2 font-semibold text-ink">
-                        {{ o.name | localized: language.lang() }}
-                        <span class="pill" [class]="o.isActive ? 'pill-success' : 'pill-neutral'">{{ (o.isActive ? 'billing.offers.on' : 'billing.offers.off') | transloco }}</span>
-                      </p>
-                      <p class="mt-0.5 text-xs text-muted">
-                        <span dir="ltr">{{ o.discountPercent !== null ? '−' + o.discountPercent + ' %' : '−' + (o.discountAmount | number: '1.0-3' : language.locale()) + ' TND' }}</span>
-                        · {{ o.months ? ('billing.offers.forMonths' | transloco: { n: o.months }) : ('billing.offers.anyMonths' | transloco) }}
-                        · {{ 'billing.offers.targets.' + o.target | transloco }}@if (o.target !== 'AllStores') { ({{ o.targetIds.length }}) }
-                        @if (o.firstPaymentOnly) { · {{ 'billing.offers.firstPaymentOnly' | transloco }} }
-                        @if (o.startsOn || o.endsOn) { · {{ o.startsOn ?? '…' }} → {{ o.endsOn ?? '…' }} }
-                      </p>
-                    </div>
-                    <div class="flex items-center gap-3">
-                      <span class="text-xs text-muted">{{ 'billing.offers.used' | transloco: { n: o.timesUsed, amount: (o.totalDiscount | number: '1.0-3' : language.locale()) } }}</span>
-                      <button type="button" class="btn btn-ghost btn-sm" (click)="editing.set(o)">{{ 'common.edit' | transloco }}</button>
-                    </div>
-                  </li>
-                }
-              </ul>
-            }
-          } @else { <p class="empty-state">{{ 'common.loading' | transloco }}</p> }
-        </section>
-      }
-      @case ('revenue') {
-        <div class="mt-6"><app-period-picker [from]="from()" [to]="to()" (changed)="setPeriod($event)" /></div>
-        <section class="card mt-4 overflow-hidden">
-          @if (revenue.value(); as r) {
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
-                <thead class="bg-subtle/60 text-xs text-muted">
-                  <tr>
-                    <th scope="col" class="px-4 py-2 text-start font-medium">{{ 'billing.statement.month' | transloco }}</th>
-                    <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.revenue.subscriptions' | transloco }}</th>
-                    <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.revenue.billed' | transloco }}</th>
-                    <th scope="col" class="px-4 py-2 text-end font-medium">{{ 'billing.revenue.collected' | transloco }}</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-line">
-                  @for (m of r.months; track m.month) {
-                    <tr>
-                      <td class="px-4 py-2.5 whitespace-nowrap">{{ m.month | date: 'MMMM y' : undefined : language.locale() }}</td>
-                      <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ m.subscriptions | number: '1.0-3' : language.locale() }}</td>
-                      <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ m.commissionsBilled | number: '1.0-3' : language.locale() }}</td>
-                      <td class="px-4 py-2.5 text-end tabular-nums" dir="ltr">{{ m.commissionsCollected | number: '1.0-3' : language.locale() }}</td>
-                    </tr>
+      <nav class="tabs" [attr.aria-label]="'billing.admin.title' | transloco">
+        @for (t of tabs; track t) {
+          <button type="button" (click)="go({ tab: t === 'queue' ? null : t, page: null })"
+            class="tab cursor-pointer" [class.tab-active]="current() === t" [attr.aria-current]="current() === t ? 'page' : null">
+            {{ 'billing.admin.tabs.' + t | transloco }}
+          </button>
+        }
+      </nav>
+
+      @switch (current()) {
+        @case ('queue') {
+          <section class="card overflow-hidden">
+            @if (queue.value(); as q) {
+              <app-payment-list [payments]="q.items" invoiceLink="/admin/billing/invoices" [actions]="true" [showStore]="true"
+                (approve)="approve($event)" (reject)="rejecting.set($event)" />
+              @if (q.total > pageSize) {
+                <div class="border-t border-line bg-subtle/40 px-4 py-3 sm:px-5"><app-pagination [page]="q.page" [pageSize]="pageSize" [total]="q.total" (pageChange)="go({ page: $event })" /></div>
+              }
+            } @else { <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p> }
+          </section>
+        }
+        @case ('overdue') {
+          <section class="card overflow-hidden">
+            @if (overdue.value(); as list) {
+              @if (list.length === 0) {
+                <p class="empty-state">{{ 'billing.admin.noOverdue' | transloco }}</p>
+              } @else {
+                <ul class="divide-y divide-line">
+                  @for (s of list; track s.storeId) {
+                    <li>
+                      <a [routerLink]="['/admin/stores', s.storeId]" class="list-row row-hover">
+                        <div class="min-w-0">
+                          <p class="truncate font-semibold text-ink">{{ s.storeName }}</p>
+                          <p class="mt-0.5 text-xs text-muted">{{ 'billing.paidUntil' | transloco }} {{ s.paidUntil | date: 'mediumDate' : undefined : language.locale() }}</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+                          @if (s.commissionsDue > 0) { <span class="figure text-danger" dir="ltr">{{ s.commissionsDue | number: '1.0-3' : language.locale() }} TND</span> }
+                          @if (s.status === 'Suspended') { <span class="pill pill-danger">{{ 'billing.stateLabel.suspended' | transloco }}</span> }
+                          @else if (s.overdue) { <span class="pill pill-danger">{{ 'billing.stateLabel.overdue' | transloco }}</span> }
+                          @else if (s.daysLeft !== null) { <span class="pill pill-warning">{{ 'billing.stateLabel.countdown' | transloco: { n: s.daysLeft } }}</span> }
+                          @if (s.waitingForApproval) { <span class="pill pill-brand">{{ 'billing.stateLabel.waiting' | transloco }}</span> }
+                        </div>
+                      </a>
+                    </li>
                   }
-                </tbody>
-              </table>
+                </ul>
+              }
+            } @else { <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p> }
+          </section>
+        }
+        @case ('offers') {
+          <section class="card overflow-hidden">
+            <div class="panel-toolbar justify-end">
+              <button type="button" class="btn btn-primary btn-sm" (click)="editing.set('new')">{{ 'billing.offers.new' | transloco }}</button>
             </div>
-          } @else { <p class="empty-state">{{ 'common.loading' | transloco }}</p> }
-        </section>
+            @if (offers.value(); as list) {
+              @if (list.length === 0) {
+                <p class="empty-state">{{ 'billing.offers.none' | transloco }}</p>
+              } @else {
+                <ul class="divide-y divide-line">
+                  @for (o of list; track o.id) {
+                    <li class="list-row">
+                      <div class="min-w-0">
+                        <p class="flex flex-wrap items-center gap-2 font-semibold text-ink">
+                          {{ o.name | localized: language.lang() }}
+                          <span class="pill" [class]="o.isActive ? 'pill-success' : 'pill-neutral'">{{ (o.isActive ? 'billing.offers.on' : 'billing.offers.off') | transloco }}</span>
+                        </p>
+                        <p class="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted">
+                          <span class="font-semibold text-ink-soft tabular-nums" dir="ltr">{{ o.discountPercent !== null ? '−' + o.discountPercent + ' %' : '−' + (o.discountAmount | number: '1.0-3' : language.locale()) + ' TND' }}</span>
+                          <span>{{ o.months ? ('billing.offers.forMonths' | transloco: { n: o.months }) : ('billing.offers.anyMonths' | transloco) }}</span>
+                          <span>{{ 'billing.offers.targets.' + o.target | transloco }}@if (o.target !== 'AllStores') { ({{ o.targetIds.length }}) }</span>
+                          @if (o.firstPaymentOnly) { <span>{{ 'billing.offers.firstPaymentOnly' | transloco }}</span> }
+                          @if (o.startsOn || o.endsOn) { <span dir="ltr">{{ o.startsOn ?? '…' }} – {{ o.endsOn ?? '…' }}</span> }
+                        </p>
+                      </div>
+                      <div class="flex flex-wrap items-center gap-3 sm:justify-end">
+                        <span class="text-xs text-muted">{{ 'billing.offers.used' | transloco: { n: o.timesUsed, amount: (o.totalDiscount | number: '1.0-3' : language.locale()) } }}</span>
+                        <button type="button" class="btn btn-ghost btn-sm" (click)="editing.set(o)">{{ 'common.edit' | transloco }}</button>
+                      </div>
+                    </li>
+                  }
+                </ul>
+              }
+            } @else { <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p> }
+          </section>
+        }
+        @case ('revenue') {
+          <section class="card overflow-hidden">
+            <div class="panel-toolbar">
+              <app-period-picker [from]="from()" [to]="to()" (changed)="setPeriod($event)" />
+            </div>
+            @if (revenue.value(); as r) {
+              <div class="overflow-x-auto">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{{ 'billing.statement.month' | transloco }}</th>
+                      <th scope="col" class="text-end">{{ 'billing.revenue.subscriptions' | transloco }}</th>
+                      <th scope="col" class="text-end">{{ 'billing.revenue.billed' | transloco }}</th>
+                      <th scope="col" class="text-end">{{ 'billing.revenue.collected' | transloco }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (m of r.months; track m.month) {
+                      <tr>
+                        <td class="whitespace-nowrap font-medium text-ink">{{ m.month | date: 'MMMM y' : undefined : language.locale() }}</td>
+                        <td class="figure text-end whitespace-nowrap" dir="ltr">{{ m.subscriptions | number: '1.0-3' : language.locale() }}</td>
+                        <td class="text-end tabular-nums whitespace-nowrap" dir="ltr">{{ m.commissionsBilled | number: '1.0-3' : language.locale() }}</td>
+                        <td class="figure text-end whitespace-nowrap text-success" dir="ltr">{{ m.commissionsCollected | number: '1.0-3' : language.locale() }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else { <p class="py-14 text-center text-sm text-muted">{{ 'common.loading' | transloco }}</p> }
+          </section>
+        }
       }
-    }
+    </div>
 
     @if (rejecting(); as p) {
       <app-reject-dialog [payment]="p" [busy]="busy()" [error]="error()" (confirmed)="reject(p, $event)" (cancelled)="rejecting.set(null)" />
